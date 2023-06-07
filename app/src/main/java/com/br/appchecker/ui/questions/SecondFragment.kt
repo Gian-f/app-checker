@@ -2,15 +2,10 @@ package com.br.appchecker.ui.questions
 
 import android.content.Context
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatTextView
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import com.br.appchecker.R
 import com.br.appchecker.databinding.FragmentSecondBinding
 import com.br.appchecker.ui.questions.interfaces.ProgressBarListener
 
@@ -36,7 +31,6 @@ class SecondFragment : Fragment() {
         super.onAttach(context)
         progressBarListener = context as? ProgressBarListener
     }
-
     override fun onDetach() {
         super.onDetach()
         progressBarListener = null

@@ -59,13 +59,11 @@ class FirstFragment : Fragment() {
         val adapter = SingleChoiceQuestionAdapter(questions, object :
             SingleChoiceQuestionAdapter.ViewHolder.OnItemClickListener {
             override fun onItemClick(question: Question, position: Int) {
-                println(questions)
                 Toast.makeText(requireContext(), "teste", Toast.LENGTH_SHORT).show()
             }
         })
         recyclerView.adapter = adapter
     }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         progressBarListener = context as? ProgressBarListener

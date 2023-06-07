@@ -73,16 +73,20 @@ class LoginActivity : AppCompatActivity() {
         binding.login.setOnClickListener {
             with(binding) {
                 loading?.visibility = View.VISIBLE
-                loginViewModel.login(username.text.toString(), password.text.toString())
+//                loginViewModel.login(username.text.toString(), password.text.toString())
+                navigateToMain()
             }
         }
 
         binding.guest?.setOnClickListener {
-            val intent = Intent(applicationContext, MainActivity::class.java)
-            startActivity(intent)
+            navigateToMain()
         }
     }
 
+    private fun navigateToMain() {
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        startActivity(intent)
+    }
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
         val displayName = model.displayName
