@@ -30,6 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:padding="2dp"
         android:layout_marginBottom="140dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,6 +52,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:padding="2dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
@@ -74,12 +76,12 @@
 
     <Button
         android:id="@+id/login"
-        style="@style/Button"
+        style="@style/ButtonWhite"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_gravity="start"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:enabled="false"
         android:padding="0dp"
@@ -99,27 +101,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Cadastre-se"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_layout" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="Esqueceu a senha?"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_layout" />
-
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/guest"
-        style="@style/Button"
+        style="@style/ButtonTransparent"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_gravity="start"
