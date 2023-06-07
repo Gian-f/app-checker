@@ -15,17 +15,55 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="40dp"
             android:background="@color/white"
             app:layout_scrollFlags="scroll|enterAlways"
             app:titleTextColor="@color/white">
-
         </androidx.appcompat.widget.Toolbar>
 
-        <include layout="@layout/layout_custom_progress" />
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progressIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:indeterminate="false"
+            android:minHeight="4dp"
+            android:progress="1"
+            android:max="10"
+            app:indicatorColor="@color/purple_500"
+            app:trackColor="@color/gray" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+    android:id="@+id/questionTextView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:layout_gravity="center"
+    android:textSize="14sp"
+    tools:text="teste"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:gravity="center" />
 
-    <include layout="@layout/content_main" />
+</com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:defaultNavHost="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navGraph="@navigation/nav_graph" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

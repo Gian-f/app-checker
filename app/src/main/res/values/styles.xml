@@ -6,4 +6,15 @@
     <style name="ButtonWhite">
         <item name="android:background">@drawable/button_rounded_white</item>
     </style>
+    <style name="QuestionBackground">
+        <item name="android:background">@drawable/background_question</item>
+    </style>
+
+    <style name="BottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/bottomSheetStyleWrapper</item>
+    </style>
+
+    <style name="bottomSheetStyleWrapper" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
 </resources>

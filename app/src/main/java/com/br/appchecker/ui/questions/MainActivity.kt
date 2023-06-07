@@ -1,44 +1,50 @@
 package com.br.appchecker.ui.questions
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.br.appchecker.R
 import com.br.appchecker.databinding.ActivityMainBinding
+import com.br.appchecker.ui.questions.interfaces.ProgressBarListener
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ProgressBarListener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding: ActivityMainBinding
+    private val binding: ActivityMainBinding by
+    lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
-
-        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setSupportActionBar(binding.toolbar)
-
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-
-        //binding.fab.setOnClickListener { view ->
-            // Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-            //    .setAnchorView(R.id.fab)
-        //     .setAction("Action", null).show()
-        }
+        setupNavController()
+        onUpdateProgressBar(1, "1 de 10")
     }
 
-// override fun onSupportNavigateUp(): Boolean {
-        //  val navController = findNavController(R.id.nav_host_fragment_content_main)
-        //  return navController.navigateUp(appBarConfiguration)
-        //  || super.onSupportNavigateUp()
-//  }
-//}
+    private fun setupNavController() {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+        appBarConfiguration = AppBarConfiguration(navController.graph)
+        setupActionBarWithNavController(navController, appBarConfiguration)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment)
+        appBarConfiguration = AppBarConfiguration(navController.graph)
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        return navController.navigateUp(appBarConfiguration)
+                || super.onSupportNavigateUp()
+    }
+
+    override fun onUpdateProgressBar(progress: Int, step: String) {
+        binding.progressIndicator.progress = progress
+        binding.questionTextView.text = step
+    }
+}

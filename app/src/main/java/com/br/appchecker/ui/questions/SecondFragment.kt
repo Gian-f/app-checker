@@ -1,42 +1,44 @@
 package com.br.appchecker.ui.questions
 
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import com.br.appchecker.R
 import com.br.appchecker.databinding.FragmentSecondBinding
+import com.br.appchecker.ui.questions.interfaces.ProgressBarListener
 
 class SecondFragment : Fragment() {
 
-    private var _binding: FragmentSecondBinding? = null
+    private val binding: FragmentSecondBinding by
+    lazy { FragmentSecondBinding.inflate(layoutInflater) }
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    private var progressBarListener: ProgressBarListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
-        _binding = FragmentSecondBinding.inflate(inflater, container, false)
+    ): View {
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        //binding.buttonSecond.setOnClickListener {
-        //findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
-        // }
+        progressBarListener?.onUpdateProgressBar(2, "2 de 10")
+    }
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        progressBarListener = context as? ProgressBarListener
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    override fun onDetach() {
+        super.onDetach()
+        progressBarListener = null
     }
 }
