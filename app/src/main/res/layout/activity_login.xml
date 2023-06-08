@@ -72,7 +72,7 @@
 
     <Button
         android:id="@+id/login"
-        style="@style/ButtonWhite"
+        android:background="@drawable/neumorphism_bg"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_gravity="start"
@@ -99,7 +99,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/guest"
-        style="@style/ButtonTransparent"
+        android:background="@drawable/neumorphism_bg"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_gravity="start"
@@ -107,7 +107,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:padding="0dp"
-        android:textColor="@color/purple_500"
+        android:textColor="@android:color/black"
         android:text="@string/action_sign_guest"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"

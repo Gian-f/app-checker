@@ -7,5 +7,5 @@ data class Question(
     val title: String,
     val description: String,
     val answers: List<String>,
-    var selectedAnswerPosition: Int = RecyclerView.NO_POSITION
+    var selectedAnswerPosition: Int? = RecyclerView.NO_POSITION
 )

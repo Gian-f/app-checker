@@ -25,7 +25,7 @@ class SecondFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        progressBarListener?.onUpdateProgressBar(2, "2 de 10")
+        progressBarListener?.onUpdateProgressBar(2, "2 de 6")
     }
     override fun onAttach(context: Context) {
         super.onAttach(context)

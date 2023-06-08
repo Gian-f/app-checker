@@ -7,14 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.br.appchecker.R
 import com.br.appchecker.data.model.Question
 import com.br.appchecker.databinding.FragmentFirstBinding
 import com.br.appchecker.ui.questions.adapters.SingleChoiceQuestionAdapter
 import com.br.appchecker.ui.questions.interfaces.ProgressBarListener
-import com.br.appchecker.util.showBottomSheet
 import ulid.ULID
 
 class FirstFragment : Fragment() {
@@ -33,33 +30,26 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configRecyclerView()
-        setupListeners()
-        progressBarListener?.onUpdateProgressBar(1, "1 de 10")
-    }
-
-    private fun setupListeners() {
-        binding.continueButton.setOnClickListener {
-//            showBottomSheet(message = R.string.error_generic)
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-        }
+        progressBarListener?.onUpdateProgressBar(1, "1 de 6")
     }
 
     private fun configRecyclerView() {
         val recyclerView = binding.rv
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         val questions = listOf<Question>().toMutableList()
-        questions.add(Question(ULID.randomULID(),
-            "Quanto de renda bruta você ganhou este ano?",
-            "Selecione quanto de renda você ganhou este ano",
-            listOf("de R$1.000,00 a 5.000,00",
-                "de R$5.000,00 a R$10.000,00",
-                "de R$5.000,00 a R$10.000,00",
-                "de R$5.000,00 a R$10.000,00")
-            , 0))
+        questions.add(Question(
+            id = ULID.randomULID(),
+            title = "Seus rendimentos tributáveis foram superiores a R$ 28.559,70 no ano passado?",
+            description = "Selecione a opção que melhor descreve a sua situação",
+            answers = listOf(
+                "Sim, acima do limite estabelecido",
+                "Não, não recebi acima do limite estabelecido",
+                "Não sei / Não tenho certeza"),
+            selectedAnswerPosition = null))
         val adapter = SingleChoiceQuestionAdapter(questions, object :
-            SingleChoiceQuestionAdapter.ViewHolder.OnItemClickListener {
+            SingleChoiceQuestionAdapter.OnItemClickListener {
             override fun onItemClick(question: Question, position: Int) {
-                Toast.makeText(requireContext(), "teste", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "você clicou no $position", Toast.LENGTH_SHORT).show()
             }
         })
         recyclerView.adapter = adapter

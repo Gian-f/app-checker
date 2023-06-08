@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#F0F0F0" /> <!-- Cor base do neumorfismo -->
+    <corners android:radius="36dp" /> <!-- Arredondamento dos cantos -->
+    <padding android:bottom="2dp" android:right="2dp" android:top="2dp" />
+    <size android:width="8dp" />
+</shape>

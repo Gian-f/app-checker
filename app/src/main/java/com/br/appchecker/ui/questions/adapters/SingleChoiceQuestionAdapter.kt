@@ -12,7 +12,7 @@ import com.google.android.material.radiobutton.MaterialRadioButton
 
 class SingleChoiceQuestionAdapter(
     private val questions: List<Question>,
-    private val listener: ViewHolder.OnItemClickListener
+    private val listener: OnItemClickListener
 ) : RecyclerView.Adapter<SingleChoiceQuestionAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,7 +23,7 @@ class SingleChoiceQuestionAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val question = questions[position]
-        holder.bind(question, listener)
+        holder.bind(question, position, listener)
     }
 
     override fun getItemCount(): Int {
@@ -34,8 +34,9 @@ class SingleChoiceQuestionAdapter(
         private val titleTextView: TextView = itemView.findViewById(R.id.title)
         private val descriptionTextView: TextView = itemView.findViewById(R.id.description)
         private val radioGroup: RadioGroup = itemView.findViewById(R.id.answers_group)
+        private var adapterPosition = RecyclerView.NO_POSITION
 
-        fun bind(question: Question, listener: OnItemClickListener) {
+        fun bind(question: Question, position: Int, listener: OnItemClickListener) {
             titleTextView.text = question.title
             descriptionTextView.text = question.description
             radioGroup.removeAllViews()
@@ -46,23 +47,25 @@ class SingleChoiceQuestionAdapter(
                     setBackgroundResource(R.drawable.background_question)
                     layoutParams = RadioGroup.LayoutParams(
                         RadioGroup.LayoutParams.MATCH_PARENT,
-                        RadioGroup.LayoutParams.WRAP_CONTENT)
-                    (layoutParams as RadioGroup.LayoutParams)
-                        .setMargins(0, 24, 0, 0)
+                        RadioGroup.LayoutParams.WRAP_CONTENT
+                    ).apply {
+                        setMargins(0, 24, 0, 24)
+                    }
                     text = answer
-                    setPadding(8, 16, 8, 16)
                     setTextAppearance(android.R.style.TextAppearance_Holo_Medium)
                     isChecked = (i == question.selectedAnswerPosition)
                     setOnClickListener {
                         question.selectedAnswerPosition = i
-                        listener.onItemClick(question, adapterPosition)
+                        listener.onItemClick(question, position)
                     }
                 }
+                radioButton.setPadding(8, 24, 8, 24)
                 radioGroup.addView(radioButton)
             }
         }
-        interface OnItemClickListener {
-            fun onItemClick(question: Question, position: Int)
-        }
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(question: Question, position: Int)
     }
 }
