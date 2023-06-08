@@ -35,13 +35,15 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
         binding.continueButton.setOnClickListener {
             when (navController.currentDestination?.id) {
                 R.id.FirstFragment -> navigateToSecondFragment()
-                R.id.SecondFragment -> navigateToFirstFragment()
+                R.id.SecondFragment -> navigateToThirdFragment()
+                R.id.ThirdFragment -> TODO()
             }
         }
 
         binding.backButton.setOnClickListener {
             navigateUp()
         }
+
     }
 
     private fun navigateToSecondFragment() {
@@ -59,9 +61,27 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
         navController.navigate(action)
     }
 
+    private fun navigateToThirdFragment() {
+        binding.backButton.visibility = View.VISIBLE
+        binding.continueButton.layoutParams.width =
+            resources.getDimensionPixelSize(R.dimen.button_width_180dp)
+        val action = SecondFragmentDirections.actionSecondFragmentToThirdFragment()
+        navController.navigate(action)
+    }
+
     private fun navigateUp() {
         binding.continueButton.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-        binding.backButton.visibility = View.GONE
+        // Verificar o destino anterior
+        val previousDestination = navController.previousBackStackEntry?.destination?.id
+        if (previousDestination == R.id.SecondFragment) {
+            // Mostrar o botão de voltar
+            binding.backButton.visibility = View.VISIBLE
+            binding.continueButton.layoutParams.width =
+                resources.getDimensionPixelSize(R.dimen.button_width_180dp)
+        } else {
+            // Esconder o botão de voltar
+            binding.backButton.visibility = View.GONE
+        }
         navController.navigateUp()
     }
 
