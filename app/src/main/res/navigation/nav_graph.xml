@@ -33,9 +33,42 @@
     <fragment
         android:id="@+id/ThirdFragment"
         android:name="com.br.appchecker.ui.questions.ThirdFragment"
-        android:label="ThirdFragment" >
+        android:label="ThirdFragment">
         <action
             android:id="@+id/action_ThirdFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
+        <action
+            android:id="@+id/action_ThirdFragment_to_FourthFragment"
+            app:destination="@id/FourthFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/FourthFragment"
+        android:name="com.br.appchecker.ui.questions.FourthFragment"
+        android:label="FourthFragment" >
+        <action
+            android:id="@+id/action_FourthFragment_to_ThirdFragment"
+            app:destination="@id/ThirdFragment" />
+        <action
+            android:id="@+id/action_FourthFragment_to_FifthFragment"
+            app:destination="@id/FifthFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/FifthFragment"
+        android:name="com.br.appchecker.ui.questions.FifthFragment"
+        android:label="FifthFragment" >
+        <action
+            android:id="@+id/action_FifthFragment_to_FourthFragment"
+            app:destination="@id/FourthFragment" />
+        <action
+            android:id="@+id/action_FifthFragment_to_SixthFragment"
+            app:destination="@id/SixthFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/SixthFragment"
+        android:name="com.br.appchecker.ui.questions.SixthFragment"
+        android:label="SixthFragment" >
+        <action
+            android:id="@+id/action_SixthFragment_to_FifthFragment"
+            app:destination="@id/FifthFragment" />
     </fragment>
 </navigation>

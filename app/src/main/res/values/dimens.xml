@@ -4,5 +4,5 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="button_width_match_parent">0dp</dimen>
-    <dimen name="button_width_180dp">163dp</dimen>
+    <dimen name="button_width_180dp">150dp</dimen>
 </resources>

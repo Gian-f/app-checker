@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
+    android:layout_height="wrap_content"
+    android:padding="12dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
         android:id="@+id/progressLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
         android:gravity="center"
+        android:layout_marginTop="30dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,10 +23,11 @@
             android:id="@+id/questionTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_medium"
             android:layout_marginBottom="8dp"
-            android:text="teste"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:text="teste" />
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/progressIndicator"
@@ -59,31 +60,32 @@
         android:id="@+id/buttons_group"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_margin="8dp"
+        android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nav_host_fragment">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/back_button"
-            android:layout_width="163dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:background="@drawable/neumorphism_bg"
-            android:text="Voltar"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/voltar"
             android:textAllCaps="false"
             android:visibility="gone" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/continue_button"
-            android:layout_width="match_parent"
+            android:layout_width="320dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:background="@drawable/neumorphism_bg"
-            android:text="Próximo"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/proximo"
             android:textAllCaps="false"
             android:textColor="@android:color/black" />
 

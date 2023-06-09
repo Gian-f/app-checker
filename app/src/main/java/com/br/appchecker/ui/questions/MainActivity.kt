@@ -10,6 +10,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.br.appchecker.R
 import com.br.appchecker.databinding.ActivityMainBinding
 import com.br.appchecker.ui.questions.interfaces.ProgressBarListener
+import com.br.appchecker.util.showBottomSheet
 
 class MainActivity : AppCompatActivity(), ProgressBarListener {
 
@@ -34,16 +35,38 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
     private fun setupListeners() {
         binding.continueButton.setOnClickListener {
             when (navController.currentDestination?.id) {
-                R.id.FirstFragment -> navigateToSecondFragment()
+                R.id.FirstFragment ->  navigateToSecondFragment()
                 R.id.SecondFragment -> navigateToThirdFragment()
-                R.id.ThirdFragment -> TODO()
+                R.id.ThirdFragment ->  navigateToFourthFragment()
+                R.id.FourthFragment -> navigateToFifthFragment()
+                R.id.FifthFragment ->  navigateToSixthFragment()
             }
         }
 
         binding.backButton.setOnClickListener {
             navigateUp()
         }
+    }
 
+    private fun navigateToFourthFragment() {
+        binding.backButton.visibility = View.VISIBLE
+        binding.continueButton.layoutParams.width = resources.getDimensionPixelSize(R.dimen.button_width_180dp)
+        val action = ThirdFragmentDirections.actionThirdFragmentToFourthFragment()
+        navController.navigate(action)
+    }
+
+    private fun navigateToFifthFragment() {
+        binding.backButton.visibility = View.VISIBLE
+        binding.continueButton.layoutParams.width = resources.getDimensionPixelSize(R.dimen.button_width_180dp)
+        val action = FourthFragmentDirections.actionFourthFragmentToFifthFragment()
+        navController.navigate(action)
+    }
+
+    private fun navigateToSixthFragment() {
+        binding.backButton.visibility = View.VISIBLE
+        binding.continueButton.layoutParams.width = resources.getDimensionPixelSize(R.dimen.button_width_180dp)
+        val action = FifthFragmentDirections.actionFifthFragmentToSixthFragment()
+        navController.navigate(action)
     }
 
     private fun navigateToSecondFragment() {
@@ -51,13 +74,6 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
         binding.continueButton.layoutParams.width =
             resources.getDimensionPixelSize(R.dimen.button_width_180dp)
         val action = FirstFragmentDirections.actionFirstFragmentToSecondFragment()
-        navController.navigate(action)
-    }
-
-    private fun navigateToFirstFragment() {
-        binding.continueButton.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-        binding.backButton.visibility = View.GONE
-        val action = SecondFragmentDirections.actionSecondFragmentToFirstFragment()
         navController.navigate(action)
     }
 
@@ -73,7 +89,11 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
         binding.continueButton.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
         // Verificar o destino anterior
         val previousDestination = navController.previousBackStackEntry?.destination?.id
-        if (previousDestination == R.id.SecondFragment) {
+
+        if (previousDestination == R.id.SecondFragment ||
+            previousDestination == R.id.ThirdFragment  ||
+            previousDestination == R.id.FourthFragment ||
+            previousDestination == R.id.FifthFragment) {
             // Mostrar o botão de voltar
             binding.backButton.visibility = View.VISIBLE
             binding.continueButton.layoutParams.width =

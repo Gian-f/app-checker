@@ -1,0 +1,56 @@
+package com.br.appchecker.ui.questions
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.br.appchecker.data.model.Question
+import com.br.appchecker.databinding.FragmentSixthBinding
+import com.br.appchecker.ui.questions.adapters.SingleChoiceQuestionAdapter
+import ulid.ULID
+
+class SixthFragment : BaseFragment<FragmentSixthBinding>() {
+
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentSixthBinding
+        get() = FragmentSixthBinding::inflate
+
+    override fun getProgressBarIndex(): Int {
+        return 6
+    }
+
+    override fun getProgressBarMessage(): String {
+        return "6 de 6"
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        configRecyclerView()
+    }
+
+    private fun configRecyclerView() {
+        binding.rvSixth.layoutManager = LinearLayoutManager(requireContext())
+
+        val questions = mutableListOf<Question>()
+        questions.add(
+            Question(
+                id = ULID.randomULID(),
+                title = "teste",
+                description = "Selecione a opção que melhor te descreve",
+                answers = listOf(
+                    "Sim, possuo posse ou propriedade acima do limite estabelecido",
+                    "Não, não possuo posse ou propriedade acima do limite estabelecido",
+                    "Não sei / Não tenho certeza",
+                    "Não se aplica"
+                ),
+                selectedAnswerPosition = null))
+
+        val adapter = SingleChoiceQuestionAdapter(questions, object : SingleChoiceQuestionAdapter.OnItemClickListener {
+            override fun onItemClick(question: Question, position: Int) {
+                Toast.makeText(requireContext(), "Você clicou na posição $position", Toast.LENGTH_SHORT).show()
+            }
+        })
+        binding.rvSixth.adapter = adapter
+    }
+}
