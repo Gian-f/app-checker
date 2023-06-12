@@ -43,13 +43,13 @@ class ThirdFragment : BaseFragment<FragmentThirdBinding>() {
         questions.add(
             Question(
             id = ULID.randomULID(),
-            title = "Você tinha a posse ou propriedade, em 31 de dezembro do ano-calendário, de bens ou direitos (incluindo terra nua) acima de R$ 300.000,00?",
+            title = "Você obteve ganho de capital na venda de bens ou direitos sujeito ao imposto?",
             description = "Selecione a opção que te melhor descreve",
             answers = listOf(
-                "Sim, acima do limite estabelecido",
-                "Não, eu tinha acima do limite estabelecido",
+                "Sim, obtive ganho de capital em venda de bens",
+                "Não, não obtive ganho de capital em venda de bens",
                 "Não sei / Não tenho certeza",
-                "Não se aplica"),
+                "Não se aplica a mim"),
             selectedAnswerPosition = null)
         )
         println(questions)

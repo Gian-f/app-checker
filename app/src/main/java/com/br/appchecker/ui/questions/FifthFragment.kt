@@ -43,13 +43,13 @@ class FifthFragment: BaseFragment<FragmentFifthBinding>() {
         questions.add(
             Question(
                 id = ULID.randomULID(),
-                title = "Você tinha a posse ou propriedade, em 31 de dezembro do ano-calendário, de bens ou direitos (incluindo terra nua) acima de R$ 300.000,00?",
+                title = "Você fez operações em bolsas de valores, de mercadorias, de futuros e assemelhadas acima de R$40.000,00 ou com ganhos líquidos sujeitos a impostos?",
                 description = "Selecione a opção que te melhor descreve",
                 answers = listOf(
-                    "Sim, possuo posse ou propriedade acima do limite estabelecido",
-                    "Não, não possuo posse ou propriedade acima do limite estabelecido",
+                    "Sim, realizei operações acima do limite estabelecido",
+                    "Não, não realizei operações acima do limite estabelecido",
                     "Não sei / Não tenho certeza",
-                    "Não se aplica"),
+                    "Não se aplica a mim"),
                 selectedAnswerPosition = null)
         )
         println(questions)

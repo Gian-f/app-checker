@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
                 R.id.ThirdFragment ->  navigateToFourthFragment()
                 R.id.FourthFragment -> navigateToFifthFragment()
                 R.id.FifthFragment ->  navigateToSixthFragment()
+                R.id.SixthFragment -> showBottomSheet(message = R.string.error_generic)
             }
         }
 

@@ -49,7 +49,7 @@ class FourthFragment : BaseFragment<FragmentFourthBinding>() {
                     "Sim, possuo posse ou propriedade acima do limite estabelecido",
                     "Não, não possuo posse ou propriedade acima do limite estabelecido",
                     "Não sei / Não tenho certeza",
-                    "Não se aplica"),
+                    "Não se aplica a mim"),
                 selectedAnswerPosition = null))
         println(questions)
         val adapter = SingleChoiceQuestionAdapter(questions, object :

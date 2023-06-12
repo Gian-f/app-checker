@@ -44,13 +44,13 @@ class SixthFragment : BaseFragment<FragmentSixthBinding>() {
         questions.add(
             Question(
                 id = ULID.randomULID(),
-                title = "teste",
+                title = "Você se tornou residente no Brasil em algum mês e estava nessa condição em 31 de dezembro do ano-calendário?",
                 description = "Selecione a opção que melhor te descreve",
                 answers = listOf(
-                    "Sim, possuo posse ou propriedade acima do limite estabelecido",
-                    "Não, não possuo posse ou propriedade acima do limite estabelecido",
+                    "Sim,me tornei residente e estava nessa condição",
+                    "Não, não me tornei residente no brasil no ano-calendário",
                     "Não sei / Não tenho certeza",
-                    "Não se aplica"
+                    "Não se aplica a mim"
                 ),
                 selectedAnswerPosition = null))
 

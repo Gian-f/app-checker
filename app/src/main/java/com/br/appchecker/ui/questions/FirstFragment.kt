@@ -48,13 +48,14 @@ class FirstFragment : BaseFragment <FragmentFirstBinding>(){
             answers = listOf(
                 "Sim, acima do limite estabelecido",
                 "Não, não recebi acima do limite estabelecido",
-                "Não sei / Não tenho certeza"),
+                "Não sei / Não tenho certeza",
+                "Não se aplica a mim"),
             selectedAnswerPosition = null))
         val adapter = SingleChoiceQuestionAdapter(questions, object :
             SingleChoiceQuestionAdapter.OnItemClickListener {
             override fun onItemClick(question: Question, position: Int) {
                     Toast.makeText(requireContext(),
-                    "Você clicou no $position - ${question.selectedAnswerPosition}",
+                    "Você clicou no $position",
                     Toast.LENGTH_LONG).show()
             }
         })

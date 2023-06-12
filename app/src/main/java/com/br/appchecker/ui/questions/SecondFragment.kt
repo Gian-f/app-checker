@@ -49,7 +49,7 @@ class SecondFragment : BaseFragment<FragmentSecondBinding>() {
                     "Sim, acima do limite estabelecido",
                     "Não, não recebi acima do limite estabelecido",
                     "Não sei / Não tenho certeza",
-                    "Não se aplica"
+                    "Não se aplica a mim"
                 ),
                 selectedAnswerPosition = null
             )
