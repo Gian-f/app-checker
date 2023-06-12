@@ -1,22 +1,21 @@
 package com.br.appchecker.ui.questions
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.br.appchecker.data.model.Question
 import com.br.appchecker.databinding.FragmentThirdBinding
 import com.br.appchecker.ui.questions.adapters.SingleChoiceQuestionAdapter
-import com.br.appchecker.ui.questions.interfaces.ProgressBarListener
 import ulid.ULID
 
-class ThirdFragment(override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) ->
-FragmentThirdBinding) : BaseFragment<FragmentThirdBinding>() {
+class ThirdFragment : BaseFragment<FragmentThirdBinding>() {
 
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) ->
+    FragmentThirdBinding
+        get() = FragmentThirdBinding::inflate
     override fun getProgressBarIndex(): Int {
         return 3
     }
@@ -28,6 +27,7 @@ FragmentThirdBinding) : BaseFragment<FragmentThirdBinding>() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        binding = bindingInflater.invoke(inflater, container, false)
         return binding.root
     }
 

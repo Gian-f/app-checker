@@ -13,8 +13,8 @@ import ulid.ULID
 
 class SixthFragment : BaseFragment<FragmentSixthBinding>() {
 
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentSixthBinding
-        get() = FragmentSixthBinding::inflate
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) ->
+    FragmentSixthBinding get() = FragmentSixthBinding::inflate
 
     override fun getProgressBarIndex(): Int {
         return 6
@@ -22,6 +22,14 @@ class SixthFragment : BaseFragment<FragmentSixthBinding>() {
 
     override fun getProgressBarMessage(): String {
         return "6 de 6"
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = bindingInflater.invoke(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

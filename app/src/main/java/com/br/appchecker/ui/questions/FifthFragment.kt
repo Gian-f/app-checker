@@ -11,9 +11,10 @@ import com.br.appchecker.databinding.FragmentFifthBinding
 import com.br.appchecker.ui.questions.adapters.SingleChoiceQuestionAdapter
 import ulid.ULID
 
-class FifthFragment(override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) ->
-FragmentFifthBinding) : BaseFragment<FragmentFifthBinding>() {
+class FifthFragment: BaseFragment<FragmentFifthBinding>() {
 
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) ->
+    FragmentFifthBinding get() = FragmentFifthBinding::inflate
     override fun getProgressBarIndex(): Int {
         return 5
     }
@@ -26,6 +27,7 @@ FragmentFifthBinding) : BaseFragment<FragmentFifthBinding>() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        binding = bindingInflater.invoke(inflater, container, false)
         return binding.root
     }
 

@@ -11,9 +11,11 @@ import com.br.appchecker.databinding.FragmentFirstBinding
 import com.br.appchecker.ui.questions.adapters.SingleChoiceQuestionAdapter
 import ulid.ULID
 
-class FirstFragment(
+class FirstFragment : BaseFragment <FragmentFirstBinding>(){
+
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) ->
-    FragmentFirstBinding) : BaseFragment <FragmentFirstBinding>() {
+    FragmentFirstBinding get() = FragmentFirstBinding::inflate
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
