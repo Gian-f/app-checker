@@ -30,20 +30,22 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
     }
 
     private fun setupNavController() {
-        setupAnimations()
+
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-            navController = navHostFragment.navController
-    }
-
-    private fun setupAnimations() {
-        supportFragmentManager.commit {
-            setCustomAnimations(
-                R.anim.slide_in,
-                R.anim.fade_out,
-                R.anim.fade_in,
-                R.anim.slide_out
-            )
+        navController = navHostFragment.navController
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            val currentDestination = navController.currentDestination
+            if (currentDestination != null && destination.id != currentDestination.id) {
+                supportFragmentManager.commit {
+                    setCustomAnimations(
+                        R.anim.slide_in,
+                        R.anim.fade_out,
+                        R.anim.fade_in,
+                        R.anim.slide_out
+                    )
+                }
+            }
         }
     }
 
@@ -56,7 +58,7 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
                     R.id.ThirdFragment ->  navigateToFourthFragment()
                     R.id.FourthFragment -> navigateToFifthFragment()
                     R.id.FifthFragment ->  navigateToSixthFragment()
-                    R.id.SixthFragment -> showBottomSheet(message = R.string.error_generic)
+                    R.id.SixthFragment ->  showBottomSheet(message = R.string.error_generic)
                 }
             }
             backButton.setOnClickListener {
@@ -66,7 +68,6 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
     }
 
     private fun navigateToSecondFragment() {
-        setupAnimations()
         with(binding) {
             backButton.visibility = View.VISIBLE
             continueButton.layoutParams.width = resources.getDimensionPixelSize(R.dimen.button_width_180dp)
@@ -76,7 +77,6 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
     }
 
     private fun navigateToThirdFragment() {
-        setupAnimations()
         with(binding) {
             backButton.visibility = View.VISIBLE
             continueButton.layoutParams.width = resources.getDimensionPixelSize(R.dimen.button_width_180dp)
@@ -86,7 +86,6 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
     }
 
     private fun navigateToFourthFragment() {
-        setupAnimations()
         with(binding) {
             backButton.visibility = View.VISIBLE
             continueButton.layoutParams.width = resources.getDimensionPixelSize(R.dimen.button_width_180dp)
@@ -96,7 +95,6 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
     }
 
     private fun navigateToFifthFragment() {
-        setupAnimations()
         with(binding) {
             backButton.visibility = View.VISIBLE
             continueButton.layoutParams.width = resources.getDimensionPixelSize(R.dimen.button_width_180dp)
@@ -106,7 +104,6 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
     }
 
     private fun navigateToSixthFragment() {
-        setupAnimations()
         with(binding) {
             backButton.visibility = View.VISIBLE
             continueButton.layoutParams.width = resources.getDimensionPixelSize(R.dimen.button_width_180dp)
@@ -116,7 +113,6 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
     }
 
     private fun navigateUp() {
-        setupAnimations()
         with(binding) {
             continueButton.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
         // Verificar o destino anterior
