@@ -9,7 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.br.appchecker.ui.questions.interfaces.ProgressBarListener
 
-abstract class BaseFragment<T : ViewBinding>() : Fragment() {
+abstract class BaseFragment<T : ViewBinding> : Fragment() {
+
     protected abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> T
     protected lateinit var binding: T
 

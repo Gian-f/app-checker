@@ -23,22 +23,23 @@ fun Fragment.showBottomSheet(
     titleDialog: Int? = null,
     titleButton: Int? = null,
     message: Int,
-    onClick: () -> Unit = {}
-) {
+    onClick: () -> Unit = {}) {
     val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
     val bottomSheetBinding: BottomSheetBinding =
         BottomSheetBinding.inflate(layoutInflater, null, false)
 
-    bottomSheetBinding.textTitle.text = getString(titleDialog ?: R.string.text_title_bottom_sheet)
-    bottomSheetBinding.textMessage.text = getText(message)
-    bottomSheetBinding.btnClick.text = getString(titleButton ?: R.string.text_button_bottom_sheet)
-    bottomSheetBinding.btnClick.setOnClickListener {
-        onClick()
-        bottomSheetDialog.dismiss()
-    }
-    bottomSheetBinding.closeButton.setOnClickListener {
-        onClick()
-        bottomSheetDialog.dismiss()
+    bottomSheetBinding.apply {
+        textTitle.text = getString(titleDialog ?: R.string.text_title_bottom_sheet)
+        textMessage.text = getText(message)
+        btnClick.text = getString(titleButton ?: R.string.text_button_bottom_sheet)
+        btnClick.setOnClickListener {
+            onClick()
+            bottomSheetDialog.dismiss()
+        }
+        closeButton.setOnClickListener {
+            onClick()
+            bottomSheetDialog.dismiss()
+        }
     }
     bottomSheetDialog.setContentView(bottomSheetBinding.root)
     bottomSheetDialog.show()
@@ -48,22 +49,23 @@ fun Activity.showBottomSheet(
     titleDialog: Int? = null,
     titleButton: Int? = null,
     message: Int,
-    onClick: () -> Unit = {}
-) {
+    onClick: () -> Unit = {}) {
     val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialog)
     val bottomSheetBinding: BottomSheetBinding =
         BottomSheetBinding.inflate(layoutInflater, null, false)
 
-    bottomSheetBinding.textTitle.text = getString(titleDialog ?: R.string.text_title_bottom_sheet)
-    bottomSheetBinding.textMessage.text = getText(message)
-    bottomSheetBinding.btnClick.text = getString(titleButton ?: R.string.text_button_bottom_sheet)
-    bottomSheetBinding.btnClick.setOnClickListener {
-        onClick()
-        bottomSheetDialog.dismiss()
-    }
-    bottomSheetBinding.closeButton.setOnClickListener {
-        onClick()
-        bottomSheetDialog.dismiss()
+    with(bottomSheetBinding) {
+        textTitle.text = getString(titleDialog ?: R.string.text_title_bottom_sheet)
+        textMessage.text = getText(message)
+        btnClick.text = getString(titleButton ?: R.string.text_button_bottom_sheet)
+        btnClick.setOnClickListener {
+            onClick()
+            bottomSheetDialog.dismiss()
+        }
+        closeButton.setOnClickListener {
+            onClick()
+            bottomSheetDialog.dismiss()
+        }
     }
     bottomSheetDialog.setContentView(bottomSheetBinding.root)
     bottomSheetDialog.show()

@@ -8,10 +8,10 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.br.appchecker.data.model.Question
 import com.br.appchecker.databinding.FragmentFirstBinding
-import com.br.appchecker.ui.questions.adapters.SingleChoiceQuestionAdapter
+import com.br.appchecker.ui.questions.adapters.SingleChoiceAdapter
 import ulid.ULID
 
-class FirstFragment : BaseFragment <FragmentFirstBinding>(){
+class FirstFragment : BaseFragment <FragmentFirstBinding>() {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) ->
     FragmentFirstBinding get() = FragmentFirstBinding::inflate
@@ -51,16 +51,15 @@ class FirstFragment : BaseFragment <FragmentFirstBinding>(){
                 "Não sei / Não tenho certeza",
                 "Não se aplica a mim"),
             selectedAnswerPosition = null))
-        val adapter = SingleChoiceQuestionAdapter(questions, object :
-            SingleChoiceQuestionAdapter.OnItemClickListener {
+        val adapter = SingleChoiceAdapter(requireContext(),
+            questions, object : SingleChoiceAdapter.OnItemClickListener {
             override fun onItemClick(question: Question, position: Int) {
                     Toast.makeText(requireContext(),
                     "Você clicou no $position",
                     Toast.LENGTH_LONG).show()
-                println(question)
-                println(questions)
             }
         })
         recyclerView.adapter = adapter
     }
+
 }

@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.br.appchecker.data.model.Question
 import com.br.appchecker.databinding.FragmentFourthBinding
-import com.br.appchecker.ui.questions.adapters.SingleChoiceQuestionAdapter
+import com.br.appchecker.ui.questions.adapters.SingleChoiceAdapter
 import ulid.ULID
 
 class FourthFragment : BaseFragment<FragmentFourthBinding>() {
@@ -52,8 +52,8 @@ class FourthFragment : BaseFragment<FragmentFourthBinding>() {
                     "Não se aplica a mim"),
                 selectedAnswerPosition = null))
         println(questions)
-        val adapter = SingleChoiceQuestionAdapter(questions, object :
-            SingleChoiceQuestionAdapter.OnItemClickListener {
+        val adapter = SingleChoiceAdapter(requireContext(),questions, object :
+            SingleChoiceAdapter.OnItemClickListener {
             override fun onItemClick(question: Question, position: Int) {
                 Toast.makeText(requireContext(), "você clicou no $position", Toast.LENGTH_SHORT).show()
             }

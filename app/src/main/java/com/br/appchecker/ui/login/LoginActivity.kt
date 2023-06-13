@@ -10,8 +10,6 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.br.appchecker.R
 import com.br.appchecker.databinding.ActivityLoginBinding
 import com.br.appchecker.ui.questions.MainActivity
@@ -19,8 +17,9 @@ import com.br.appchecker.util.afterTextChanged
 
 class LoginActivity : AppCompatActivity() {
 
+    private val binding: ActivityLoginBinding by
+    lazy { ActivityLoginBinding.inflate(layoutInflater) }
     private lateinit var loginViewModel: LoginViewModel
-    private val binding: ActivityLoginBinding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,33 +52,35 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
-        binding.username.afterTextChanged { text ->
-            loginViewModel.loginDataChanged(text, binding.password.text.toString())
-        }
-
-        binding.password.apply {
-            afterTextChanged { text ->
-                loginViewModel.loginDataChanged(binding.username.text.toString(), text)
+        binding.apply {
+            username.afterTextChanged { text ->
+                loginViewModel.loginDataChanged(text, binding.password.text.toString())
             }
 
-            setOnEditorActionListener { _, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(binding.username.text.toString(), text.toString())
+            password.apply {
+                afterTextChanged { text ->
+                    loginViewModel.loginDataChanged(binding.username.text.toString(), text)
                 }
-                false
+
+                setOnEditorActionListener { _, actionId, _ ->
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        loginViewModel.login(binding.username.text.toString(), text.toString())
+                    }
+                    false
+                }
             }
         }
 
-        binding.login.setOnClickListener {
-            with(binding) {
-                loading?.visibility = View.VISIBLE
+        with(binding) {
+        login.setOnClickListener {
+            loading?.visibility = View.VISIBLE
 //                loginViewModel.login(username.text.toString(), password.text.toString())
-                navigateToMain()
-            }
+            navigateToMain()
         }
 
-        binding.guest?.setOnClickListener {
+        guest?.setOnClickListener {
             navigateToMain()
+            }
         }
     }
 

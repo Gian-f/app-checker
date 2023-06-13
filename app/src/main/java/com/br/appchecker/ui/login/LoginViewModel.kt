@@ -9,7 +9,9 @@ import com.br.appchecker.data.Result
 
 import com.br.appchecker.R
 
-class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
+class LoginViewModel(
+    private val loginRepository: LoginRepository
+    ) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
@@ -38,7 +40,6 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
             _loginForm.value = LoginFormState(isDataValid = true)
         }
     }
-
     // A placeholder username validation check
     private fun isUserNameValid(username: String): Boolean {
         return if (username.contains('@')) {
@@ -47,7 +48,6 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
             username.isNotBlank()
         }
     }
-
     // A placeholder password validation check
     private fun isPasswordValid(password: String): Boolean {
         return password.length >= 5
