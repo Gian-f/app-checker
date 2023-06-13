@@ -9,16 +9,15 @@ import com.br.appchecker.databinding.ItemSingleChoiceQuestionBinding
 import com.br.appchecker.ui.questions.adapters.SingleChoiceAdapter
 import com.google.android.material.radiobutton.MaterialRadioButton
 
-class SingleChoiceViewHolder(binding: ItemSingleChoiceQuestionBinding) :
+class SingleChoiceViewHolder(
+    binding:ItemSingleChoiceQuestionBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(
-        binding: ItemSingleChoiceQuestionBinding,
-        question: Question,
-        listener: SingleChoiceAdapter.OnItemClickListener
-    ) {
-
+        binding: ItemSingleChoiceQuestionBinding, question: Question,
+        listener: SingleChoiceAdapter.OnItemClickListener) {
         with(binding) {
+
             title.text = question.title
             description.text = question.description
             answersGroup.removeAllViews()

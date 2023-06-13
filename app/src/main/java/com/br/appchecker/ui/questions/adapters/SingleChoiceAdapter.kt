@@ -12,7 +12,7 @@ class SingleChoiceAdapter(
     val context: Context,
     private val questions: MutableList<Question>,
     private val listener: OnItemClickListener
-) : RecyclerView.Adapter<SingleChoiceViewHolder>() {
+    ) : RecyclerView.Adapter<SingleChoiceViewHolder>() {
 
      val binding : ItemSingleChoiceQuestionBinding by
      lazy { ItemSingleChoiceQuestionBinding.inflate(LayoutInflater.from(context)) }
