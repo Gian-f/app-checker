@@ -57,6 +57,8 @@ class FirstFragment : BaseFragment <FragmentFirstBinding>(){
                     Toast.makeText(requireContext(),
                     "Você clicou no $position",
                     Toast.LENGTH_LONG).show()
+                println(question)
+                println(questions)
             }
         })
         recyclerView.adapter = adapter

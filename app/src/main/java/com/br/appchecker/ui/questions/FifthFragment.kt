@@ -52,11 +52,14 @@ class FifthFragment: BaseFragment<FragmentFifthBinding>() {
                     "Não se aplica a mim"),
                 selectedAnswerPosition = null)
         )
-        println(questions)
         val adapter = SingleChoiceQuestionAdapter(questions, object :
             SingleChoiceQuestionAdapter.OnItemClickListener {
             override fun onItemClick(question: Question, position: Int) {
-                Toast.makeText(requireContext(), "você clicou no $position", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),
+                    "você clicou no $position",
+                    Toast.LENGTH_SHORT).show()
+                println(question)
+                println(questions)
             }
         })
         recyclerView.adapter = adapter

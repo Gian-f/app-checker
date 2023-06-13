@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
 
     private val binding: ActivityMainBinding by
     lazy { ActivityMainBinding.inflate(layoutInflater) }
+
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +48,7 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
         binding.backButton.setOnClickListener {
             navigateUp()
         }
+
     }
 
     private fun navigateToFourthFragment() {
@@ -72,22 +74,21 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
 
     private fun navigateToSecondFragment() {
         binding.backButton.visibility = View.VISIBLE
-        binding.continueButton.layoutParams.width =
-            resources.getDimensionPixelSize(R.dimen.button_width_180dp)
+        binding.continueButton.layoutParams.width = resources.getDimensionPixelSize(R.dimen.button_width_180dp)
         val action = FirstFragmentDirections.actionFirstFragmentToSecondFragment()
         navController.navigate(action)
     }
 
     private fun navigateToThirdFragment() {
         binding.backButton.visibility = View.VISIBLE
-        binding.continueButton.layoutParams.width =
-            resources.getDimensionPixelSize(R.dimen.button_width_180dp)
+        binding.continueButton.layoutParams.width = resources.getDimensionPixelSize(R.dimen.button_width_180dp)
         val action = SecondFragmentDirections.actionSecondFragmentToThirdFragment()
         navController.navigate(action)
     }
 
     private fun navigateUp() {
         binding.continueButton.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+
         // Verificar o destino anterior
         val previousDestination = navController.previousBackStackEntry?.destination?.id
 

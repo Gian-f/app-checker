@@ -25,13 +25,8 @@ abstract class BaseFragment<T : ViewBinding>() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        progressBarListener?.onUpdateProgressBar(getProgressBarIndex(), getProgressBarMessage())
-//        configRecyclerView()
+        progressBarListener?.onUpdateProgressBar(getProgressBarIndex(), getProgressBarMessage() )
     }
-
-//    private fun configRecyclerView() {
-//        // Implemente a lógica específica do RecyclerView aqui
-//    }
 
     protected abstract fun getProgressBarIndex(): Int
 
