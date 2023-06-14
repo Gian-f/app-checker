@@ -5,8 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
-import androidx.fragment.app.commit
 import androidx.navigation.NavController
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.NavHostFragment
 import com.br.appchecker.R
 import com.br.appchecker.databinding.ActivityMainBinding
@@ -25,112 +25,62 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setupNavController()
-        setupListeners()
+//        setupListeners()
         onUpdateProgressBar(1, "1 de 6")
     }
 
     private fun setupNavController() {
-
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            val currentDestination = navController.currentDestination
-            if (currentDestination != null && destination.id != currentDestination.id) {
-                supportFragmentManager.commit {
-                    setCustomAnimations(
-                        R.anim.slide_in,
-                        R.anim.fade_out,
-                        R.anim.fade_in,
-                        R.anim.slide_out
-                    )
-                }
-            }
-        }
     }
 
-    private fun setupListeners() {
-        with(binding) {
-            continueButton.setOnClickListener {
-                when (navController.currentDestination?.id) {
-                    R.id.FirstFragment ->  navigateToSecondFragment()
-                    R.id.SecondFragment -> navigateToThirdFragment()
-                    R.id.ThirdFragment ->  navigateToFourthFragment()
-                    R.id.FourthFragment -> navigateToFifthFragment()
-                    R.id.FifthFragment ->  navigateToSixthFragment()
-                    R.id.SixthFragment ->  showBottomSheet(message = R.string.error_generic)
-                }
-            }
-            backButton.setOnClickListener {
-                navigateUp()
-            }
-        }
-    }
+//    private fun setupListeners() {
+//        with(binding) {
+//            continueButton.setOnClickListener {
+//                when (navController.currentDestination?.id) {
+//                    R.id.FirstFragment ->  navigateToFragment(FirstFragmentDirections.actionFirstFragmentToSecondFragment())
+//                    R.id.SecondFragment -> navigateToFragment(SecondFragmentDirections.actionSecondFragmentToThirdFragment())
+//                    R.id.ThirdFragment ->  navigateToFragment(ThirdFragmentDirections.actionThirdFragmentToFourthFragment())
+//                    R.id.FourthFragment -> navigateToFragment(FifthFragmentDirections.actionFifthFragmentToSixthFragment())
+//                    R.id.FifthFragment ->  navigateToFragment(FifthFragmentDirections.actionFifthFragmentToSixthFragment())
+//                    R.id.SixthFragment ->  showBottomSheet(message = R.string.error_generic)
+//                }
+//            }
+//
+//            backButton.setOnClickListener {
+//                navigateUp()
+//            }
+//
+//        }
+//    }
 
-    private fun navigateToSecondFragment() {
-        with(binding) {
-            backButton.visibility = View.VISIBLE
-            continueButton.layoutParams.width = resources.getDimensionPixelSize(R.dimen.button_width_180dp)
-            val action = FirstFragmentDirections.actionFirstFragmentToSecondFragment()
-            navController.navigate(action)
-        }
-    }
+//    private fun navigateToFragment(action: NavDirections) {
+//        with(binding) {
+//            backButton.visibility = View.VISIBLE
+//            continueButton.layoutParams.width =
+//                resources.getDimensionPixelSize(R.dimen.button_width_180dp)
+//            navController.navigate(action)
+//        }
+//    }
 
-    private fun navigateToThirdFragment() {
-        with(binding) {
-            backButton.visibility = View.VISIBLE
-            continueButton.layoutParams.width = resources.getDimensionPixelSize(R.dimen.button_width_180dp)
-            val action = SecondFragmentDirections.actionSecondFragmentToThirdFragment()
-            navController.navigate(action)
-        }
-    }
-
-    private fun navigateToFourthFragment() {
-        with(binding) {
-            backButton.visibility = View.VISIBLE
-            continueButton.layoutParams.width = resources.getDimensionPixelSize(R.dimen.button_width_180dp)
-            val action = ThirdFragmentDirections.actionThirdFragmentToFourthFragment()
-            navController.navigate(action)
-        }
-    }
-
-    private fun navigateToFifthFragment() {
-        with(binding) {
-            backButton.visibility = View.VISIBLE
-            continueButton.layoutParams.width = resources.getDimensionPixelSize(R.dimen.button_width_180dp)
-            val action = FourthFragmentDirections.actionFourthFragmentToFifthFragment()
-            navController.navigate(action)
-        }
-    }
-
-    private fun navigateToSixthFragment() {
-        with(binding) {
-            backButton.visibility = View.VISIBLE
-            continueButton.layoutParams.width = resources.getDimensionPixelSize(R.dimen.button_width_180dp)
-            val action = FifthFragmentDirections.actionFifthFragmentToSixthFragment()
-            navController.navigate(action)
-        }
-    }
-
-    private fun navigateUp() {
-        with(binding) {
-            continueButton.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-        // Verificar o destino anterior
-        val previousDestination = navController.previousBackStackEntry?.destination?.id
-        if (previousDestination == R.id.SecondFragment ||
-            previousDestination == R.id.ThirdFragment  ||
-            previousDestination == R.id.FourthFragment ||
-            previousDestination == R.id.FifthFragment) {
-            // Mostrar o botão de voltar
-            backButton.visibility = View.VISIBLE
-            continueButton.layoutParams.width = resources.getDimensionPixelSize(R.dimen.button_width_180dp)
-        } else {
-            // Esconder o botão de voltar
-            backButton.visibility = View.GONE
-        }
-        navController.navigateUp()
-        }
-    }
+//    private fun navigateUp() {
+//        with(binding) {
+//            continueButton.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+//            val previousDestination = navController.previousBackStackEntry?.destination?.id
+//            if (previousDestination == R.id.SecondFragment ||
+//                previousDestination == R.id.ThirdFragment  ||
+//                previousDestination == R.id.FourthFragment ||
+//                previousDestination == R.id.FifthFragment) {
+//                backButton.visibility = View.VISIBLE
+//                continueButton.layoutParams.width =
+//                    resources.getDimensionPixelSize(R.dimen.button_width_180dp)
+//            } else {
+//                backButton.visibility = View.GONE
+//            }
+//            navController.navigateUp()
+//        }
+//    }
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()

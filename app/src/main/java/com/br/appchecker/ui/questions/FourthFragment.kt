@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.br.appchecker.R
 import com.br.appchecker.data.model.Question
 import com.br.appchecker.databinding.FragmentFourthBinding
 import com.br.appchecker.ui.questions.adapters.SingleChoiceAdapter
+import com.br.appchecker.util.showBottomSheet
 import ulid.ULID
 
 class FourthFragment : BaseFragment<FragmentFourthBinding>() {
@@ -34,6 +37,28 @@ class FourthFragment : BaseFragment<FragmentFourthBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configRecyclerView()
+        setupListeners()
+    }
+
+    private fun setupListeners() {
+        val nextAction = FourthFragmentDirections.actionFourthFragmentToFifthFragment()
+        val previousAction = FourthFragmentDirections.actionFourthFragmentToThirdFragment()
+        with(binding) {
+            continueButton.setOnClickListener {
+                val adapter = rvFourth.adapter as? SingleChoiceAdapter
+                val questions = adapter?.getQuestions()
+                val unansweredQuestion = questions?.get(0)
+                if(unansweredQuestion?.selectedAnswerPosition != null) {
+                    findNavController().navigate(nextAction)
+                } else {
+                    showBottomSheet(message = R.string.error_generic)
+                }
+            }
+
+            backButton.setOnClickListener {
+                findNavController().navigate(previousAction)
+            }
+        }
     }
 
     private fun configRecyclerView() {
@@ -51,7 +76,6 @@ class FourthFragment : BaseFragment<FragmentFourthBinding>() {
                     "Não sei / Não tenho certeza",
                     "Não se aplica a mim"),
                 selectedAnswerPosition = null))
-        println(questions)
         val adapter = SingleChoiceAdapter(requireContext(),questions, object :
             SingleChoiceAdapter.OnItemClickListener {
             override fun onItemClick(question: Question, position: Int) {

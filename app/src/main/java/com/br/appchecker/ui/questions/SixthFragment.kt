@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.br.appchecker.R
 import com.br.appchecker.data.model.Question
 import com.br.appchecker.databinding.FragmentSixthBinding
 import com.br.appchecker.ui.questions.adapters.SingleChoiceAdapter
+import com.br.appchecker.util.showBottomSheet
 import ulid.ULID
 
 class SixthFragment : BaseFragment<FragmentSixthBinding>() {
@@ -35,11 +38,34 @@ class SixthFragment : BaseFragment<FragmentSixthBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configRecyclerView()
+        setupListeners()
     }
+    private fun setupListeners() {
+//        val nextAction = showBottomSheet(message = R.string.error_generic)
+        val previousAction =  SixthFragmentDirections.actionSixthFragmentToFifthFragment()
+        with(binding) {
+            continueButton.setOnClickListener {
+                val adapter = rvSixth.adapter as? SingleChoiceAdapter
+                val questions = adapter?.getQuestions()
+                val unansweredQuestion = questions?.get(0)
+                println(questions?.get(0))
+                if (unansweredQuestion?.selectedAnswerPosition != null) {
+//                    findNavController().navigate(nextAction)
+                    showBottomSheet(message = R.string.error_not_implemented_yet)
+                } else {
+                    showBottomSheet(message = R.string.error_generic)
+                }
+            }
+
+            backButton.setOnClickListener {
+                findNavController().navigate(previousAction)
+            }
+        }
+    }
+
 
     private fun configRecyclerView() {
         binding.rvSixth.layoutManager = LinearLayoutManager(requireContext())
-
         val questions = mutableListOf<Question>()
         questions.add(
             Question(

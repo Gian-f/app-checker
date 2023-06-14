@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.br.appchecker.R
 import com.br.appchecker.data.model.Question
 import com.br.appchecker.databinding.FragmentThirdBinding
 import com.br.appchecker.ui.questions.adapters.SingleChoiceAdapter
+import com.br.appchecker.util.showBottomSheet
 import ulid.ULID
 
 class ThirdFragment : BaseFragment<FragmentThirdBinding>() {
@@ -34,6 +37,27 @@ class ThirdFragment : BaseFragment<FragmentThirdBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configRecyclerView()
+        setupListeners()
+    }
+
+    private fun setupListeners() {
+        val nextAction = ThirdFragmentDirections.actionThirdFragmentToFourthFragment()
+        val previousAction = ThirdFragmentDirections.actionThirdFragmentToSecondFragment()
+        with(binding) {
+            continueButton.setOnClickListener {
+                val adapter = rvThird.adapter as? SingleChoiceAdapter
+                val questions = adapter?.getQuestions()
+                val unansweredQuestion = questions?.get(0)
+                if(unansweredQuestion?.selectedAnswerPosition != null) {
+                    findNavController().navigate(nextAction)
+                } else {
+                    showBottomSheet(message = R.string.error_generic)
+                }
+            }
+            backButton.setOnClickListener {
+                findNavController().navigate(previousAction)
+            }
+        }
     }
 
     private fun configRecyclerView() {

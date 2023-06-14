@@ -14,19 +14,24 @@ class SingleChoiceAdapter(
     private val listener: OnItemClickListener
     ) : RecyclerView.Adapter<SingleChoiceViewHolder>() {
 
-     val binding : ItemSingleChoiceQuestionBinding by
+    val binding : ItemSingleChoiceQuestionBinding by
      lazy { ItemSingleChoiceQuestionBinding.inflate(LayoutInflater.from(context)) }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SingleChoiceViewHolder {
         return SingleChoiceViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: SingleChoiceViewHolder, position: Int) {
         val question = questions[position]
-        holder.bind(binding,question, listener)
+        holder.bind(binding, question, listener)
     }
 
     override fun getItemCount(): Int {
         return questions.size
+    }
+
+    fun getQuestions(): List<Question> {
+        return questions
     }
 
     interface OnItemClickListener {

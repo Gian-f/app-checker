@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.br.appchecker.R
 import com.br.appchecker.data.model.Question
 import com.br.appchecker.databinding.FragmentFirstBinding
 import com.br.appchecker.ui.questions.adapters.SingleChoiceAdapter
+import com.br.appchecker.util.showBottomSheet
 import ulid.ULID
 
 class FirstFragment : BaseFragment <FragmentFirstBinding>() {
@@ -27,6 +30,7 @@ class FirstFragment : BaseFragment <FragmentFirstBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configRecyclerView()
+        setupListeners()
     }
 
     override fun getProgressBarIndex(): Int {
@@ -35,6 +39,23 @@ class FirstFragment : BaseFragment <FragmentFirstBinding>() {
 
     override fun getProgressBarMessage(): String {
         return "1 de 6"
+    }
+
+    private fun setupListeners() {
+        with(binding) {
+            val action = FirstFragmentDirections.actionFirstFragmentToSecondFragment()
+            continueButton.setOnClickListener {
+                val adapter = rv.adapter as? SingleChoiceAdapter
+                val questions = adapter?.getQuestions()
+                val unansweredQuestion = questions?.get(0)
+                println(questions?.get(0))
+                if (unansweredQuestion?.selectedAnswerPosition != null) {
+                    findNavController().navigate(action)
+                } else {
+                    showBottomSheet(message = R.string.error_generic)
+                }
+            }
+        }
     }
 
     private fun configRecyclerView() {
@@ -51,15 +72,16 @@ class FirstFragment : BaseFragment <FragmentFirstBinding>() {
                 "Não sei / Não tenho certeza",
                 "Não se aplica a mim"),
             selectedAnswerPosition = null))
-        val adapter = SingleChoiceAdapter(requireContext(),
-            questions, object : SingleChoiceAdapter.OnItemClickListener {
+        val adapter = SingleChoiceAdapter(
+            requireContext(), questions,
+            object : SingleChoiceAdapter.OnItemClickListener {
             override fun onItemClick(question: Question, position: Int) {
-                    Toast.makeText(requireContext(),
-                    "Você clicou no $position",
+                question.selectedAnswerPosition = position
+                Toast.makeText(requireContext(),
+                    "Você clicou no $position - ${question.selectedAnswerPosition}",
                     Toast.LENGTH_LONG).show()
             }
         })
         recyclerView.adapter = adapter
     }
-
 }
