@@ -53,7 +53,10 @@ dependencies {
     //ULID
     implementation "com.aallam.ulid:ulid-kotlin:1.2.1"
 
-    implementation "androidx.navigation:navigation-fragment-ktx:2.5.3"
-    implementation "androidx.navigation:navigation-ui-ktx:2.5.3"
+    //stepper library
+    implementation "com.tbuonomo:dotsindicator:4.3"
+
+    implementation "androidx.navigation:navigation-fragment-ktx:2.6.0"
+    implementation "androidx.navigation:navigation-ui-ktx:2.6.0"
 
 }

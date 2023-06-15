@@ -28,18 +28,18 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        progressBarListener?.onUpdateProgressBar(getProgressBarIndex(), getProgressBarMessage() )
+        progressBarListener?.onUpdateProgressBar(getProgressBarIndex(), getProgressBarMessage())
     }
 
-    protected abstract fun getProgressBarIndex(): Int
+    abstract fun getProgressBarIndex(): Int
 
-    protected abstract fun getProgressBarMessage(): String
+    abstract fun getProgressBarMessage(): String
 
-    protected abstract fun getActionForNextFragment(): NavDirections
+    abstract fun getActionForNextFragment(): NavDirections
 
-    protected abstract fun getActionForPreviousFragment(): NavDirections?
+    abstract fun getActionForPreviousFragment(): NavDirections?
 
-    protected abstract fun isAnswerSelected(): Boolean
+    abstract fun isAnswerSelected(): Boolean
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

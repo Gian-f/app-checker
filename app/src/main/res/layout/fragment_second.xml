@@ -35,9 +35,10 @@
 
             <Button
                 android:id="@+id/back_button"
-                android:layout_width="165dp"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:textSize="18sp"
                 android:background="@drawable/neumorphism_bg"
                 android:elevation="8dp"
                 android:fontFamily="@font/inter_medium"
@@ -47,9 +48,10 @@
 
             <Button
                 android:id="@+id/continue_button"
-                android:layout_width="165dp"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:textSize="18sp"
                 android:background="@drawable/neumorphism_bg"
                 android:elevation="8dp"
                 android:fontFamily="@font/inter_medium"

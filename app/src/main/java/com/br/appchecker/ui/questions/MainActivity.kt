@@ -1,17 +1,13 @@
 package com.br.appchecker.ui.questions
 
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
-import androidx.navigation.NavDirections
 import androidx.navigation.fragment.NavHostFragment
 import com.br.appchecker.R
 import com.br.appchecker.databinding.ActivityMainBinding
 import com.br.appchecker.ui.questions.interfaces.ProgressBarListener
-import com.br.appchecker.util.showBottomSheet
 
 class MainActivity : AppCompatActivity(), ProgressBarListener {
 

@@ -53,6 +53,7 @@
                 android:layout_margin="16dp"
                 android:background="@drawable/neumorphism_bg"
                 android:elevation="8dp"
+                android:textSize="18sp"
                 android:fontFamily="@font/inter_medium"
                 android:text="@string/proximo"
                 android:textAllCaps="false"

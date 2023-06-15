@@ -5,4 +5,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="button_width_match_parent">0dp</dimen>
     <dimen name="button_width_180dp">150dp</dimen>
+    <dimen name="margin_16">16dp</dimen>
+    <dimen name="padding_30">30dp</dimen>
+    <dimen name="margin_8">8dp</dimen>
 </resources>

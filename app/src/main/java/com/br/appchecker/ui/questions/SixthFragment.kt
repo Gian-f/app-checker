@@ -96,7 +96,6 @@ class SixthFragment : BaseFragment<FragmentSixthBinding>() {
             val adapter = rvSixth.adapter as? SingleChoiceAdapter
             val questions = adapter?.getQuestions()
             val unansweredQuestion = questions?.get(0)
-            println(questions?.get(0))
             return unansweredQuestion?.selectedAnswerPosition != null
         }
     }
