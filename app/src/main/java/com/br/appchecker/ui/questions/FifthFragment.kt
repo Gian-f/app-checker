@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.br.appchecker.R
@@ -18,13 +19,6 @@ class FifthFragment: BaseFragment<FragmentFifthBinding>() {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) ->
     FragmentFifthBinding get() = FragmentFifthBinding::inflate
-    override fun getProgressBarIndex(): Int {
-        return 5
-    }
-
-    override fun getProgressBarMessage(): String {
-        return "5 de 6"
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,26 +35,19 @@ class FifthFragment: BaseFragment<FragmentFifthBinding>() {
     }
 
     private fun setupListeners() {
-        val nextAction = FifthFragmentDirections.actionFifthFragmentToSixthFragment()
-        val previousAction = FifthFragmentDirections.actionFifthFragmentToFourthFragment()
         with(binding) {
             continueButton.setOnClickListener {
-                val adapter = rvFifth.adapter as? SingleChoiceAdapter
-                val questions = adapter?.getQuestions()
-                val unansweredQuestion = questions?.get(0)
-                if(unansweredQuestion?.selectedAnswerPosition != null) {
-                    findNavController().navigate(nextAction)
+                if(isAnswerSelected()) {
+                    findNavController().navigate(getActionForNextFragment())
                 } else {
                     showBottomSheet(message = R.string.error_empty_form)
                 }
             }
-
             backButton.setOnClickListener {
-                findNavController().navigate(previousAction)
+                findNavController().navigate(getActionForPreviousFragment())
             }
         }
     }
-
 
     private fun configRecyclerView() {
         val recyclerView = binding.rvFifth
@@ -87,5 +74,30 @@ class FifthFragment: BaseFragment<FragmentFifthBinding>() {
             }
         })
         recyclerView.adapter = adapter
+    }
+
+    override fun getProgressBarIndex(): Int {
+        return 5
+    }
+
+    override fun getProgressBarMessage(): String {
+        return "5 de 6"
+    }
+
+    override fun getActionForNextFragment(): NavDirections {
+        return FifthFragmentDirections.actionFifthFragmentToSixthFragment()
+    }
+
+    override fun getActionForPreviousFragment(): NavDirections {
+        return FifthFragmentDirections.actionFifthFragmentToFourthFragment()
+    }
+
+    override fun isAnswerSelected(): Boolean {
+        with(binding) {
+            val adapter = rvFifth.adapter as? SingleChoiceAdapter
+            val questions = adapter?.getQuestions()
+            val unansweredQuestion = questions?.get(0)
+            return unansweredQuestion?.selectedAnswerPosition != null
+        }
     }
 }

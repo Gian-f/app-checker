@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavDirections
 import androidx.viewbinding.ViewBinding
 import com.br.appchecker.ui.questions.interfaces.ProgressBarListener
 
 abstract class BaseFragment<T : ViewBinding> : Fragment() {
 
     protected abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> T
+
     protected lateinit var binding: T
 
     private var progressBarListener: ProgressBarListener? = null
@@ -32,6 +34,12 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
     protected abstract fun getProgressBarIndex(): Int
 
     protected abstract fun getProgressBarMessage(): String
+
+    protected abstract fun getActionForNextFragment(): NavDirections
+
+    protected abstract fun getActionForPreviousFragment(): NavDirections?
+
+    protected abstract fun isAnswerSelected(): Boolean
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

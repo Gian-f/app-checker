@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.br.appchecker.R
@@ -18,14 +19,6 @@ class SixthFragment : BaseFragment<FragmentSixthBinding>() {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) ->
     FragmentSixthBinding get() = FragmentSixthBinding::inflate
-
-    override fun getProgressBarIndex(): Int {
-        return 6
-    }
-
-    override fun getProgressBarMessage(): String {
-        return "6 de 6"
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,15 +34,9 @@ class SixthFragment : BaseFragment<FragmentSixthBinding>() {
         setupListeners()
     }
     private fun setupListeners() {
-//        val nextAction = showBottomSheet(message = R.string.error_generic)
-        val previousAction =  SixthFragmentDirections.actionSixthFragmentToFifthFragment()
         with(binding) {
             continueButton.setOnClickListener {
-                val adapter = rvSixth.adapter as? SingleChoiceAdapter
-                val questions = adapter?.getQuestions()
-                val unansweredQuestion = questions?.get(0)
-                println(questions?.get(0))
-                if (unansweredQuestion?.selectedAnswerPosition != null) {
+                if (isAnswerSelected()) {
 //                    findNavController().navigate(nextAction)
                     showBottomSheet(message = R.string.error_not_implemented_yet)
                 } else {
@@ -58,11 +45,10 @@ class SixthFragment : BaseFragment<FragmentSixthBinding>() {
             }
 
             backButton.setOnClickListener {
-                findNavController().navigate(previousAction)
+                findNavController().navigate(getActionForPreviousFragment())
             }
         }
     }
-
 
     private fun configRecyclerView() {
         binding.rvSixth.layoutManager = LinearLayoutManager(requireContext())
@@ -87,5 +73,31 @@ class SixthFragment : BaseFragment<FragmentSixthBinding>() {
             }
         })
         binding.rvSixth.adapter = adapter
+    }
+
+    override fun getProgressBarIndex(): Int {
+        return 6
+    }
+
+    override fun getProgressBarMessage(): String {
+        return "6 de 6"
+    }
+
+    override fun getActionForNextFragment(): NavDirections {
+        return TODO()
+    }
+
+    override fun getActionForPreviousFragment(): NavDirections {
+        return SixthFragmentDirections.actionSixthFragmentToFifthFragment()
+    }
+
+    override fun isAnswerSelected(): Boolean {
+        with(binding) {
+            val adapter = rvSixth.adapter as? SingleChoiceAdapter
+            val questions = adapter?.getQuestions()
+            val unansweredQuestion = questions?.get(0)
+            println(questions?.get(0))
+            return unansweredQuestion?.selectedAnswerPosition != null
+        }
     }
 }

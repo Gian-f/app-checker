@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.br.appchecker.R
@@ -18,13 +19,6 @@ class FourthFragment : BaseFragment<FragmentFourthBinding>() {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) ->
     FragmentFourthBinding get() = FragmentFourthBinding::inflate
-    override fun getProgressBarIndex(): Int {
-        return 4
-    }
-
-    override fun getProgressBarMessage(): String {
-        return "4 de 6"
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,22 +35,16 @@ class FourthFragment : BaseFragment<FragmentFourthBinding>() {
     }
 
     private fun setupListeners() {
-        val nextAction = FourthFragmentDirections.actionFourthFragmentToFifthFragment()
-        val previousAction = FourthFragmentDirections.actionFourthFragmentToThirdFragment()
         with(binding) {
             continueButton.setOnClickListener {
-                val adapter = rvFourth.adapter as? SingleChoiceAdapter
-                val questions = adapter?.getQuestions()
-                val unansweredQuestion = questions?.get(0)
-                if(unansweredQuestion?.selectedAnswerPosition != null) {
-                    findNavController().navigate(nextAction)
+                if (isAnswerSelected()) {
+                    findNavController().navigate(getActionForNextFragment())
                 } else {
                     showBottomSheet(message = R.string.error_empty_form)
                 }
             }
-
             backButton.setOnClickListener {
-                findNavController().navigate(previousAction)
+                findNavController().navigate(getActionForPreviousFragment())
             }
         }
     }
@@ -83,5 +71,30 @@ class FourthFragment : BaseFragment<FragmentFourthBinding>() {
             }
         })
         recyclerView.adapter = adapter
+    }
+
+    override fun getProgressBarIndex(): Int {
+        return 4
+    }
+
+    override fun getProgressBarMessage(): String {
+        return "4 de 6"
+    }
+
+    override fun getActionForNextFragment(): NavDirections {
+        return FourthFragmentDirections.actionFourthFragmentToFifthFragment()
+    }
+
+    override fun getActionForPreviousFragment(): NavDirections {
+        return FourthFragmentDirections.actionFourthFragmentToThirdFragment()
+    }
+
+    override fun isAnswerSelected(): Boolean {
+        with(binding) {
+            val adapter = rvFourth.adapter as? SingleChoiceAdapter
+            val questions = adapter?.getQuestions()
+            val unansweredQuestion = questions?.get(0)
+            return unansweredQuestion?.selectedAnswerPosition != null
+        }
     }
 }

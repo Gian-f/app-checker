@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.br.appchecker.R
@@ -18,13 +19,6 @@ class SecondFragment : BaseFragment<FragmentSecondBinding>() {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) ->
     FragmentSecondBinding get() = FragmentSecondBinding::inflate
-    override fun getProgressBarIndex(): Int {
-        return 2
-    }
-
-    override fun getProgressBarMessage(): String {
-        return "2 de 6"
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,28 +33,6 @@ class SecondFragment : BaseFragment<FragmentSecondBinding>() {
         configRecyclerView()
         setupListeners()
     }
-
-    private fun setupListeners() {
-        val nextAction = SecondFragmentDirections.actionSecondFragmentToThirdFragment()
-        val previousAction = SecondFragmentDirections.actionSecondFragmentToFirstFragment()
-        with(binding) {
-            continueButton.setOnClickListener {
-                val adapter = rvSecond.adapter as? SingleChoiceAdapter
-                val questions = adapter?.getQuestions()
-                val unansweredQuestion = questions?.get(0)
-                println(questions?.get(0))
-                if (unansweredQuestion?.selectedAnswerPosition != null) {
-                    findNavController().navigate(nextAction)
-                } else {
-                    showBottomSheet(message = R.string.error_empty_form)
-                }
-            }
-            backButton.setOnClickListener {
-                findNavController().navigate(previousAction)
-            }
-        }
-    }
-
     private fun configRecyclerView() {
         val recyclerView = binding.rvSecond
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -78,13 +50,56 @@ class SecondFragment : BaseFragment<FragmentSecondBinding>() {
                 ),
                 selectedAnswerPosition = null
             ))
-        val adapter = SingleChoiceAdapter(requireContext(),questions, object :
+        val adapter = SingleChoiceAdapter(requireContext(), questions, object :
             SingleChoiceAdapter.OnItemClickListener {
             override fun onItemClick(question: Question, position: Int) {
-                Toast.makeText(requireContext(), "você clicou no $position", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(),
+                    "você clicou no $position",
+                    Toast.LENGTH_SHORT)
                     .show()
             }
         })
         recyclerView.adapter = adapter
+    }
+
+
+    private fun setupListeners() {
+        with(binding) {
+            continueButton.setOnClickListener {
+                if (isAnswerSelected()) {
+                    findNavController().navigate(getActionForNextFragment())
+                } else {
+                    showBottomSheet(message = R.string.error_empty_form)
+                }
+            }
+            backButton.setOnClickListener {
+                findNavController().navigate(getActionForPreviousFragment())
+            }
+        }
+    }
+
+    override fun getProgressBarIndex(): Int {
+        return 2
+    }
+
+    override fun getProgressBarMessage(): String {
+        return "2 de 6"
+    }
+
+    override fun getActionForNextFragment(): NavDirections {
+        return SecondFragmentDirections.actionSecondFragmentToThirdFragment()
+    }
+
+    override fun getActionForPreviousFragment(): NavDirections {
+        return SecondFragmentDirections.actionSecondFragmentToFirstFragment()
+    }
+
+    override fun isAnswerSelected(): Boolean {
+        with(binding) {
+            val adapter = rvSecond.adapter as? SingleChoiceAdapter
+            val questions = adapter?.getQuestions()
+            val unansweredQuestion = questions?.get(0)
+            return unansweredQuestion?.selectedAnswerPosition != null
+        }
     }
 }

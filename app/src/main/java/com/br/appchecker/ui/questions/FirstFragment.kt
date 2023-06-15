@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.br.appchecker.R
@@ -33,24 +34,11 @@ class FirstFragment : BaseFragment <FragmentFirstBinding>() {
         setupListeners()
     }
 
-    override fun getProgressBarIndex(): Int {
-        return 1
-    }
-
-    override fun getProgressBarMessage(): String {
-        return "1 de 6"
-    }
-
     private fun setupListeners() {
         with(binding) {
-            val action = FirstFragmentDirections.actionFirstFragmentToSecondFragment()
             continueButton.setOnClickListener {
-                val adapter = rv.adapter as? SingleChoiceAdapter
-                val questions = adapter?.getQuestions()
-                val unansweredQuestion = questions?.get(0)
-                println(questions?.get(0))
-                if (unansweredQuestion?.selectedAnswerPosition != null) {
-                    findNavController().navigate(action)
+                if (isAnswerSelected()) {
+                    findNavController().navigate(getActionForNextFragment())
                 } else {
                     showBottomSheet(message = R.string.error_empty_form)
                 }
@@ -75,13 +63,38 @@ class FirstFragment : BaseFragment <FragmentFirstBinding>() {
         val adapter = SingleChoiceAdapter(
             requireContext(), questions,
             object : SingleChoiceAdapter.OnItemClickListener {
-            override fun onItemClick(question: Question, position: Int) {
-                question.selectedAnswerPosition = position
-                Toast.makeText(requireContext(),
-                    "Você clicou no $position - ${question.selectedAnswerPosition}",
-                    Toast.LENGTH_LONG).show()
-            }
-        })
+                override fun onItemClick(question: Question, position: Int) {
+                    question.selectedAnswerPosition = position
+                    Toast.makeText(requireContext(),
+                        "Você clicou no $position - ${question.selectedAnswerPosition}",
+                        Toast.LENGTH_LONG).show()
+                }
+            })
         recyclerView.adapter = adapter
+    }
+
+    override fun getProgressBarIndex(): Int {
+        return 1
+    }
+
+    override fun getProgressBarMessage(): String {
+        return "1 de 6"
+    }
+
+    override fun getActionForNextFragment(): NavDirections {
+        return FirstFragmentDirections.actionFirstFragmentToSecondFragment()
+    }
+
+    override fun getActionForPreviousFragment(): NavDirections? {
+        return null
+    }
+
+    override fun isAnswerSelected(): Boolean {
+        with(binding) {
+            val adapter = rv.adapter as? SingleChoiceAdapter
+            val questions = adapter?.getQuestions()
+            val unansweredQuestion = questions?.get(0)
+            return unansweredQuestion?.selectedAnswerPosition != null
+        }
     }
 }
