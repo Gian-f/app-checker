@@ -53,7 +53,7 @@ class SixthFragment : BaseFragment<FragmentSixthBinding>() {
 //                    findNavController().navigate(nextAction)
                     showBottomSheet(message = R.string.error_not_implemented_yet)
                 } else {
-                    showBottomSheet(message = R.string.error_generic)
+                    showBottomSheet(message = R.string.error_empty_form)
                 }
             }
 

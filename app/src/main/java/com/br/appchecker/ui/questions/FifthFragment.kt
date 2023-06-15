@@ -51,7 +51,7 @@ class FifthFragment: BaseFragment<FragmentFifthBinding>() {
                 if(unansweredQuestion?.selectedAnswerPosition != null) {
                     findNavController().navigate(nextAction)
                 } else {
-                    showBottomSheet(message = R.string.error_generic)
+                    showBottomSheet(message = R.string.error_empty_form)
                 }
             }
 

@@ -52,7 +52,7 @@ class FirstFragment : BaseFragment <FragmentFirstBinding>() {
                 if (unansweredQuestion?.selectedAnswerPosition != null) {
                     findNavController().navigate(action)
                 } else {
-                    showBottomSheet(message = R.string.error_generic)
+                    showBottomSheet(message = R.string.error_empty_form)
                 }
             }
         }

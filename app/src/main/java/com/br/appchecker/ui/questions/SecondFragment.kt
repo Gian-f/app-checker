@@ -52,7 +52,7 @@ class SecondFragment : BaseFragment<FragmentSecondBinding>() {
                 if (unansweredQuestion?.selectedAnswerPosition != null) {
                     findNavController().navigate(nextAction)
                 } else {
-                    showBottomSheet(message = R.string.error_generic)
+                    showBottomSheet(message = R.string.error_empty_form)
                 }
             }
             backButton.setOnClickListener {
