@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.br.appchecker.R
 import com.br.appchecker.databinding.BottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.textfield.TextInputEditText
 
 fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
     this.addTextChangedListener(object : TextWatcher {

@@ -21,7 +21,7 @@ abstract class QuestionBaseFragment<T : ViewBinding> : Fragment() {
 
     protected lateinit var binding: T
 
-    private lateinit var viewModel: QuestionViewModel
+    lateinit var viewModel: QuestionViewModel
 
     private var progressBarListener: ProgressBarListener? = null
 
@@ -39,8 +39,7 @@ abstract class QuestionBaseFragment<T : ViewBinding> : Fragment() {
     }
 
     protected fun setupViewModel() {
-        val questionApiClient = QuestionService()
-        val questionRepository = QuestionRepositoryImpl(questionApiClient)
+        val questionRepository = QuestionRepositoryImpl()
         viewModel = ViewModelProvider(this,
             QuestionViewModelFactory(questionRepository)
         )[QuestionViewModel::class.java]

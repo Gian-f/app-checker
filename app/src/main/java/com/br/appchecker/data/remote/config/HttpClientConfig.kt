@@ -1,24 +1,27 @@
 package com.br.appchecker.data.remote.config
 
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.HttpTimeout
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.request.headers
-import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
-import io.ktor.http.append
-import java.util.concurrent.TimeUnit
+import com.br.appchecker.data.remote.service.QuestionService
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
-object HttpClientConfig {
-    val client: HttpClient = HttpClient(CIO) {
-        install(HttpTimeout) {
-            requestTimeoutMillis = TimeUnit.SECONDS.toMillis(30)
-        }
-        defaultRequest {
-            headers {
-                append(HttpHeaders.ContentType, ContentType.Application.Json)
-            }
-        }
+object QuestionServiceFactory {
+    private const val BASE_URL = "http://192.168.206.96:8080"
+
+    fun createQuestionService(): QuestionService {
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
+            .build()
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        return retrofit.create(QuestionService::class.java)
     }
+
 }

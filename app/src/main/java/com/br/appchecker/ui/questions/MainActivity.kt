@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setupNavController()
-//        onUpdateProgressBar(1, "1 de 6")
+        onUpdateProgressBar(1, "1 de 6")
     }
 
     private fun setupNavController() {
@@ -40,5 +40,4 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
             questionTextView.text = step
         }
     }
-
 }

@@ -1,5 +1,6 @@
 package com.br.appchecker.ui.questions.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.br.appchecker.R
 import com.br.appchecker.data.model.Question
 import com.br.appchecker.databinding.FragmentSixthBinding
+import com.br.appchecker.ui.questions.ResultActivity
 import com.br.appchecker.ui.questions.adapters.SingleChoiceAdapter
 import com.br.appchecker.util.showBottomSheet
 import ulid.ULID
@@ -38,8 +40,9 @@ class SixthFragment : QuestionBaseFragment<FragmentSixthBinding>() {
         with(binding) {
             continueButton.setOnClickListener {
                 if (isAnswerSelected()) {
-//                    findNavController().navigate(nextAction)
-                    showBottomSheet(message = R.string.error_not_implemented_yet)
+                    val intent = Intent(context, ResultActivity::class.java)
+                    context?.startActivity(intent)
+//                    showBottomSheet(message = R.string.error_not_implemented_yet)
                 } else {
                     showBottomSheet(message = R.string.error_empty_form)
                 }
@@ -52,8 +55,8 @@ class SixthFragment : QuestionBaseFragment<FragmentSixthBinding>() {
     }
 
     private fun configRecyclerView() {
-        val adapter = SingleChoiceAdapter(requireContext(), getMockedQuestions() , object :
-            SingleChoiceAdapter.OnItemClickListener {
+        val adapter = SingleChoiceAdapter(requireContext(), getMockedQuestions() ,
+            object : SingleChoiceAdapter.OnItemClickListener {
             override fun onItemClick(question: Question, position: Int) {
                 Toast.makeText(requireContext(), "Você clicou na posição $position", Toast.LENGTH_SHORT).show()
             }
@@ -86,7 +89,6 @@ class SixthFragment : QuestionBaseFragment<FragmentSixthBinding>() {
 
     override fun getActionForPreviousFragment() =
         SixthFragmentDirections.actionSixthFragmentToFifthFragment()
-
 
     override fun isAnswerSelected(): Boolean {
         with(binding) {

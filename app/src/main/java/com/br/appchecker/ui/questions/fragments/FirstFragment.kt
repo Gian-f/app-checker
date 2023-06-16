@@ -56,10 +56,11 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
                 }
             })
 
-//        viewModel.questions.observe(viewLifecycleOwner) { questions ->
-//            adapter.submitList(questions)
-//        }
-//        viewModel.getAllQuestions()
+        viewModel.questions.observe(viewLifecycleOwner) { questions ->
+            adapter.submitList(questions)
+            adapter.notifyDataSetChanged()
+        }
+        viewModel.getAllQuestions()
         binding.rv.adapter = adapter
     }
 
@@ -92,7 +93,7 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
     override fun isAnswerSelected(): Boolean {
         val adapter = binding.rv.adapter as? SingleChoiceAdapter
         val questions = adapter?.getQuestions()
-        val unansweredQuestion = questions?.get(0)
+        val unansweredQuestion = questions?.getOrNull(0)
         return unansweredQuestion?.selectedAnswerPosition != null
     }
 }
