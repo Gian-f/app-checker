@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
-import com.br.appchecker.data.LoginRepository
+import com.br.appchecker.data.repository.LoginRepository
 import com.br.appchecker.data.Result
 
 import com.br.appchecker.R

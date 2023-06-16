@@ -1,5 +1,7 @@
-package com.br.appchecker.data
+package com.br.appchecker.data.repository
 
+import com.br.appchecker.data.LoginDataSource
+import com.br.appchecker.data.Result
 import com.br.appchecker.data.model.LoggedInUser
 
 class LoginRepository(val dataSource: LoginDataSource) {
