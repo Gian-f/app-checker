@@ -5,26 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.br.appchecker.R
 import com.br.appchecker.data.model.Question
-import com.br.appchecker.data.remote.service.QuestionService
-import com.br.appchecker.data.repository.QuestionRepositoryImpl
 import com.br.appchecker.databinding.FragmentSecondBinding
-import com.br.appchecker.ui.questions.QuestionBaseFragment
-import com.br.appchecker.ui.questions.fragments.SecondFragmentDirections
 import com.br.appchecker.ui.questions.adapters.SingleChoiceAdapter
-import com.br.appchecker.ui.questions.viewmodels.QuestionViewModel
-import com.br.appchecker.ui.questions.viewmodels.factory.QuestionViewModelFactory
 import com.br.appchecker.util.showBottomSheet
 import ulid.ULID
 
 class SecondFragment : QuestionBaseFragment<FragmentSecondBinding>() {
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) ->
     FragmentSecondBinding get() = FragmentSecondBinding::inflate
-
-    private lateinit var viewModel: QuestionViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,15 +30,6 @@ class SecondFragment : QuestionBaseFragment<FragmentSecondBinding>() {
         setupViewModel()
         configRecyclerView()
         setupListeners()
-    }
-
-    private fun setupViewModel() {
-        val questionApiClient = QuestionService()
-        val questionRepository = QuestionRepositoryImpl(questionApiClient)
-        viewModel = ViewModelProvider(
-            this,
-            QuestionViewModelFactory(questionRepository)
-        )[QuestionViewModel::class.java]
     }
 
     private fun configRecyclerView() {
