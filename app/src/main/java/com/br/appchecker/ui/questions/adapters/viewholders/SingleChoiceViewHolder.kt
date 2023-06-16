@@ -17,7 +17,6 @@ class SingleChoiceViewHolder(
         binding: ItemSingleChoiceQuestionBinding, question: Question,
         listener: SingleChoiceAdapter.OnItemClickListener) {
         with(binding) {
-
             title.text = question.title
             description.text = question.description
             answersGroup.removeAllViews()
