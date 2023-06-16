@@ -10,7 +10,7 @@ import androidx.navigation.NavDirections
 import androidx.viewbinding.ViewBinding
 import com.br.appchecker.ui.questions.interfaces.ProgressBarListener
 
-abstract class BaseFragment<T : ViewBinding> : Fragment() {
+abstract class QuestionBaseFragment<T : ViewBinding> : Fragment() {
 
     protected abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> T
 

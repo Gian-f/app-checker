@@ -1,4 +1,4 @@
-package com.br.appchecker.ui.login
+package com.br.appchecker.ui.login.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,6 +8,9 @@ import com.br.appchecker.data.repository.LoginRepository
 import com.br.appchecker.data.Result
 
 import com.br.appchecker.R
+import com.br.appchecker.ui.login.LoggedInUserView
+import com.br.appchecker.ui.login.LoginFormState
+import com.br.appchecker.ui.login.LoginResult
 
 class LoginViewModel(
     private val loginRepository: LoginRepository

@@ -21,8 +21,7 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setupNavController()
-//        setupListeners()
-        onUpdateProgressBar(1, "1 de 6")
+//        onUpdateProgressBar(1, "1 de 6")
     }
 
     private fun setupNavController() {
@@ -30,53 +29,6 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
     }
-
-//    private fun setupListeners() {
-//        with(binding) {
-//            continueButton.setOnClickListener {
-//                when (navController.currentDestination?.id) {
-//                    R.id.FirstFragment ->  navigateToFragment(FirstFragmentDirections.actionFirstFragmentToSecondFragment())
-//                    R.id.SecondFragment -> navigateToFragment(SecondFragmentDirections.actionSecondFragmentToThirdFragment())
-//                    R.id.ThirdFragment ->  navigateToFragment(ThirdFragmentDirections.actionThirdFragmentToFourthFragment())
-//                    R.id.FourthFragment -> navigateToFragment(FifthFragmentDirections.actionFifthFragmentToSixthFragment())
-//                    R.id.FifthFragment ->  navigateToFragment(FifthFragmentDirections.actionFifthFragmentToSixthFragment())
-//                    R.id.SixthFragment ->  showBottomSheet(message = R.string.error_generic)
-//                }
-//            }
-//
-//            backButton.setOnClickListener {
-//                navigateUp()
-//            }
-//
-//        }
-//    }
-
-//    private fun navigateToFragment(action: NavDirections) {
-//        with(binding) {
-//            backButton.visibility = View.VISIBLE
-//            continueButton.layoutParams.width =
-//                resources.getDimensionPixelSize(R.dimen.button_width_180dp)
-//            navController.navigate(action)
-//        }
-//    }
-
-//    private fun navigateUp() {
-//        with(binding) {
-//            continueButton.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-//            val previousDestination = navController.previousBackStackEntry?.destination?.id
-//            if (previousDestination == R.id.SecondFragment ||
-//                previousDestination == R.id.ThirdFragment  ||
-//                previousDestination == R.id.FourthFragment ||
-//                previousDestination == R.id.FifthFragment) {
-//                backButton.visibility = View.VISIBLE
-//                continueButton.layoutParams.width =
-//                    resources.getDimensionPixelSize(R.dimen.button_width_180dp)
-//            } else {
-//                backButton.visibility = View.GONE
-//            }
-//            navController.navigateUp()
-//        }
-//    }
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
@@ -88,4 +40,5 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
             questionTextView.text = step
         }
     }
+
 }

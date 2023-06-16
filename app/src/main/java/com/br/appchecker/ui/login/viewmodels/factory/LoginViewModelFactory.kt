@@ -1,9 +1,10 @@
-package com.br.appchecker.ui.login
+package com.br.appchecker.ui.login.viewmodels.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.br.appchecker.data.LoginDataSource
 import com.br.appchecker.data.repository.LoginRepository
+import com.br.appchecker.ui.login.viewmodels.LoginViewModel
 
 class LoginViewModelFactory : ViewModelProvider.Factory {
 

@@ -12,6 +12,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.br.appchecker.R
 import com.br.appchecker.databinding.ActivityLoginBinding
+import com.br.appchecker.ui.login.viewmodels.LoginViewModel
+import com.br.appchecker.ui.login.viewmodels.factory.LoginViewModelFactory
 import com.br.appchecker.ui.questions.MainActivity
 import com.br.appchecker.util.afterTextChanged
 
