@@ -9,7 +9,7 @@
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">E-mail inválido</string>
     <string name="invalid_password">Senha precisa ter pelo menos 5 caracteres</string>
-    <string name="login_failed">"Login failed"</string>
+    <string name="login_failed">"Ocorreu um erro ao efetuar o login"</string>
     <string name="enter_or_create">Entre ou crie a sua conta!</string>
     <string name="or">ou</string>
     <string name="title_activity_main">MainActivity</string>

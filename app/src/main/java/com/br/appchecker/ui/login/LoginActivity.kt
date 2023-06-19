@@ -26,7 +26,8 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())[LoginViewModel::class.java]
+        loginViewModel =
+            ViewModelProvider(this, LoginViewModelFactory())[LoginViewModel::class.java]
         setupObservers()
         setupListeners()
     }
@@ -66,7 +67,9 @@ class LoginActivity : AppCompatActivity() {
 
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        loginViewModel.login(binding.username.text.toString(), text.toString())
+                        loginViewModel.login(binding.username.text.toString(), text.toString()) {
+
+                        }
                     }
                     false
                 }
@@ -74,14 +77,15 @@ class LoginActivity : AppCompatActivity() {
         }
 
         with(binding) {
-        login.setOnClickListener {
-            loading?.visibility = View.VISIBLE
-//                loginViewModel.login(username.text.toString(), password.text.toString())
-            navigateToMain()
-        }
+            login.setOnClickListener {
+                loading?.visibility = View.VISIBLE
+                loginViewModel.login(username.text.toString(), password.text.toString()) {
+                    navigateToMain()
+                }
+            }
 
-        guest?.setOnClickListener {
-            navigateToMain()
+            guest?.setOnClickListener {
+                navigateToMain()
             }
         }
     }
@@ -90,6 +94,7 @@ class LoginActivity : AppCompatActivity() {
         val intent = Intent(applicationContext, MainActivity::class.java)
         startActivity(intent)
     }
+
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
         val displayName = model.displayName
@@ -100,13 +105,3 @@ class LoginActivity : AppCompatActivity() {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
 }
-
-//private fun View.afterTextChanged(afterTextChanged: (String) -> Unit) {
-//    this.addTextChangedListener(object : TextWatcher {
-//        override fun afterTextChanged(editable: Editable?) {
-//            afterTextChanged.invoke(editable.toString())
-//        }
-//        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-//        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-//    })
-//}

@@ -9,8 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDirections
 import androidx.viewbinding.ViewBinding
-import com.br.appchecker.data.remote.service.QuestionService
-import com.br.appchecker.data.repository.QuestionRepositoryImpl
+import com.br.appchecker.data.repository.question.QuestionRepositoryImpl
+import com.br.appchecker.domain.usecase.question.GetQuestionsUseCase
+import com.br.appchecker.domain.usecase.question.InsertQuestionUseCase
 import com.br.appchecker.ui.questions.interfaces.ProgressBarListener
 import com.br.appchecker.ui.questions.viewmodels.QuestionViewModel
 import com.br.appchecker.ui.questions.viewmodels.factory.QuestionViewModelFactory
@@ -40,8 +41,10 @@ abstract class QuestionBaseFragment<T : ViewBinding> : Fragment() {
 
     protected fun setupViewModel() {
         val questionRepository = QuestionRepositoryImpl()
+        val getAllUseCase = GetQuestionsUseCase(questionRepository)
+        val insertUseCase = InsertQuestionUseCase(questionRepository)
         viewModel = ViewModelProvider(this,
-            QuestionViewModelFactory(questionRepository)
+            QuestionViewModelFactory(getAllUseCase,insertUseCase)
         )[QuestionViewModel::class.java]
     }
 

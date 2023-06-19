@@ -55,31 +55,37 @@ class SixthFragment : QuestionBaseFragment<FragmentSixthBinding>() {
     }
 
     private fun configRecyclerView() {
-        val adapter = SingleChoiceAdapter(requireContext(), getMockedQuestions() ,
+        val adapter = SingleChoiceAdapter(requireContext(),
             object : SingleChoiceAdapter.OnItemClickListener {
             override fun onItemClick(question: Question, position: Int) {
                 Toast.makeText(requireContext(), "Você clicou na posição $position", Toast.LENGTH_SHORT).show()
             }
         })
+        viewModel.questions.observe(viewLifecycleOwner) { questions ->
+            adapter.submitList(questions)
+            adapter.notifyDataSetChanged()
+            println(questions[0].selectedAnswerPosition)
+        }
+        viewModel.getAllQuestions()
         binding.rvSixth.adapter = adapter
     }
 
-    private fun getMockedQuestions(): MutableList<Question> {
-        return mutableListOf(
-            Question(
-                id = ULID.randomULID(),
-                title = "Você se tornou residente no Brasil em algum mês e estava nessa condição em 31 de dezembro do ano-calendário?",
-                description = "Selecione a opção que melhor te descreve",
-                answers = listOf(
-                    "Sim,me tornei residente e estava nessa condição",
-                    "Não, não me tornei residente no brasil no ano-calendário",
-                    "Não sei / Não tenho certeza",
-                    "Não se aplica a mim"
-                    ),
-                selectedAnswerPosition = null
-            )
-        )
-    }
+//    private fun getMockedQuestions(): MutableList<Question> {
+//        return mutableListOf(
+//            Question(
+//                id = ULID.randomULID(),
+//                title = "Você se tornou residente no Brasil em algum mês e estava nessa condição em 31 de dezembro do ano-calendário?",
+//                description = "Selecione a opção que melhor te descreve",
+//                answers = listOf(
+//                    "Sim,me tornei residente e estava nessa condição",
+//                    "Não, não me tornei residente no brasil no ano-calendário",
+//                    "Não sei / Não tenho certeza",
+//                    "Não se aplica a mim"
+//                    ),
+//                selectedAnswerPosition = null
+//            )
+//        )
+//    }
 
     override fun getProgressBarIndex() = 6
 
@@ -91,11 +97,9 @@ class SixthFragment : QuestionBaseFragment<FragmentSixthBinding>() {
         SixthFragmentDirections.actionSixthFragmentToFifthFragment()
 
     override fun isAnswerSelected(): Boolean {
-        with(binding) {
-            val adapter = rvSixth.adapter as? SingleChoiceAdapter
-            val questions = adapter?.getQuestions()
-            val unansweredQuestion = questions?.get(0)
-            return unansweredQuestion?.selectedAnswerPosition != null
-        }
+        val adapter = binding.rvSixth.adapter as? SingleChoiceAdapter
+        val questions = adapter?.currentList
+        val unansweredQuestion = questions?.getOrNull(0)
+        return unansweredQuestion?.selectedAnswerPosition != null
     }
 }

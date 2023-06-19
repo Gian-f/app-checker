@@ -49,7 +49,7 @@ class FourthFragment : QuestionBaseFragment<FragmentFourthBinding>() {
     }
 
     private fun configRecyclerView() {
-        val adapter = SingleChoiceAdapter(requireContext(),getMockedQuestions(),
+        val adapter = SingleChoiceAdapter(requireContext(),
             object : SingleChoiceAdapter.OnItemClickListener {
             override fun onItemClick(question: Question, position: Int) {
                 Toast.makeText(requireContext(),
@@ -57,23 +57,28 @@ class FourthFragment : QuestionBaseFragment<FragmentFourthBinding>() {
                 Toast.LENGTH_SHORT).show()
             }
         })
+        viewModel.questions.observe(viewLifecycleOwner) { questions ->
+            adapter.submitList(questions)
+            adapter.notifyDataSetChanged()
+        }
+        viewModel.getAllQuestions()
         binding.rvFourth.adapter = adapter
     }
 
-    private fun getMockedQuestions(): MutableList<Question> {
-        return mutableListOf(
-            Question(
-                id = ULID.randomULID(),
-                title = "Você tinha a posse ou propriedade, em 31 de dezembro do ano-calendário, de bens ou direitos (incluindo terra nua) acima de R$ 300.000,00?",
-                description = "Selecione a opção que te melhor descreve",
-                answers = listOf(
-                    "Sim, possuo posse ou propriedade acima do limite estabelecido",
-                    "Não, não possuo posse ou propriedade acima do limite estabelecido",
-                    "Não sei / Não tenho certeza",
-                    "Não se aplica a mim"),
-                selectedAnswerPosition = null)
-        )
-    }
+//    private fun getMockedQuestions(): MutableList<Question> {
+//        return mutableListOf(
+//            Question(
+//                id = ULID.randomULID(),
+//                title = "Você tinha a posse ou propriedade, em 31 de dezembro do ano-calendário, de bens ou direitos (incluindo terra nua) acima de R$ 300.000,00?",
+//                description = "Selecione a opção que te melhor descreve",
+//                answers = listOf(
+//                    "Sim, possuo posse ou propriedade acima do limite estabelecido",
+//                    "Não, não possuo posse ou propriedade acima do limite estabelecido",
+//                    "Não sei / Não tenho certeza",
+//                    "Não se aplica a mim"),
+//                selectedAnswerPosition = null)
+//        )
+//    }
 
     override fun getProgressBarIndex() = 4
 
@@ -86,11 +91,9 @@ class FourthFragment : QuestionBaseFragment<FragmentFourthBinding>() {
         FourthFragmentDirections.actionFourthFragmentToThirdFragment()
 
     override fun isAnswerSelected(): Boolean {
-        with(binding) {
-            val adapter = rvFourth.adapter as? SingleChoiceAdapter
-            val questions = adapter?.getQuestions()
-            val unansweredQuestion = questions?.get(0)
-            return unansweredQuestion?.selectedAnswerPosition != null
-        }
+        val adapter = binding.rvFourth.adapter as? SingleChoiceAdapter
+        val questions = adapter?.currentList
+        val unansweredQuestion = questions?.getOrNull(0)
+        return unansweredQuestion?.selectedAnswerPosition != null
     }
 }

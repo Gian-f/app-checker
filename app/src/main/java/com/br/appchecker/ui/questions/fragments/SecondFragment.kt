@@ -11,7 +11,6 @@ import com.br.appchecker.data.model.Question
 import com.br.appchecker.databinding.FragmentSecondBinding
 import com.br.appchecker.ui.questions.adapters.SingleChoiceAdapter
 import com.br.appchecker.util.showBottomSheet
-import ulid.ULID
 
 class SecondFragment : QuestionBaseFragment<FragmentSecondBinding>() {
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) ->
@@ -33,7 +32,7 @@ class SecondFragment : QuestionBaseFragment<FragmentSecondBinding>() {
     }
 
     private fun configRecyclerView() {
-        val adapter = SingleChoiceAdapter(requireContext(), getMockedQuestions(),
+        val adapter = SingleChoiceAdapter(requireContext(),
             object : SingleChoiceAdapter.OnItemClickListener {
             override fun onItemClick(question: Question, position: Int) {
                 Toast.makeText(requireContext(),
@@ -42,6 +41,12 @@ class SecondFragment : QuestionBaseFragment<FragmentSecondBinding>() {
                     .show()
             }
         })
+        viewModel.questions.observe(viewLifecycleOwner) { questions ->
+            adapter.submitList(questions)
+            adapter.notifyDataSetChanged()
+        }
+
+        viewModel.getAllQuestions()
         binding.rvSecond.adapter = adapter
     }
 
@@ -60,22 +65,22 @@ class SecondFragment : QuestionBaseFragment<FragmentSecondBinding>() {
         }
     }
 
-    private fun getMockedQuestions(): MutableList<Question> {
-        return mutableListOf(
-            Question(
-                id = ULID.randomULID(),
-                title = "Sua receita bruta na atividade rural foi superior a R$ 142.798,50?",
-                description = "Selecione a opção que te melhor descreve",
-                answers = listOf(
-                    "Sim, acima do limite estabelecido",
-                    "Não, não recebi acima do limite estabelecido",
-                    "Não sei / Não tenho certeza",
-                    "Não se aplica a mim"
-                ),
-                selectedAnswerPosition = null
-            )
-        )
-    }
+//    private fun getMockedQuestions(): MutableList<Question> {
+//        return mutableListOf(
+//            Question(
+//                id = ULID.randomULID(),
+//                title = "Sua receita bruta na atividade rural foi superior a R$ 142.798,50?",
+//                description = "Selecione a opção que te melhor descreve",
+//                answers = listOf(
+//                    "Sim, acima do limite estabelecido",
+//                    "Não, não recebi acima do limite estabelecido",
+//                    "Não sei / Não tenho certeza",
+//                    "Não se aplica a mim"
+//                ),
+//                selectedAnswerPosition = null
+//            )
+//        )
+//    }
     override fun getProgressBarIndex(): Int = 2
     override fun getProgressBarMessage(): String = "2 de 6"
     override fun getActionForNextFragment() =
@@ -83,11 +88,9 @@ class SecondFragment : QuestionBaseFragment<FragmentSecondBinding>() {
     override fun getActionForPreviousFragment() =
         SecondFragmentDirections.actionSecondFragmentToFirstFragment()
     override fun isAnswerSelected(): Boolean {
-        with(binding) {
-            val adapter = rvSecond.adapter as? SingleChoiceAdapter
-            val questions = adapter?.getQuestions()
-            val unansweredQuestion = questions?.get(0)
-            return unansweredQuestion?.selectedAnswerPosition != null
-        }
+        val adapter = binding.rvSecond.adapter as? SingleChoiceAdapter
+        val questions = adapter?.currentList
+        val unansweredQuestion = questions?.getOrNull(0)
+        return unansweredQuestion?.selectedAnswerPosition != null
     }
 }

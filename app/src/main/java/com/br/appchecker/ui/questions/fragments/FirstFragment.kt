@@ -11,7 +11,6 @@ import com.br.appchecker.data.model.Question
 import com.br.appchecker.databinding.FragmentFirstBinding
 import com.br.appchecker.ui.questions.adapters.SingleChoiceAdapter
 import com.br.appchecker.util.showBottomSheet
-import ulid.ULID
 
 class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
 
@@ -36,7 +35,7 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
     private fun setupListeners() {
         binding.continueButton.setOnClickListener {
             if (isAnswerSelected()) {
-                findNavController().navigate(getActionForNextFragment())
+                navigateToNextQuestion()
             } else {
                 showBottomSheet(message = R.string.error_empty_form)
             }
@@ -44,7 +43,7 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
     }
 
     private fun setupRecyclerView() {
-        val adapter = SingleChoiceAdapter(requireContext(), getMockedQuestions(),
+        val adapter = SingleChoiceAdapter(requireContext(),
             object : SingleChoiceAdapter.OnItemClickListener {
                 override fun onItemClick(question: Question, position: Int) {
                     question.selectedAnswerPosition = position
@@ -59,26 +58,33 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
         viewModel.questions.observe(viewLifecycleOwner) { questions ->
             adapter.submitList(questions)
             adapter.notifyDataSetChanged()
+            println(questions[0].selectedAnswerPosition)
         }
+
         viewModel.getAllQuestions()
         binding.rv.adapter = adapter
     }
 
-    private fun getMockedQuestions(): MutableList<Question> {
-        return mutableListOf(
-            Question(
-                id = ULID.randomULID(),
-                title = "Seus rendimentos tributáveis foram superiores a R$ 28.559,70 no ano passado?",
-                description = "Selecione a opção que melhor te descreve",
-                answers = listOf(
-                    "Sim, acima do limite estabelecido",
-                    "Não, não recebi acima do limite estabelecido",
-                    "Não sei / Não tenho certeza",
-                    "Não se aplica a mim"
-                ),
-                selectedAnswerPosition = null
-            )
-        )
+//    private fun getMockedQuestions(): MutableList<Question> {
+//        return mutableListOf(
+//            Question(
+//                id = ULID.randomULID(),
+//                title = "Seus rendimentos tributáveis foram superiores a R$ 28.559,70 no ano passado?",
+//                description = "Selecione a opção que melhor te descreve",
+//                answers = listOf(
+//                    "Sim, acima do limite estabelecido",
+//                    "Não, não recebi acima do limite estabelecido",
+//                    "Não sei / Não tenho certeza",
+//                    "Não se aplica a mim"
+//                ),
+//                selectedAnswerPosition = null
+//            )
+//        )
+//    }
+
+    private fun navigateToNextQuestion() {
+//        viewModel.navigateToNextQuestion()
+        findNavController().navigate(getActionForNextFragment())
     }
 
     override fun getProgressBarIndex(): Int = 1
@@ -92,7 +98,7 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
 
     override fun isAnswerSelected(): Boolean {
         val adapter = binding.rv.adapter as? SingleChoiceAdapter
-        val questions = adapter?.getQuestions()
+        val questions = adapter?.currentList
         val unansweredQuestion = questions?.getOrNull(0)
         return unansweredQuestion?.selectedAnswerPosition != null
     }

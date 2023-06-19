@@ -1,8 +1,10 @@
 package com.br.appchecker.data.remote.response
 
+import com.google.gson.annotations.SerializedName
+
 data class QuestionResponse(
-    val id: Long,
-    val title: String,
-    val description: String,
-    val deleted: String
+   @SerializedName("pergunta")
+   val question: QuestionData,
+   @SerializedName("opcoes")
+   val answers: List<AnswersData>
 )

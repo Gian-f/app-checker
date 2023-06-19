@@ -12,29 +12,22 @@ import com.br.appchecker.ui.questions.adapters.viewholders.SingleChoiceViewHolde
 
 class SingleChoiceAdapter(
     val context: Context,
-    private val questions: MutableList<Question>,
     private val listener: OnItemClickListener
-    ) : ListAdapter<Question, SingleChoiceViewHolder>(QuestionDiffCallback()) {
-
-    val binding : ItemSingleChoiceQuestionBinding by
-     lazy { ItemSingleChoiceQuestionBinding.inflate(LayoutInflater.from(context)) }
+) : ListAdapter<Question, SingleChoiceViewHolder>(QuestionDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SingleChoiceViewHolder {
+        val binding = ItemSingleChoiceQuestionBinding.inflate(LayoutInflater.from(context), parent, false)
         return SingleChoiceViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: SingleChoiceViewHolder, position: Int) {
-        val question = questions[position]
-        holder.bind(binding, question, listener)
+        val question = getItem(position)
+        holder.bind(question, listener)
     }
 
-    override fun getItemCount(): Int {
-        return questions.size
-    }
-
-    fun getQuestions(): List<Question> {
+    /*  fun getQuestions(): List<Question> {
         return questions
-    }
+    }*/
 
     interface OnItemClickListener {
         fun onItemClick(question: Question, position: Int)
@@ -43,6 +36,7 @@ class SingleChoiceAdapter(
     private class QuestionDiffCallback : DiffUtil.ItemCallback<Question>() {
         override fun areItemsTheSame(oldItem: Question, newItem: Question) =
             oldItem.id == newItem.id
+
         override fun areContentsTheSame(oldItem: Question, newItem: Question) =
             oldItem == newItem
     }

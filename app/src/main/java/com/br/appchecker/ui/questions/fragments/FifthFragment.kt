@@ -49,7 +49,7 @@ class FifthFragment: QuestionBaseFragment<FragmentFifthBinding>() {
     }
 
     private fun configRecyclerView() {
-        val adapter = SingleChoiceAdapter(requireContext(), getMockedQuestion(),
+        val adapter = SingleChoiceAdapter(requireContext(),
             object : SingleChoiceAdapter.OnItemClickListener {
             override fun onItemClick(question: Question, position: Int) {
                 Toast.makeText(requireContext(),
@@ -57,23 +57,28 @@ class FifthFragment: QuestionBaseFragment<FragmentFifthBinding>() {
                     Toast.LENGTH_SHORT).show()
             }
         })
+        viewModel.questions.observe(viewLifecycleOwner) { questions ->
+            adapter.submitList(questions)
+            adapter.notifyDataSetChanged()
+        }
+        viewModel.getAllQuestions()
         binding.rvFifth.adapter = adapter
     }
 
-    private fun getMockedQuestion(): MutableList<Question> {
-        return mutableListOf(
-            Question(
-                id = ULID.randomULID(),
-                title = "Você fez operações em bolsas de valores, de mercadorias, de futuros e assemelhadas acima de R$40.000,00 ou com ganhos líquidos sujeitos a impostos?",
-                description = "Selecione a opção que te melhor descreve",
-                answers = listOf(
-                    "Sim, realizei operações acima do limite estabelecido",
-                    "Não, não realizei operações acima do limite estabelecido",
-                    "Não sei / Não tenho certeza",
-                    "Não se aplica a mim"),
-                selectedAnswerPosition = null)
-        )
-    }
+//    private fun getMockedQuestion(): MutableList<Question> {
+//        return mutableListOf(
+//            Question(
+//                id = ULID.randomULID(),
+//                title = "Você fez operações em bolsas de valores, de mercadorias, de futuros e assemelhadas acima de R$40.000,00 ou com ganhos líquidos sujeitos a impostos?",
+//                description = "Selecione a opção que te melhor descreve",
+//                answers = listOf(
+//                    "Sim, realizei operações acima do limite estabelecido",
+//                    "Não, não realizei operações acima do limite estabelecido",
+//                    "Não sei / Não tenho certeza",
+//                    "Não se aplica a mim"),
+//                selectedAnswerPosition = null)
+//        )
+//    }
 
     override fun getProgressBarIndex() = 5
 
@@ -86,12 +91,9 @@ class FifthFragment: QuestionBaseFragment<FragmentFifthBinding>() {
         FifthFragmentDirections.actionFifthFragmentToFourthFragment()
 
     override fun isAnswerSelected(): Boolean {
-        with(binding) {
-            val adapter = rvFifth.adapter as? SingleChoiceAdapter
-            val questions = adapter?.getQuestions()
-            val unansweredQuestion = questions?.get(0)
-            return unansweredQuestion?.selectedAnswerPosition != null
-        }
+        val adapter = binding.rvFifth.adapter as? SingleChoiceAdapter
+        val questions = adapter?.currentList
+        val unansweredQuestion = questions?.getOrNull(0)
+        return unansweredQuestion?.selectedAnswerPosition != null
     }
-
 }

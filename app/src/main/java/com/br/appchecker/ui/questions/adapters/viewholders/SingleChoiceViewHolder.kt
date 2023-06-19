@@ -10,11 +10,11 @@ import com.br.appchecker.ui.questions.adapters.SingleChoiceAdapter
 import com.google.android.material.radiobutton.MaterialRadioButton
 
 class SingleChoiceViewHolder(
-    binding:ItemSingleChoiceQuestionBinding) :
-    RecyclerView.ViewHolder(binding.root) {
+    private val binding: ItemSingleChoiceQuestionBinding
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(
-        binding: ItemSingleChoiceQuestionBinding, question: Question,
+        question: Question,
         listener: SingleChoiceAdapter.OnItemClickListener) {
         with(binding) {
             title.text = question.title
@@ -33,7 +33,7 @@ class SingleChoiceViewHolder(
                         RadioGroup.LayoutParams.WRAP_CONTENT).apply {
                         setMargins(0, 16, 0, 16)
                     }
-                    text = answer
+                    text = answer.toString()
                     setTextAppearance(android.R.style.TextAppearance_Holo_Small)
                     isChecked = (i == question.selectedAnswerPosition)
                     setOnClickListener {
