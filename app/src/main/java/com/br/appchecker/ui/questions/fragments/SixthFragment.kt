@@ -8,12 +8,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.br.appchecker.R
-import com.br.appchecker.data.model.Question
+import com.br.appchecker.domain.model.Question
+import com.br.appchecker.data.remote.request.QuestionRequest
 import com.br.appchecker.databinding.FragmentSixthBinding
-import com.br.appchecker.ui.questions.ResultActivity
 import com.br.appchecker.ui.questions.adapters.SingleChoiceAdapter
 import com.br.appchecker.util.showBottomSheet
-import ulid.ULID
 
 class SixthFragment : QuestionBaseFragment<FragmentSixthBinding>() {
 
@@ -40,8 +39,8 @@ class SixthFragment : QuestionBaseFragment<FragmentSixthBinding>() {
         with(binding) {
             continueButton.setOnClickListener {
                 if (isAnswerSelected()) {
-                    val intent = Intent(context, ResultActivity::class.java)
-                    context?.startActivity(intent)
+//                    val intent = Intent(context, ResultActivity::class.java)
+//                    context?.startActivity(intent)
 //                    showBottomSheet(message = R.string.error_not_implemented_yet)
                 } else {
                     showBottomSheet(message = R.string.error_empty_form)
@@ -66,7 +65,7 @@ class SixthFragment : QuestionBaseFragment<FragmentSixthBinding>() {
             adapter.notifyDataSetChanged()
             println(questions[0].selectedAnswerPosition)
         }
-        viewModel.getAllQuestions()
+        viewModel.getAllQuestions(QuestionRequest(1))
         binding.rvSixth.adapter = adapter
     }
 

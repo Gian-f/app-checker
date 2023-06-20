@@ -12,7 +12,9 @@ class QuestionViewModelFactory (
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(QuestionViewModel::class.java)) {
-            return QuestionViewModel(getQuestionsUseCase, insertQuestionUseCase) as T
+            return QuestionViewModel(
+                getQuestionsUseCase,
+                insertQuestionUseCase) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

@@ -1,9 +1,11 @@
-package com.br.appchecker.data.model.login
+package com.br.appchecker.data.state
+
+import com.br.appchecker.domain.model.User
 
 sealed class StateLogin<out T> {
 
     data class Success<out T>(
-        val data: T?,
+        val data: User,
         val info: String
     ) : StateLogin<T>()
 

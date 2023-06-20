@@ -1,6 +1,6 @@
 package com.br.appchecker.domain.usecase.question
 
-import com.br.appchecker.data.model.Question
+import com.br.appchecker.domain.model.Question
 import com.br.appchecker.data.repository.question.QuestionRepository
 
 

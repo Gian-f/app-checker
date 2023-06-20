@@ -3,24 +3,28 @@ package com.br.appchecker.ui.login
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.br.appchecker.R
+import com.br.appchecker.data.state.StateLogin
 import com.br.appchecker.databinding.ActivityLoginBinding
 import com.br.appchecker.ui.login.viewmodels.LoginViewModel
 import com.br.appchecker.ui.login.viewmodels.factory.LoginViewModelFactory
 import com.br.appchecker.ui.questions.MainActivity
 import com.br.appchecker.util.afterTextChanged
+import com.br.appchecker.util.showBottomSheet
 
 class LoginActivity : AppCompatActivity() {
 
     private val binding: ActivityLoginBinding by
     lazy { ActivityLoginBinding.inflate(layoutInflater) }
+
     private lateinit var loginViewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,16 +46,25 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
-        loginViewModel.loginResult.observe(this, Observer { loginResult ->
-            loginResult ?: return@Observer
-            with(binding) {
-                loading?.visibility = View.GONE
-                loginResult.error?.let { showLoginFailed(it) }
-                loginResult.success?.let { updateUiWithUser(it) }
+        loginViewModel.loginResult.observe(this) { state ->
+            when (state) {
+                is StateLogin.Success -> {
+                    val handler = Handler(Looper.getMainLooper())
+                    handler.postDelayed({
+                        navigateToMain()
+                    }, 3000)
+                }
+
+                is StateLogin.Error -> {
+                    val handler = Handler(Looper.getMainLooper())
+                    handler.postDelayed({
+                        showLoginFailed()
+                    }, 3000)
+                }
             }
+
             setResult(Activity.RESULT_OK)
-            finish()
-        })
+        }
     }
 
     private fun setupListeners() {
@@ -67,9 +80,7 @@ class LoginActivity : AppCompatActivity() {
 
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        loginViewModel.login(binding.username.text.toString(), text.toString()) {
-
-                        }
+                        loginViewModel.login(binding.username.text.toString(), text.toString())
                     }
                     false
                 }
@@ -78,30 +89,33 @@ class LoginActivity : AppCompatActivity() {
 
         with(binding) {
             login.setOnClickListener {
-                loading?.visibility = View.VISIBLE
-                loginViewModel.login(username.text.toString(), password.text.toString()) {
-                    navigateToMain()
-                }
+                loading.visibility = View.VISIBLE
+                loginViewModel.login(username.text.toString(), password.text.toString())
             }
 
             guest?.setOnClickListener {
-                navigateToMain()
+                loading.visibility = View.VISIBLE
+                val handler = Handler(Looper.getMainLooper())
+                handler.postDelayed({
+                    navigateToMain()
+                }, 3000)
             }
         }
     }
 
     private fun navigateToMain() {
+        binding.loading.visibility = View.GONE
+        Toast.makeText(
+            this,
+            "Login Efetuado com sucesso!",
+            Toast.LENGTH_LONG
+        ).show()
         val intent = Intent(applicationContext, MainActivity::class.java)
         startActivity(intent)
     }
 
-    private fun updateUiWithUser(model: LoggedInUserView) {
-        val welcome = getString(R.string.welcome)
-        val displayName = model.displayName
-        Toast.makeText(applicationContext, "$welcome $displayName", Toast.LENGTH_LONG).show()
-    }
-
-    private fun showLoginFailed(@StringRes errorString: Int) {
-        Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
+    private fun showLoginFailed() {
+        binding.loading.visibility = View.GONE
+        showBottomSheet(message = R.string.error_generic)
     }
 }

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.br.appchecker.data.model.Question
+import com.br.appchecker.domain.model.Question
 import com.br.appchecker.databinding.ItemSingleChoiceQuestionBinding
 import com.br.appchecker.ui.questions.adapters.viewholders.SingleChoiceViewHolder
 

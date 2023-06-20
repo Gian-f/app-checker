@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.RadioGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.br.appchecker.R
-import com.br.appchecker.data.model.Question
+import com.br.appchecker.domain.model.Question
 import com.br.appchecker.databinding.ItemSingleChoiceQuestionBinding
 import com.br.appchecker.ui.questions.adapters.SingleChoiceAdapter
 import com.google.android.material.radiobutton.MaterialRadioButton

@@ -34,9 +34,8 @@ abstract class QuestionBaseFragment<T : ViewBinding> : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        progressBarListener?.onUpdateProgressBar(getProgressBarIndex(), getProgressBarMessage())
+    fun updateProgressBar(position: Int, sizeList: Int) {
+        progressBarListener?.onUpdateProgressBar(position + 1, sizeList)
     }
 
     protected fun setupViewModel() {

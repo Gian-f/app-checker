@@ -1,6 +1,7 @@
 package com.br.appchecker.data.repository.login
 
-import com.br.appchecker.data.model.login.StateLogin
+import android.util.Log
+import com.br.appchecker.data.state.StateLogin
 import com.br.appchecker.data.remote.config.ApiServiceFactory
 import com.br.appchecker.data.remote.request.LoginRequest
 import com.br.appchecker.data.remote.response.LoginResponse
@@ -16,15 +17,17 @@ class LoginRepositoryImpl : LoginRepository {
             if (response.isSuccessful) {
                 val user = response.body()
                 if (user != null) {
-                    StateLogin.Success(user, "Login efetuado com sucesso!")
+                    StateLogin.Success(user.user, user.info)
                 } else {
+                    Log.e(null,"Erro ao efetuar o login")
                     StateLogin.Error(
                         message = "Ocorreu um erro ao efetuar login. Resposta inválida.",
-                        txt = "",
+                        txt = "Por favor, tente novamente",
                         title = "Ocorreu um erro"
                     )
                 }
             } else {
+                Log.e(null,"Erro ao efetuar o login")
                 StateLogin.Error(
                     message =
                     "Ocorreu um erro ao efetuar login. Código de resposta: ${response.code()}",
@@ -34,6 +37,7 @@ class LoginRepositoryImpl : LoginRepository {
                 )
             }
         } catch (e: Exception) {
+            Log.e("Erro ao efetuar o login", "$e")
             StateLogin.Error(
                 message = "Ocorreu um erro ao efetuar login.",
                 exception = e

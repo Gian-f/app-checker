@@ -1,5 +1,6 @@
 package com.br.appchecker.data.remote.config
 
+import com.br.appchecker.data.remote.service.AnswerService
 import com.br.appchecker.data.remote.service.LoginService
 import com.br.appchecker.data.remote.service.QuestionService
 import com.google.gson.GsonBuilder
@@ -48,6 +49,25 @@ object ApiServiceFactory {
             .build()
 
         return retrofit.create(LoginService::class.java)
+    }
+
+    fun createService(): AnswerService {
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor()
+                .apply { level = HttpLoggingInterceptor.Level.BODY })
+            .build()
+
+        val gson = GsonBuilder()
+            .setLenient()
+            .create()
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+
+        return retrofit.create(AnswerService::class.java)
     }
 
 }

@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.br.appchecker.R
-import com.br.appchecker.data.model.Question
+import com.br.appchecker.domain.model.Question
+import com.br.appchecker.data.remote.request.QuestionRequest
 import com.br.appchecker.databinding.FragmentFirstBinding
 import com.br.appchecker.ui.questions.adapters.SingleChoiceAdapter
 import com.br.appchecker.util.showBottomSheet
@@ -16,6 +18,14 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) ->
     FragmentFirstBinding = FragmentFirstBinding::inflate
+
+    private val position by lazy {
+        FirstFragmentArgs.fromBundle(requireArguments()).position
+    }
+
+    private val list by lazy {
+        FirstFragmentArgs.fromBundle(requireArguments()).list
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +40,7 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
         setupViewModel()
         setupRecyclerView()
         setupListeners()
+        setupButtonsVisibility()
     }
 
     private fun setupListeners() {
@@ -39,6 +50,9 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
             } else {
                 showBottomSheet(message = R.string.error_empty_form)
             }
+        }
+        binding.backButton.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 
@@ -56,12 +70,22 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
             })
 
         viewModel.questions.observe(viewLifecycleOwner) { questions ->
-            adapter.submitList(questions)
+            GlobalData.questions.value = questions
+            updateProgressBar(position, questions.size)
+            adapter.submitList(findQuestionListOne(questions))
             adapter.notifyDataSetChanged()
-            println(questions[0].selectedAnswerPosition)
         }
 
-        viewModel.getAllQuestions()
+        if ((list.isNullOrEmpty()) || GlobalData.questions.value.isNullOrEmpty()) {
+            viewModel.getAllQuestions(QuestionRequest(3))
+        } else {
+            val listAux = ArrayList<Question>()
+            listAux.addAll(list ?: arrayOf())
+            GlobalData.questions.value = listAux
+            updateProgressBar(position, listAux.size)
+            adapter.submitList(findQuestionListOne(listAux))
+            adapter.notifyDataSetChanged()
+        }
         binding.rv.adapter = adapter
     }
 
@@ -82,17 +106,33 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
 //        )
 //    }
 
+    private fun setupButtonsVisibility() {
+        if(position > 0) {
+            binding.backButton.visibility = View.VISIBLE
+            binding.continueButton.width = 150
+        }
+    }
+
+    private fun findQuestionListOne(questions: List<Question>): MutableList<Question> {
+        return mutableListOf(questions[position])
+    }
+
     private fun navigateToNextQuestion() {
-//        viewModel.navigateToNextQuestion()
         findNavController().navigate(getActionForNextFragment())
     }
 
-    override fun getProgressBarIndex(): Int = 1
+    override fun getProgressBarIndex(): Int = position + 1
 
-    override fun getProgressBarMessage(): String = "1 de 6"
+    override fun getProgressBarMessage(): String =
+        "${position + 1} de ${list?.size ?: GlobalData.questions.value?.size ?: 1}"
 
-    override fun getActionForNextFragment() =
-        FirstFragmentDirections.actionFirstFragmentToSecondFragment()
+    override fun getActionForNextFragment(): NavDirections {
+        return if (position + 1 < (list?.size ?: GlobalData.questions.value?.size ?: 0)) {
+            FirstFragmentDirections.actionFirstFragmentSelf(
+                position = position + 1,
+                list = list ?: GlobalData.questions.value?.toTypedArray() ?: arrayOf())
+        } else FirstFragmentDirections.actionFirstFragmentToResultFragment()
+    }
 
     override fun getActionForPreviousFragment(): Nothing? = null
 
@@ -103,3 +143,4 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
         return unansweredQuestion?.selectedAnswerPosition != null
     }
 }
+

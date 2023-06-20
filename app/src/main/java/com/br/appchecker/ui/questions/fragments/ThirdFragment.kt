@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.br.appchecker.R
-import com.br.appchecker.data.model.Question
+import com.br.appchecker.domain.model.Question
+import com.br.appchecker.data.remote.request.QuestionRequest
 import com.br.appchecker.databinding.FragmentThirdBinding
 import com.br.appchecker.ui.questions.adapters.SingleChoiceAdapter
 import com.br.appchecker.util.showBottomSheet
@@ -62,7 +63,7 @@ class ThirdFragment : QuestionBaseFragment<FragmentThirdBinding>() {
             adapter.notifyItemChanged(
                 questions[0].selectedAnswerPosition!!)
         }
-        viewModel.getAllQuestions()
+        viewModel.getAllQuestions(QuestionRequest(1))
         binding.rvThird.adapter = adapter
     }
 

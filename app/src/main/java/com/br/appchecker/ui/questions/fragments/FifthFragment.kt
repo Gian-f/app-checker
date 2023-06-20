@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.br.appchecker.R
-import com.br.appchecker.data.model.Question
+import com.br.appchecker.domain.model.Question
+import com.br.appchecker.data.remote.request.QuestionRequest
 import com.br.appchecker.databinding.FragmentFifthBinding
 import com.br.appchecker.ui.questions.adapters.SingleChoiceAdapter
 import com.br.appchecker.util.showBottomSheet
@@ -61,24 +62,9 @@ class FifthFragment: QuestionBaseFragment<FragmentFifthBinding>() {
             adapter.submitList(questions)
             adapter.notifyDataSetChanged()
         }
-        viewModel.getAllQuestions()
+        viewModel.getAllQuestions(QuestionRequest(1))
         binding.rvFifth.adapter = adapter
     }
-
-//    private fun getMockedQuestion(): MutableList<Question> {
-//        return mutableListOf(
-//            Question(
-//                id = ULID.randomULID(),
-//                title = "Você fez operações em bolsas de valores, de mercadorias, de futuros e assemelhadas acima de R$40.000,00 ou com ganhos líquidos sujeitos a impostos?",
-//                description = "Selecione a opção que te melhor descreve",
-//                answers = listOf(
-//                    "Sim, realizei operações acima do limite estabelecido",
-//                    "Não, não realizei operações acima do limite estabelecido",
-//                    "Não sei / Não tenho certeza",
-//                    "Não se aplica a mim"),
-//                selectedAnswerPosition = null)
-//        )
-//    }
 
     override fun getProgressBarIndex() = 5
 

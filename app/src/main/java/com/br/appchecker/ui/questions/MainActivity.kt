@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setupNavController()
-        onUpdateProgressBar(1, "1 de 6")
+        onUpdateProgressBar(1, 6)
     }
 
     private fun setupNavController() {
@@ -34,10 +34,11 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
-    override fun onUpdateProgressBar(progress: Int, step: String) {
+    override fun onUpdateProgressBar(progress: Int, max: Int) {
         with(binding) {
             progressIndicator.progress = progress
-            questionTextView.text = step
+            questionTextView.text = "$progress de $max"
+            progressIndicator.max = max
         }
     }
 }
