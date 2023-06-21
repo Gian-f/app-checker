@@ -21,13 +21,13 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/item_single_choice_question" />
 
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/buttons_group"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:gravity="center"
             android:orientation="horizontal"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,32 +35,38 @@
 
             <Button
                 android:id="@+id/back_button"
-                android:layout_width="160dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:background="@drawable/neumorphism_bg"
                 android:elevation="8dp"
-                android:textSize="18sp"
                 android:fontFamily="@font/inter_medium"
                 android:text="@string/voltar"
                 android:textAllCaps="false"
+                android:textSize="18sp"
                 android:visibility="gone"
-                app:icon="@drawable/ic_back" />
+                app:icon="@drawable/ic_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/continue_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:layout_margin="8dp"
                 android:background="@drawable/neumorphism_bg"
                 android:elevation="8dp"
-                android:textSize="18sp"
                 android:fontFamily="@font/inter_medium"
                 android:text="@string/proximo"
                 android:textAllCaps="false"
+                android:textSize="18sp"
                 app:icon="@drawable/ic_next"
-                app:iconGravity="end" />
-        </LinearLayout>
+                app:iconGravity="end"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

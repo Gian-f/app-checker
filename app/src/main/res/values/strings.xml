@@ -58,6 +58,7 @@
     <string name="text_button_bottom_sheet"> Ok </string>
     <string name="text_title_bottom_sheet">Atenção!</string>
     <string name="error_generic">Ocorreu um erro, por favor tente novamente.</string>
+    <string name="error_login">Ocorreu um erro, por favor verifique seus dados e tente novamente.</string>
     <string name="error_empty_form">Houve um erro 🥺 preencha todos os campos obrigatórios antes de prosseguir.</string>
     <string name="error_not_implemented_yet">Recurso ainda não implementado.</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -65,7 +66,7 @@
     <string name="proximo">Próximo</string>
     <string name="voltar">Voltar</string>
 
-   <!-- OnBoarding -->
+    <!-- OnBoarding -->
     <string name="title_activity_onboarding">OnboardingActivity</string>
 
     <string name="onboarding_slide1_title">Create an account</string>

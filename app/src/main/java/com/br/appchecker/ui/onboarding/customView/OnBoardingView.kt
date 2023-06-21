@@ -8,7 +8,7 @@ import android.widget.FrameLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.br.appchecker.databinding.OnboardingViewBinding
 import com.br.appchecker.domain.OnBoardingPrefManager
-import com.br.appchecker.ui.login.LoginActivity
+import com.br.appchecker.ui.login.auth.LoginActivity
 import com.br.appchecker.ui.onboarding.adapters.OnBoardingPagerAdapter
 import com.br.appchecker.ui.onboarding.animations.setParallaxTransformation
 import com.br.appchecker.ui.onboarding.enums.OnBoardingPage

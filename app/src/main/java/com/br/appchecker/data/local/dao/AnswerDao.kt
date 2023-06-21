@@ -10,13 +10,13 @@ import com.br.appchecker.data.remote.response.AnswersData
 @Dao
 interface AnswerDao {
 
-    @Query("SELECT * FROM AnswersData ORDER BY positionOrder")
+    @Query("SELECT * FROM answers ORDER BY positionOrder")
     fun getAll(): List<AnswersData>
 
-    @Query("SELECT * FROM AnswersData WHERE id IN (:AnswerDataIds)")
+    @Query("SELECT * FROM answers WHERE id IN (:AnswerDataIds)")
     fun loadAllByIds(AnswerDataIds: IntArray): List<AnswersData>
 
-    @Query("SELECT * FROM AnswersData WHERE idQuestion LIKE :id ORDER BY positionOrder LIMIT 1")
+    @Query("SELECT * FROM answers WHERE questionId LIKE :id ORDER BY positionOrder LIMIT 1")
     fun findById(id: Int): AnswersData
 
     @Insert
@@ -28,6 +28,6 @@ interface AnswerDao {
     @Delete
     fun delete(answer: AnswersData)
 
-    @Query("DELETE FROM AnswersData")
+    @Query("DELETE FROM answers")
     fun deleteAll()
 }

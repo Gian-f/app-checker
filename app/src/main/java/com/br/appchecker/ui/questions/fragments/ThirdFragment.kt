@@ -63,7 +63,7 @@ class ThirdFragment : QuestionBaseFragment<FragmentThirdBinding>() {
             adapter.notifyItemChanged(
                 questions[0].selectedAnswerPosition!!)
         }
-        viewModel.getAllQuestions(QuestionRequest(1))
+        viewModel.getAllQuestions()
         binding.rvThird.adapter = adapter
     }
 

@@ -25,7 +25,7 @@
 
         <argument
             android:name="list"
-            app:argType="com.br.appchecker.data.model.Question[]"
+            app:argType="com.br.appchecker.domain.model.Question[]"
             app:nullable="true"
             android:defaultValue="@null" />
 

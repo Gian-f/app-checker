@@ -1,8 +1,4 @@
-package com.br.appchecker.ui.login
-
-/**
- * Data validation state of the login form.
- */
+package com.br.appchecker.ui.login.state
 data class LoginFormState(
     val usernameError: Int? = null,
     val passwordError: Int? = null,

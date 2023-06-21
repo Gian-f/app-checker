@@ -6,14 +6,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.Room
-import com.br.appchecker.MyApplication
 import com.br.appchecker.R
-import com.br.appchecker.data.local.AppDatabase
-import com.br.appchecker.data.state.StateLogin
 import com.br.appchecker.data.remote.response.LoginResponse
 import com.br.appchecker.data.repository.login.LoginRepositoryImpl
-import com.br.appchecker.ui.login.LoginFormState
+import com.br.appchecker.data.state.StateLogin
+import com.br.appchecker.ui.login.state.LoginFormState
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,7 +18,6 @@ import kotlinx.coroutines.withContext
 
 class LoginViewModel(
     private val loginRepository: LoginRepositoryImpl,
-    private val appDatabase: AppDatabase
 ) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
@@ -33,10 +29,17 @@ class LoginViewModel(
     fun login(username: String, password: String) {
         viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
             Log.e("ERRO login ", "$throwable") }) {
+            deleteAllUsers()
             val state = loginRepository.login(username, password)
             withContext(Dispatchers.Main) {
                 _loginResult.value = state
             }
+        }
+    }
+
+    fun deleteAllUsers() {
+        viewModelScope.launch(Dispatchers.IO) {
+            loginRepository.deleteAllUsers()
         }
     }
 

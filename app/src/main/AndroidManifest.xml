@@ -34,7 +34,7 @@
             android:label="@string/title_activity_main"
             android:theme="@style/Theme.AppChecker" />
         <activity
-            android:name=".ui.login.LoginActivity"
+            android:name=".ui.login.auth.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login">
             <intent-filter>

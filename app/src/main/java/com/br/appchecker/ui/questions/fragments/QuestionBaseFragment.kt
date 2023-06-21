@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDirections
 import androidx.viewbinding.ViewBinding
+import com.br.appchecker.data.local.AppDatabase
 import com.br.appchecker.data.repository.question.QuestionRepositoryImpl
 import com.br.appchecker.domain.usecase.question.GetQuestionsUseCase
 import com.br.appchecker.domain.usecase.question.InsertQuestionUseCase
@@ -39,11 +40,17 @@ abstract class QuestionBaseFragment<T : ViewBinding> : Fragment() {
     }
 
     protected fun setupViewModel() {
-        val questionRepository = QuestionRepositoryImpl()
+        val questionDao = AppDatabase.getInstance(requireContext()).questionDao()
+        val userDao = AppDatabase.getInstance(requireContext()).userDao()
+        val questionRepository = QuestionRepositoryImpl(questionDao, userDao)
         val getAllUseCase = GetQuestionsUseCase(questionRepository)
         val insertUseCase = InsertQuestionUseCase(questionRepository)
-        viewModel = ViewModelProvider(this,
-            QuestionViewModelFactory(getAllUseCase,insertUseCase)
+        viewModel = ViewModelProvider(
+            this,
+            QuestionViewModelFactory(
+                getAllUseCase,
+                insertUseCase,
+            )
         )[QuestionViewModel::class.java]
     }
 

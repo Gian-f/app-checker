@@ -62,7 +62,7 @@ class FifthFragment: QuestionBaseFragment<FragmentFifthBinding>() {
             adapter.submitList(questions)
             adapter.notifyDataSetChanged()
         }
-        viewModel.getAllQuestions(QuestionRequest(1))
+        viewModel.getAllQuestions()
         binding.rvFifth.adapter = adapter
     }
 

@@ -5,22 +5,24 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.Relation
 import com.br.appchecker.data.remote.response.AnswersData
 import kotlinx.parcelize.Parcelize
+
+@Entity(tableName = "questions")
 @Parcelize
-@Entity
 data class Question(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     val id: Int = 0,
-    @ColumnInfo("title")
+    @ColumnInfo(name = "title")
     val title: String,
-    @ColumnInfo("description")
+    @ColumnInfo(name = "description")
     val description: String,
-    @ColumnInfo("answers")
+    @ColumnInfo(name = "answers")
     val answers: List<AnswersData>,
-    @ColumnInfo("option_id_result")
-    val optionIdResult: AnswersData? = null,
-    @ColumnInfo("selected_answer_position")
+    @ColumnInfo(name = "optionIdResultId")
+    val optionIdResultId: Int? = null,
+    @ColumnInfo(name = "selected_answer_position")
     var selectedAnswerPosition: Int? = RecyclerView.NO_POSITION
 ): Parcelable
 

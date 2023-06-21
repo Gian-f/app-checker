@@ -47,7 +47,7 @@ class SecondFragment : QuestionBaseFragment<FragmentSecondBinding>() {
             adapter.notifyDataSetChanged()
         }
 
-        viewModel.getAllQuestions(QuestionRequest(1))
+        viewModel.getAllQuestions()
         binding.rvSecond.adapter = adapter
     }
 

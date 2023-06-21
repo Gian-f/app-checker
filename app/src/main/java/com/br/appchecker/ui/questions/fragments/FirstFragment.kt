@@ -8,9 +8,8 @@ import android.widget.Toast
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.br.appchecker.R
-import com.br.appchecker.domain.model.Question
-import com.br.appchecker.data.remote.request.QuestionRequest
 import com.br.appchecker.databinding.FragmentFirstBinding
+import com.br.appchecker.domain.model.Question
 import com.br.appchecker.ui.questions.adapters.SingleChoiceAdapter
 import com.br.appchecker.util.showBottomSheet
 
@@ -77,10 +76,10 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
         }
 
         if ((list.isNullOrEmpty()) || GlobalData.questions.value.isNullOrEmpty()) {
-            viewModel.getAllQuestions(QuestionRequest(3))
+            viewModel.getAllQuestions()
         } else {
             val listAux = ArrayList<Question>()
-            listAux.addAll(list ?: arrayOf())
+            listAux.addAll((list ?: arrayOf()))
             GlobalData.questions.value = listAux
             updateProgressBar(position, listAux.size)
             adapter.submitList(findQuestionListOne(listAux))
@@ -107,9 +106,11 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
 //    }
 
     private fun setupButtonsVisibility() {
-        if(position > 0) {
-            binding.backButton.visibility = View.VISIBLE
-            binding.continueButton.width = 150
+        if (position > 0) {
+            with(binding) {
+                backButton.visibility = View.VISIBLE
+                continueButton.layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
+            }
         }
     }
 
@@ -130,7 +131,8 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
         return if (position + 1 < (list?.size ?: GlobalData.questions.value?.size ?: 0)) {
             FirstFragmentDirections.actionFirstFragmentSelf(
                 position = position + 1,
-                list = list ?: GlobalData.questions.value?.toTypedArray() ?: arrayOf())
+                list = list ?: GlobalData.questions.value?.toTypedArray() ?: arrayOf()
+            )
         } else FirstFragmentDirections.actionFirstFragmentToResultFragment()
     }
 

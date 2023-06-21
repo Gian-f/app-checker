@@ -62,7 +62,7 @@ class FourthFragment : QuestionBaseFragment<FragmentFourthBinding>() {
             adapter.submitList(questions)
             adapter.notifyDataSetChanged()
         }
-        viewModel.getAllQuestions(QuestionRequest(1))
+        viewModel.getAllQuestions()
         binding.rvFourth.adapter = adapter
     }
 

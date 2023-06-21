@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiServiceFactory {
 
-    private const val BASE_URL = "http://192.168.203.19:8081"
+    private const val BASE_URL = "http://192.168.203.56:8081"
 
     fun createQuestionService(): QuestionService {
         val okHttpClient = OkHttpClient.Builder()
