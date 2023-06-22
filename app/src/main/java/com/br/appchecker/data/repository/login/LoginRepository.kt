@@ -7,6 +7,8 @@ interface LoginRepository {
 
     suspend fun login(email: String, password: String): StateLogin<LoginResponse>
 
+    suspend fun loginAsGuest(): StateLogin<LoginResponse>
+
     suspend fun logout()
 
 }

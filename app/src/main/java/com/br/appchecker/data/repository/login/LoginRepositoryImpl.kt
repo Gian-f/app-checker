@@ -7,6 +7,7 @@ import com.br.appchecker.data.state.StateLogin
 import com.br.appchecker.data.remote.config.ApiServiceFactory
 import com.br.appchecker.data.remote.request.LoginRequest
 import com.br.appchecker.data.remote.response.LoginResponse
+import com.br.appchecker.domain.model.User
 import retrofit2.awaitResponse
 
 class LoginRepositoryImpl(
@@ -45,6 +46,26 @@ class LoginRepositoryImpl(
             Log.e("Erro ao efetuar o login", "$e")
             StateLogin.Error(
                 message = "Ocorreu um erro ao efetuar login.",
+                exception = e
+            )
+        }
+    }
+
+    override suspend fun loginAsGuest(): StateLogin<LoginResponse> {
+        return try {
+            val guestUser = userDao.getAll().first()
+            if (guestUser.id == 0) {
+                StateLogin.Success(User(0,"Convidado", "Convidado"), "Usuário autenticado com sucesso")
+            } else {
+                StateLogin.Error(
+                    message = "O usuário não é um convidado.",
+                    txt = "Por favor, faça o login regularmente."
+                )
+            }
+        } catch (e: Exception) {
+            Log.e("Erro ao efetuar o login", "$e")
+            StateLogin.Error(
+                message = "Ocorreu um erro ao efetuar login como usuário convidado.",
                 exception = e
             )
         }

@@ -29,8 +29,17 @@ class LoginViewModel(
     fun login(username: String, password: String) {
         viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
             Log.e("ERRO login ", "$throwable") }) {
-            deleteAllUsers()
             val state = loginRepository.login(username, password)
+            withContext(Dispatchers.Main) {
+                _loginResult.value = state
+            }
+        }
+    }
+
+    fun loginAsGuest() {
+        viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
+            Log.e("ERRO login as guest ", "$throwable") }) {
+            val state = loginRepository.loginAsGuest()
             withContext(Dispatchers.Main) {
                 _loginResult.value = state
             }

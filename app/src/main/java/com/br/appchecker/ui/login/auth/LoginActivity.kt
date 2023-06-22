@@ -117,11 +117,7 @@ class LoginActivity : AppCompatActivity() {
 
             guest?.setOnClickListener {
                 loading.visibility = View.VISIBLE
-                loginViewModel.deleteAllUsers()
-                val handler = Handler(Looper.getMainLooper())
-                handler.postDelayed({
-                    navigateToMain()
-                }, 3000)
+                loginViewModel.loginAsGuest()
             }
         }
     }
