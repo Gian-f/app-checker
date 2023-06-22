@@ -53,6 +53,7 @@
         android:text="@string/continuar"
         android:textSize="18sp"
         android:textColor="@color/white"
+        android:fontFamily="@font/inter_medium"
         app:cornerRadius="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

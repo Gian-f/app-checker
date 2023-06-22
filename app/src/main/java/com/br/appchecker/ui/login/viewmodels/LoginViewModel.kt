@@ -54,11 +54,8 @@ class LoginViewModel(
     }
 
     private fun isUserNameValid(username: String): Boolean {
-        return if (username.contains('@')) {
-            Patterns.EMAIL_ADDRESS.matcher(username).matches()
-        } else {
-            username.isNotBlank()
-        }
+        val emailRegex = Patterns.EMAIL_ADDRESS.toRegex()
+        return username.isNotBlank() && (emailRegex.matches(username))
     }
 
     private fun isPasswordValid(password: String): Boolean {

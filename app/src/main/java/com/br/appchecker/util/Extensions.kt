@@ -4,6 +4,7 @@ import android.app.Activity
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.br.appchecker.R
 import com.br.appchecker.databinding.BottomSheetBinding
@@ -17,6 +18,10 @@ fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
     })
+}
+
+fun Activity.showToast(message: String) {
+    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 }
 
 fun Fragment.showBottomSheet(

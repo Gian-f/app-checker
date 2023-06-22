@@ -15,6 +15,7 @@ import com.br.appchecker.R
 import com.br.appchecker.data.local.AppDatabase
 import com.br.appchecker.data.state.StateLogin
 import com.br.appchecker.databinding.ActivityLoginBinding
+import com.br.appchecker.ui.login.auth.register.RegisterActivity
 import com.br.appchecker.ui.login.viewmodels.LoginViewModel
 import com.br.appchecker.ui.login.viewmodels.factory.LoginViewModelFactory
 import com.br.appchecker.ui.questions.MainActivity
@@ -68,13 +69,13 @@ class LoginActivity : AppCompatActivity() {
                     }, 3000)
                 }
             }
-
             setResult(Activity.RESULT_OK)
         }
     }
 
     private fun setupListeners() {
         binding.apply {
+
             username.afterTextChanged { text ->
                 loginViewModel.loginDataChanged(text, binding.password.text.toString())
             }
@@ -91,9 +92,23 @@ class LoginActivity : AppCompatActivity() {
                     false
                 }
             }
-        }
 
-        with(binding) {
+            register?.setOnClickListener {
+                val intent = Intent(
+                    applicationContext,
+                    RegisterActivity::class.java
+                )
+                startActivity(intent)
+            }
+
+            recover?.setOnClickListener {
+                val intent = Intent(
+                    this@LoginActivity,
+                    RecoverActivity::class.java
+                )
+                startActivity(intent)
+            }
+
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
                 loginViewModel.login(username.text.toString(), password.text.toString())

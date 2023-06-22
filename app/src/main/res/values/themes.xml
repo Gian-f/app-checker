@@ -2,15 +2,15 @@
     <!-- Base application theme. -->
     <style name="Theme.AppChecker" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/color_primary_medium</item>
-        <item name="colorPrimaryVariant">@color/color_primary_high</item>
+        <item name="colorPrimary">@color/color_primary_high</item>
+        <item name="colorPrimaryVariant">@color/color_primary_medium</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/color_secondary_light</item>
-        <item name="colorSecondaryVariant">@color/color_secondary_medium</item>
+        <item name="colorSecondary">@color/color_secondary_medium</item>
+        <item name="colorSecondaryVariant">@color/color_secondary_light</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
     </style>
     <!-- Base application theme. -->
@@ -32,11 +32,20 @@
         <item name="colorControlNormal">@color/gray</item>
         <item name="colorControlActivated">@color/gray</item>
     </style>
-    <style name="Widget.MaterialComponents.Button.TextButton.OnBoardTextButton"
-        parent="Widget.MaterialComponents.Button.TextButton">
+
+    <style name="Widget.MaterialComponents.Button.TextButton.OnBoardTextButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/color_primary_high</item>
     </style>
+
+    <style name="Theme.AppChecker.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.AppChecker.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.AppChecker.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>
