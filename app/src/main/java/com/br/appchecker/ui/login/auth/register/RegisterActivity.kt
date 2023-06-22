@@ -21,9 +21,11 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun setupListeners() {
         binding.apply {
+
             google.setOnClickListener {
                 showBottomSheet(message = R.string.error_not_implemented_yet)
             }
+
             mail.setOnClickListener {
                 val intent = Intent(applicationContext, RegisterFormActivity::class.java)
                 startActivity(intent)

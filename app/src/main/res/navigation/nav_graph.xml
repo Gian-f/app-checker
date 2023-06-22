@@ -12,12 +12,6 @@
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
 
-        <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment"
-            app:enterAnim="@anim/slide_in"
-            app:exitAnim="@anim/fade_out"/>
-
         <argument
             android:name="position"
             app:argType="integer"
@@ -44,79 +38,6 @@
             app:popExitAnim="@anim/slide_out"
             app:destination="@id/resultFragment" />
 
-    </fragment>
-
-    <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.br.appchecker.ui.questions.fragments.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
-
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment"
-            app:enterAnim="@anim/slide_in"
-            app:exitAnim="@anim/fade_out" />
-        <action
-            android:id="@+id/action_SecondFragment_to_ThirdFragment"
-            app:destination="@id/ThirdFragment"
-            app:enterAnim="@anim/slide_in"
-            app:exitAnim="@anim/fade_out" />
-    </fragment>
-    <fragment
-        android:id="@+id/ThirdFragment"
-        android:name="com.br.appchecker.ui.questions.fragments.ThirdFragment"
-        android:label="ThirdFragment">
-        <action
-            android:id="@+id/action_ThirdFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment"
-            app:enterAnim="@anim/slide_in"
-            app:exitAnim="@anim/fade_out" />
-        <action
-            android:id="@+id/action_ThirdFragment_to_FourthFragment"
-            app:destination="@id/FourthFragment"
-            app:enterAnim="@anim/slide_in"
-            app:exitAnim="@anim/fade_out" />
-    </fragment>
-    <fragment
-        android:id="@+id/FourthFragment"
-        android:name="com.br.appchecker.ui.questions.fragments.FourthFragment"
-        android:label="FourthFragment" >
-        <action
-            android:id="@+id/action_FourthFragment_to_ThirdFragment"
-            app:destination="@id/ThirdFragment"
-            app:enterAnim="@anim/slide_in"
-            app:exitAnim="@anim/fade_out" />
-        <action
-            android:id="@+id/action_FourthFragment_to_FifthFragment"
-            app:destination="@id/FifthFragment"
-            app:enterAnim="@anim/slide_in"
-            app:exitAnim="@anim/fade_out" />
-    </fragment>
-    <fragment
-        android:id="@+id/FifthFragment"
-        android:name="com.br.appchecker.ui.questions.fragments.FifthFragment"
-        android:label="FifthFragment" >
-        <action
-            android:id="@+id/action_FifthFragment_to_FourthFragment"
-            app:destination="@id/FourthFragment"
-            app:enterAnim="@anim/slide_in"
-            app:exitAnim="@anim/fade_out" />
-        <action
-            android:id="@+id/action_FifthFragment_to_SixthFragment"
-            app:destination="@id/SixthFragment"
-            app:enterAnim="@anim/slide_in"
-            app:exitAnim="@anim/fade_out" />
-    </fragment>
-    <fragment
-        android:id="@+id/SixthFragment"
-        android:name="com.br.appchecker.ui.questions.fragments.SixthFragment"
-        android:label="SixthFragment" >
-        <action
-            android:id="@+id/action_SixthFragment_to_FifthFragment"
-            app:enterAnim="@anim/slide_in"
-            app:exitAnim="@anim/fade_out"
-            app:destination="@id/FifthFragment" />
     </fragment>
 
     <fragment

@@ -23,7 +23,8 @@
             android:exported="false"
             android:label="@string/title_activity_register_form"
             android:resizeableActivity="true"
-            android:theme="@style/Theme.AppChecker.NoActionBar"
+            android:theme="@style/Theme.AppChecker"
+            android:windowSoftInputMode="adjustResize"
             tools:targetApi="24" />
         <activity
             android:name=".ui.onboarding.OnboardingActivity"
@@ -57,7 +58,7 @@
             android:label="@string/title_activity_register"
             android:theme="@style/Theme.AppChecker" />
         <activity
-            android:name=".ui.login.auth.RecoverActivity"
+            android:name=".ui.login.auth.recover.RecoverActivity"
             android:exported="false"
             android:label="@string/title_activity_recover"
             android:theme="@style/Theme.AppChecker" />

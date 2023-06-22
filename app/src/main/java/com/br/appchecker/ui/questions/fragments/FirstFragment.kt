@@ -88,23 +88,6 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
         binding.rv.adapter = adapter
     }
 
-//    private fun getMockedQuestions(): MutableList<Question> {
-//        return mutableListOf(
-//            Question(
-//                id = ULID.randomULID(),
-//                title = "Seus rendimentos tributáveis foram superiores a R$ 28.559,70 no ano passado?",
-//                description = "Selecione a opção que melhor te descreve",
-//                answers = listOf(
-//                    "Sim, acima do limite estabelecido",
-//                    "Não, não recebi acima do limite estabelecido",
-//                    "Não sei / Não tenho certeza",
-//                    "Não se aplica a mim"
-//                ),
-//                selectedAnswerPosition = null
-//            )
-//        )
-//    }
-
     private fun setupButtonsVisibility() {
         if (position > 0) {
             with(binding) {

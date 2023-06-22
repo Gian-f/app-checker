@@ -8,9 +8,9 @@
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">E-mail inválido</string>
-    <string name="invalid_password">Senha precisa ter pelo menos 5 caracteres</string>
+    <string name="invalid_password">A senha deve conter no mínimo 5 caracteres, com pelo menos uma letra maiúscula e uma letra minúscula.</string>
     <string name="login_failed">"Ocorreu um erro ao efetuar o login"</string>
-    <string name="enter_or_create">Que bom te ver aqui novamente!</string>
+    <string name="enter_or_create">Que bom te ver por aqui novamente!</string>
     <string name="or">ou</string>
     <string name="title_activity_main">MainActivity</string>
     <!-- Strings used for fragments for navigation -->
@@ -109,4 +109,6 @@
     <string name="image_view_item_transform_content_description">Represents an image view in the
         item
     </string>
+    <string name="now">Agora...</string>
+    <string name="create_password">Crie uma senha</string>
 </resources>

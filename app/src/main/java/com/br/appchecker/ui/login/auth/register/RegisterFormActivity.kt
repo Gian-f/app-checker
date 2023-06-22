@@ -2,13 +2,12 @@ package com.br.appchecker.ui.login.auth.register
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.br.appchecker.R
 import com.br.appchecker.data.local.AppDatabase
 import com.br.appchecker.databinding.ActivityRegisterFormBinding
 import com.br.appchecker.ui.login.auth.LoginActivity
@@ -52,25 +51,23 @@ class RegisterFormActivity : AppCompatActivity() {
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
                         loginViewModel.login(username.text.toString(), text.toString())
+                        true
+                    } else {
+                        false
                     }
-                    false
                 }
             }
 
             continueButton.setOnClickListener {
-                val isPasswordVisible = (passwordLayout.visibility == View.VISIBLE)
-                val isPasswordNotEmpty = password.text.isNotEmpty()
-
-                if (isPasswordVisible && isPasswordNotEmpty) {
+                val isPasswordValid = loginViewModel.isPasswordValid(password.text.toString())
+                if (isPasswordValid) {
                     loading.visibility = View.VISIBLE
-                    startLoginActivity()
-                    showToast("Conta criada com sucesso!")
+                    continueButton.isEnabled = false
+                    startLoginActivityDelayed()
                 } else {
                     loading.visibility = View.VISIBLE
-                    val handler = Handler(Looper.getMainLooper())
-                    handler.postDelayed({
-                        showPasswordLayout()
-                    }, 2000)
+                    continueButton.isEnabled = false
+                    showPasswordLayoutDelayed()
                 }
             }
         }
@@ -79,28 +76,40 @@ class RegisterFormActivity : AppCompatActivity() {
     private fun setupObservers() {
         loginViewModel.loginFormState.observe(this, Observer { loginState ->
             loginState ?: return@Observer
-            with(binding) {
-                val isUsernameValid = (loginState.usernameError != 0)
-                continueButton.isEnabled = isUsernameValid
+            binding.apply {
+                val isUsernameValid = loginViewModel.isUserNameValid(username.text.toString())
+                val isPasswordValid = if (isUsernameValid) {
+                    loginViewModel.isPasswordValid(password.text.toString())
+                } else {
+                    false
+                }
+                continueButton.isEnabled = isUsernameValid or isPasswordValid
                 usernameLayout.error = loginState.usernameError?.let { getString(it) }
                 passwordLayout.error = loginState.passwordError?.let { getString(it) }
             }
         })
     }
 
-    private fun startLoginActivity() {
-        binding.loading.visibility = View.GONE
-        val intent = Intent(applicationContext, LoginActivity::class.java)
-        startActivity(intent)
+    private fun startLoginActivityDelayed() {
+        binding.loading.visibility = View.VISIBLE
+        binding.continueButton.postDelayed({
+            binding.loading.visibility = View.GONE
+            val intent = Intent(applicationContext, LoginActivity::class.java)
+            startActivity(intent)
+            showToast("Conta criada com sucesso!")
+        }, 2000)
     }
 
-    private fun showPasswordLayout() {
-        binding.loading.visibility = View.GONE
+    private fun showPasswordLayoutDelayed() {
         binding.apply {
-            passwordLayout.visibility = View.VISIBLE
-            usernameLayout.visibility = View.INVISIBLE
-            letsGetStarted.text = "Agora..."
-            question.text = "Crie uma senha"
+            loading.visibility = View.VISIBLE
+            passwordLayout.postDelayed({
+                loading.visibility = View.GONE
+                passwordLayout.visibility = View.VISIBLE
+                usernameLayout.visibility = View.INVISIBLE
+                letsGetStarted.text = getString(R.string.now)
+                question.text = getString(R.string.create_password)
+            }, 2000)
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.br.appchecker.util
 
 import android.app.Activity
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText

@@ -1,4 +1,4 @@
-package com.br.appchecker.ui.login.auth
+package com.br.appchecker.ui.login.auth.recover
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

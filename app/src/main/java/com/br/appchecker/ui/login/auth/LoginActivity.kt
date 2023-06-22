@@ -15,6 +15,7 @@ import com.br.appchecker.R
 import com.br.appchecker.data.local.AppDatabase
 import com.br.appchecker.data.state.StateLogin
 import com.br.appchecker.databinding.ActivityLoginBinding
+import com.br.appchecker.ui.login.auth.recover.RecoverActivity
 import com.br.appchecker.ui.login.auth.register.RegisterActivity
 import com.br.appchecker.ui.login.viewmodels.LoginViewModel
 import com.br.appchecker.ui.login.viewmodels.factory.LoginViewModelFactory

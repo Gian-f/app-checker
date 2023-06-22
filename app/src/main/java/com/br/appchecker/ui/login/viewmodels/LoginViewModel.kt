@@ -53,12 +53,32 @@ class LoginViewModel(
         }
     }
 
-    private fun isUserNameValid(username: String): Boolean {
+    fun isUserNameValid(username: String): Boolean {
         val emailRegex = Patterns.EMAIL_ADDRESS.toRegex()
         return username.isNotBlank() && (emailRegex.matches(username))
     }
 
-    private fun isPasswordValid(password: String): Boolean {
-        return password.length >= 5
+    fun isPasswordValid(password: String): Boolean {
+        val minLength = 5
+
+        // Verificar comprimento mínimo
+        if (password.length < minLength) {
+            return false
+        }
+
+        // Verificar se contém pelo menos uma letra minúscula
+        val lowercaseRegex = Regex("[a-z]")
+        if (!password.contains(lowercaseRegex)) {
+            return false
+        }
+
+        // Verificar se contém pelo menos uma letra maiúscula
+        val uppercaseRegex = Regex("[A-Z]")
+        if (!password.contains(uppercaseRegex)) {
+            return false
+        }
+
+        return true
     }
+
 }
