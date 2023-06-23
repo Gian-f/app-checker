@@ -40,6 +40,7 @@ class RegisterFormActivity : AppCompatActivity() {
 
     private fun setupListeners() {
         binding.apply {
+
             username.afterTextChanged { email ->
                 loginViewModel.loginDataChanged(email, password.text.toString())
             }
@@ -48,6 +49,7 @@ class RegisterFormActivity : AppCompatActivity() {
                 afterTextChanged { password ->
                     loginViewModel.loginDataChanged(username.text.toString(), password)
                 }
+
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
                         loginViewModel.login(username.text.toString(), text.toString())
@@ -82,9 +84,7 @@ class RegisterFormActivity : AppCompatActivity() {
                 val isUsernameValid = loginViewModel.isUserNameValid(username.text.toString())
                 val isPasswordValid = if (isUsernameValid) {
                     loginViewModel.isPasswordValid(password.text.toString())
-                } else {
-                    false
-                }
+                } else false
                 continueButton.isEnabled = isUsernameValid or isPasswordValid
                 usernameLayout.error = loginState.usernameError?.let { getString(it) }
                 passwordLayout.error = loginState.passwordError?.let { getString(it) }

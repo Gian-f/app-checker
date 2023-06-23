@@ -136,6 +136,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
+
         binding.apply {
 
             username.afterTextChanged { text ->
@@ -174,10 +175,12 @@ class LoginActivity : AppCompatActivity() {
 
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
+                loginViewModel.deleteAllUsers()
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }
 
             guest?.setOnClickListener {
+                loginViewModel.deleteAllUsers()
                 loading.visibility = View.VISIBLE
                 loginViewModel.loginAsGuest()
             }
@@ -199,5 +202,4 @@ class LoginActivity : AppCompatActivity() {
         binding.loading.visibility = View.GONE
         showBottomSheet(message = R.string.error_login)
     }
-
 }

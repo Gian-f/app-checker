@@ -76,17 +76,16 @@ class LoginViewModel(
         }
 
         // Verificar se contém pelo menos uma letra minúscula
-        val lowercaseRegex = Regex("[a-z]")
-        if (!password.contains(lowercaseRegex)) {
-            return false
-        }
-
-        // Verificar se contém pelo menos uma letra maiúscula
-        val uppercaseRegex = Regex("[A-Z]")
-        if (!password.contains(uppercaseRegex)) {
-            return false
-        }
-
+//        val lowercaseRegex = Regex("[a-z]")
+//        if (!password.contains(lowercaseRegex)) {
+//            return false
+//        }
+//
+//        // Verificar se contém pelo menos uma letra maiúscula
+//        val uppercaseRegex = Regex("[A-Z]")
+//        if (!password.contains(uppercaseRegex)) {
+//            return false
+//        }
         return true
     }
 

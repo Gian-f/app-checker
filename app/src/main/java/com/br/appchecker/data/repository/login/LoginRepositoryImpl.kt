@@ -1,18 +1,17 @@
 package com.br.appchecker.data.repository.login
 
 import android.util.Log
-import com.br.appchecker.data.local.AppDatabase
 import com.br.appchecker.data.local.dao.UserDao
-import com.br.appchecker.data.state.StateLogin
 import com.br.appchecker.data.remote.config.ApiServiceFactory
 import com.br.appchecker.data.remote.request.LoginRequest
 import com.br.appchecker.data.remote.response.LoginResponse
+import com.br.appchecker.data.state.StateLogin
 import com.br.appchecker.domain.model.User
 import retrofit2.awaitResponse
 
 class LoginRepositoryImpl(
     private val userDao: UserDao
-    ) : LoginRepository {
+) : LoginRepository {
 
     private var service = ApiServiceFactory.createLoginService()
 
@@ -53,9 +52,13 @@ class LoginRepositoryImpl(
 
     override suspend fun loginAsGuest(): StateLogin<LoginResponse> {
         return try {
-            val guestUser = userDao.getAll().first()
-            if (guestUser.id == 0) {
-                StateLogin.Success(User(0,"Convidado", "Convidado"), "Usuário autenticado com sucesso")
+            val guestUser = User(id = 0, email = "convidado@email.com", name = "convidado")
+            if (userDao.getAll().isEmpty()) {
+                userDao.insert(guestUser)
+                StateLogin.Success(
+                    User(guestUser.id, guestUser.email, guestUser.name),
+                    "Usuário autenticado com sucesso"
+                )
             } else {
                 StateLogin.Error(
                     message = "O usuário não é um convidado.",
