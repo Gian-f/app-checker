@@ -36,17 +36,17 @@ class RecoverActivity : AppCompatActivity() {
 
     private fun setupListeners() {
         binding.apply {
-            username.afterTextChanged { email ->
-                loginViewModel.loginDataChanged(email, username.text.toString())
+            email.afterTextChanged {
+                loginViewModel.loginDataChanged(it, email.text.toString())
             }
 
             continueButton.setOnClickListener {
-                val isUsernameValid = loginViewModel.isUserNameValid(username.text.toString())
-                if (isUsernameValid) {
+                val isemailValid = loginViewModel.isEmailValid(email.text.toString())
+                if (isemailValid) {
                     loading.visibility = View.VISIBLE
                     continueButton.isEnabled = false
 //                    startLoginActivityDelayed()
-                    println(binding.username.text)
+                    println(binding.email.text)
                 } else {
                     loading.visibility = View.VISIBLE
                     continueButton.isEnabled = false
@@ -60,9 +60,9 @@ class RecoverActivity : AppCompatActivity() {
         loginViewModel.loginFormState.observe(this, Observer { loginState ->
             loginState ?: return@Observer
             binding.apply {
-                val isUsernameValid = loginViewModel.isUserNameValid(username.text.toString())
-                continueButton.isEnabled = isUsernameValid
-                usernameLayout.error = loginState.usernameError?.let { getString(it) }
+                val isEmailValid = loginViewModel.isEmailValid(email.text.toString())
+                continueButton.isEnabled = isEmailValid
+                emailLayout.error = loginState.usernameError?.let { getString(it) }
             }
         })
     }

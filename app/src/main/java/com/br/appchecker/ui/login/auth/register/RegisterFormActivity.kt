@@ -41,37 +41,44 @@ class RegisterFormActivity : AppCompatActivity() {
     private fun setupListeners() {
         binding.apply {
 
-            username.afterTextChanged { email ->
-                loginViewModel.loginDataChanged(email, password.text.toString())
+            email.afterTextChanged { email ->
+                loginViewModel.createUserDataChanged(
+                    email,
+                    password.text.toString(),
+                    binding.name.text.toString()
+                )
             }
 
             password.apply {
                 afterTextChanged { password ->
-                    loginViewModel.loginDataChanged(username.text.toString(), password)
+                    loginViewModel.createUserDataChanged(
+                        email.text.toString(),
+                        password,
+                        binding.name.text.toString()
+                    )
                 }
 
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        loginViewModel.login(username.text.toString(), text.toString())
+                        loginViewModel.login(email.text.toString(), text.toString())
                         true
                     } else {
                         false
                     }
                 }
             }
-
             continueButton.setOnClickListener {
+                val isEmailValid = loginViewModel.isEmailValid(email.text.toString())
                 val isPasswordValid = loginViewModel.isPasswordValid(password.text.toString())
-                if (isPasswordValid) {
-                    loading.visibility = View.VISIBLE
-                    continueButton.isEnabled = false
-                    startLoginActivityDelayed()
-                    println(binding.username.text)
-                    println(binding.password.text)
-                } else {
-                    loading.visibility = View.VISIBLE
-                    continueButton.isEnabled = false
-                    showPasswordLayoutDelayed()
+                val isNameValid = loginViewModel.isNameValid(name.text.toString())
+
+                loading.visibility = View.VISIBLE
+                continueButton.isEnabled = false
+
+                when {
+                    isEmailValid -> showPasswordLayoutDelayed()
+                    isPasswordValid -> showNameLayoutDelayed()
+                    isNameValid -> startLoginActivityDelayed()
                 }
             }
         }
@@ -81,13 +88,15 @@ class RegisterFormActivity : AppCompatActivity() {
         loginViewModel.loginFormState.observe(this, Observer { loginState ->
             loginState ?: return@Observer
             binding.apply {
-                val isUsernameValid = loginViewModel.isUserNameValid(username.text.toString())
+                val isUsernameValid = loginViewModel.isEmailValid(email.text.toString())
                 val isPasswordValid = if (isUsernameValid) {
                     loginViewModel.isPasswordValid(password.text.toString())
                 } else false
-                continueButton.isEnabled = isUsernameValid or isPasswordValid
-                usernameLayout.error = loginState.usernameError?.let { getString(it) }
+                val isNameValid = loginViewModel.isNameValid(name.text.toString())
+                continueButton.isEnabled = isUsernameValid or isPasswordValid or isNameValid
+                emailLayout.error = loginState.usernameError?.let { getString(it) }
                 passwordLayout.error = loginState.passwordError?.let { getString(it) }
+                nameLayout.error = loginState.nameError?.let { getString(it) }
             }
         })
     }
@@ -96,6 +105,7 @@ class RegisterFormActivity : AppCompatActivity() {
         binding.apply {
             loading.visibility = View.VISIBLE
             continueButton.postDelayed({
+//                loginViewModel.insertUser()
                 loading.visibility = View.GONE
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 val intent = Intent(applicationContext, LoginActivity::class.java)
@@ -114,9 +124,23 @@ class RegisterFormActivity : AppCompatActivity() {
             passwordLayout.postDelayed({
                 loading.visibility = View.GONE
                 passwordLayout.visibility = View.VISIBLE
-                usernameLayout.visibility = View.INVISIBLE
+                emailLayout.visibility = View.INVISIBLE
                 letsGetStarted.text = getString(R.string.now)
                 question.text = getString(R.string.create_password)
+            }, 2000)
+        }
+    }
+
+    private fun showNameLayoutDelayed() {
+        binding.apply {
+            loading.visibility = View.VISIBLE
+            passwordLayout.postDelayed({
+                loading.visibility = View.GONE
+                passwordLayout.visibility = View.INVISIBLE
+                emailLayout.visibility = View.INVISIBLE
+                nameLayout.visibility = View.VISIBLE
+                letsGetStarted.text = getString(R.string.finalize)
+                question.text = getString(R.string.create_name)
             }, 2000)
         }
     }

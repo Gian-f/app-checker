@@ -15,5 +15,8 @@ data class User(
     val email: String,
     @ColumnInfo("name")
     @SerializedName("nome")
-    val name: String
+    val name: String,
+    @ColumnInfo("password")
+    @SerializedName("senha")
+    val password: String?
 )

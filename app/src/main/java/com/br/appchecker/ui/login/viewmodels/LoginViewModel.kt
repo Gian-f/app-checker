@@ -28,7 +28,8 @@ class LoginViewModel(
 
     fun login(username: String, password: String) {
         viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
-            Log.e("ERRO login ", "$throwable") }) {
+            Log.e("ERRO login ", "$throwable")
+        }) {
             val state = loginRepository.login(username, password)
             withContext(Dispatchers.Main) {
                 _loginResult.value = state
@@ -38,13 +39,25 @@ class LoginViewModel(
 
     fun loginAsGuest() {
         viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
-            Log.e("ERRO login as guest ", "$throwable") }) {
+            Log.e("ERRO login as guest ", "$throwable")
+        }) {
             val state = loginRepository.loginAsGuest()
             withContext(Dispatchers.Main) {
                 _loginResult.value = state
             }
         }
     }
+
+//    fun insertUser(username: String, password: String) {
+//        viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
+//            Log.e("ERRO ao criar usuário", "$throwable")
+//        }) {
+//            val state = loginRepository.loginAsGuest()
+//            withContext(Dispatchers.Main) {
+//                _loginResult.value = state
+//            }
+//        }
+//    }
 
     fun deleteAllUsers() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -53,16 +66,23 @@ class LoginViewModel(
     }
 
     fun loginDataChanged(username: String, password: String) {
-        if (!isUserNameValid(username)) {
-            _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
-        } else if (!isPasswordValid(password)) {
-            _loginForm.value = LoginFormState(passwordError = R.string.invalid_password)
-        } else {
-            _loginForm.value = LoginFormState(isDataValid = true)
+        _loginForm.value = when {
+            !isEmailValid(username) -> LoginFormState(usernameError = R.string.invalid_username)
+            !isPasswordValid(password) -> LoginFormState(passwordError = R.string.invalid_password)
+            else -> LoginFormState(isDataValid = true)
         }
     }
 
-    fun isUserNameValid(username: String): Boolean {
+    fun createUserDataChanged(email: String, password: String, name: String) {
+        when {
+            !isEmailValid(email) -> _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
+            !isPasswordValid(password) -> _loginForm.value = LoginFormState(passwordError = R.string.invalid_password)
+            !isNameValid(name) -> _loginForm.value = LoginFormState(nameError = R.string.invalid_name)
+            else -> _loginForm.value = LoginFormState(isDataValid = true)
+        }
+    }
+
+    fun isEmailValid(username: String): Boolean {
         val emailRegex = Patterns.EMAIL_ADDRESS.toRegex()
         return username.isNotBlank() && (emailRegex.matches(username))
     }
@@ -76,17 +96,21 @@ class LoginViewModel(
         }
 
         // Verificar se contém pelo menos uma letra minúscula
-//        val lowercaseRegex = Regex("[a-z]")
-//        if (!password.contains(lowercaseRegex)) {
-//            return false
-//        }
-//
-//        // Verificar se contém pelo menos uma letra maiúscula
-//        val uppercaseRegex = Regex("[A-Z]")
-//        if (!password.contains(uppercaseRegex)) {
-//            return false
-//        }
+        val lowercaseRegex = Regex("[a-z]")
+        if (!password.contains(lowercaseRegex)) {
+            return false
+        }
+
+        // Verificar se contém pelo menos uma letra maiúscula
+        val uppercaseRegex = Regex("[A-Z]")
+        if (!password.contains(uppercaseRegex)) {
+            return false
+        }
         return true
+    }
+
+    fun isNameValid(name: String): Boolean {
+        return name.isNotEmpty()
     }
 
 }

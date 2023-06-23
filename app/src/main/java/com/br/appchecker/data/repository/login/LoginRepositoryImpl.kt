@@ -4,7 +4,10 @@ import android.util.Log
 import com.br.appchecker.data.local.dao.UserDao
 import com.br.appchecker.data.remote.config.ApiServiceFactory
 import com.br.appchecker.data.remote.request.LoginRequest
+import com.br.appchecker.data.remote.request.UserRequest
 import com.br.appchecker.data.remote.response.LoginResponse
+import com.br.appchecker.data.remote.response.UserResponse
+import com.br.appchecker.data.state.StateInfo
 import com.br.appchecker.data.state.StateLogin
 import com.br.appchecker.domain.model.User
 import retrofit2.awaitResponse
@@ -52,11 +55,12 @@ class LoginRepositoryImpl(
 
     override suspend fun loginAsGuest(): StateLogin<LoginResponse> {
         return try {
-            val guestUser = User(id = 0, email = "convidado@email.com", name = "convidado")
+            userDao.deleteAll()
+            val guestUser = User(email = "convidado@email.com", name = "convidado", password = "")
             if (userDao.getAll().isEmpty()) {
                 userDao.insert(guestUser)
                 StateLogin.Success(
-                    User(guestUser.id, guestUser.email, guestUser.name),
+                    User(guestUser.id, guestUser.email, guestUser.name, guestUser.password),
                     "Usuário autenticado com sucesso"
                 )
             } else {
@@ -74,7 +78,45 @@ class LoginRepositoryImpl(
         }
     }
 
-    suspend fun deleteAllUsers() {
+    override suspend fun createUser(
+        email: String,
+        password: String,
+        name: String
+    ): StateInfo<UserResponse> {
+        return try {
+            val response = service.createUser(UserRequest(email, password, name)).awaitResponse()
+            if (response.isSuccessful) {
+                val newUser = response.body()
+                if (newUser != null) {
+                    StateInfo.Success(status = newUser.status, info = newUser.info)
+                } else {
+                    Log.e(null, "Erro ao criar um usuário")
+                    StateInfo.Error(
+                        message = "Ocorreu um erro ao criar um usuário. Resposta inválida.",
+                        txt = "Por favor, tente novamente",
+                        title = "Ocorreu um erro"
+                    )
+                }
+            } else {
+                Log.e(null, "Erro ao criar um usuário")
+                StateInfo.Error(
+                    message =
+                    "Ocorreu um erro ao criar um usuário. Código de resposta: ${response.code()}",
+                    code = response.code(),
+                    txt = "\n\nDeseja tentar novamente?",
+                    title = "Ocorreu um erro"
+                )
+            }
+        } catch (e: Exception) {
+            Log.e("Erro ao criar um usuário", "$e")
+            StateInfo.Error(
+                message = "Ocorreu um erro ao criar um usuário.",
+                exception = e
+            )
+        }
+    }
+
+    override suspend fun deleteAllUsers() {
         userDao.deleteAll()
     }
 

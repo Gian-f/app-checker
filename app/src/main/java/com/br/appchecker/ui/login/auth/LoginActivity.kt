@@ -110,7 +110,7 @@ class LoginActivity : AppCompatActivity() {
             loginState ?: return@Observer
             with(binding) {
                 login.isEnabled = loginState.isDataValid
-                usernameLayout?.error = loginState.usernameError?.let { getString(it) }
+                emailLayout?.error = loginState.usernameError?.let { getString(it) }
                 passwordLayout?.error = loginState.passwordError?.let { getString(it) }
             }
         })
@@ -139,25 +139,24 @@ class LoginActivity : AppCompatActivity() {
 
         binding.apply {
 
-            username.afterTextChanged { text ->
+            email.afterTextChanged { text ->
                 loginViewModel.loginDataChanged(text, binding.password.text.toString())
             }
 
             password.apply {
                 afterTextChanged { text ->
-                    loginViewModel.loginDataChanged(binding.username.text.toString(), text)
+                    loginViewModel.loginDataChanged(binding.email.text.toString(), text)
                 }
 
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        loginViewModel.login(binding.username.text.toString(), text.toString())
+                        loginViewModel.login(binding.email.text.toString(), text.toString())
                     }
                     false
                 }
             }
 
             register?.setOnClickListener {
-                finish()
                 val intent = Intent(
                     applicationContext,
                     RegisterActivity::class.java
@@ -176,11 +175,10 @@ class LoginActivity : AppCompatActivity() {
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
                 loginViewModel.deleteAllUsers()
-                loginViewModel.login(username.text.toString(), password.text.toString())
+                loginViewModel.login(email.text.toString(), password.text.toString())
             }
 
             guest?.setOnClickListener {
-                loginViewModel.deleteAllUsers()
                 loading.visibility = View.VISIBLE
                 loginViewModel.loginAsGuest()
             }

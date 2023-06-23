@@ -3,6 +3,7 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">E-mail</string>
     <string name="prompt_password">Senha</string>
+    <string name="prompt_name">Nome</string>
     <string name="action_sign_in">Entre</string>
     <string name="action_sign_guest">Entre como convidado</string>
     <string name="action_sign_in_short">Sign in</string>
@@ -111,5 +112,8 @@
         item
     </string>
     <string name="now">Agora...</string>
+    <string name="finalize">Pra finalizar</string>
     <string name="create_password">Crie uma senha</string>
+    <string name="create_name">Qual é o seu nome?</string>
+    <string name="invalid_name">Seu nome não pode ser vazio!</string>
 </resources>
