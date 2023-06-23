@@ -1,7 +1,10 @@
 package com.br.appchecker.ui.login.auth
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -9,6 +12,8 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.br.appchecker.R
@@ -23,6 +28,7 @@ import com.br.appchecker.ui.questions.MainActivity
 import com.br.appchecker.util.afterTextChanged
 import com.br.appchecker.util.showBottomSheet
 
+
 class LoginActivity : AppCompatActivity() {
 
     private val binding: ActivityLoginBinding by
@@ -30,12 +36,67 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
 
+    private val REQUEST_CODE_PERMISSIONS = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        setupPermissions()
         setupFactory()
         setupObservers()
         setupListeners()
+    }
+
+    private fun setupPermissions() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.SEND_SMS
+            ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.RECEIVE_SMS
+            ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.WAKE_LOCK
+            ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.VIBRATE
+            ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+
+            // Se as permissões ainda não foram concedidas, solicita ao usuário
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                ActivityCompat.requestPermissions(
+                    this, arrayOf(
+                        Manifest.permission.SEND_SMS,
+                        Manifest.permission.RECEIVE_SMS,
+                        Manifest.permission.POST_NOTIFICATIONS,
+                        Manifest.permission.VIBRATE
+                    ),
+                    REQUEST_CODE_PERMISSIONS
+                )
+            }
+        } else {
+            // As permissões já foram concedidas
+            // Continue com a lógica de login ou exiba a tela principal
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permissões concedidas, continue com a lógica de login ou exiba a tela principal
+            } else {
+                showBottomSheet(message = R.string.deny_permissions)
+            }
+        }
     }
 
     private fun setupFactory() {
@@ -95,6 +156,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             register?.setOnClickListener {
+                finish()
                 val intent = Intent(
                     applicationContext,
                     RegisterActivity::class.java

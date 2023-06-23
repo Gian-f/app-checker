@@ -1,7 +1,6 @@
 package com.br.appchecker.util
 
 import android.app.Activity
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
@@ -19,6 +18,11 @@ fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
     })
+}
+
+fun Activity.showNotification(title:String, description: String) {
+    val notificationHelper = LocalNotificationManager(this)
+    notificationHelper.showNotification(title, description, intent)
 }
 
 fun Activity.showToast(message: String) {

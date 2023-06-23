@@ -14,7 +14,7 @@ import com.br.appchecker.ui.login.auth.LoginActivity
 import com.br.appchecker.ui.login.viewmodels.LoginViewModel
 import com.br.appchecker.ui.login.viewmodels.factory.LoginViewModelFactory
 import com.br.appchecker.util.afterTextChanged
-import com.br.appchecker.util.showToast
+import com.br.appchecker.util.showNotification
 
 class RegisterFormActivity : AppCompatActivity() {
 
@@ -64,6 +64,8 @@ class RegisterFormActivity : AppCompatActivity() {
                     loading.visibility = View.VISIBLE
                     continueButton.isEnabled = false
                     startLoginActivityDelayed()
+                    println(binding.username.text)
+                    println(binding.password.text)
                 } else {
                     loading.visibility = View.VISIBLE
                     continueButton.isEnabled = false
@@ -91,13 +93,19 @@ class RegisterFormActivity : AppCompatActivity() {
     }
 
     private fun startLoginActivityDelayed() {
-        binding.loading.visibility = View.VISIBLE
-        binding.continueButton.postDelayed({
-            binding.loading.visibility = View.GONE
-            val intent = Intent(applicationContext, LoginActivity::class.java)
-            startActivity(intent)
-            showToast("Conta criada com sucesso!")
-        }, 2000)
+        binding.apply {
+            loading.visibility = View.VISIBLE
+            continueButton.postDelayed({
+                loading.visibility = View.GONE
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                val intent = Intent(applicationContext, LoginActivity::class.java)
+                startActivity(intent)
+                showNotification(
+                    "Sua conta foi criada com sucesso!",
+                    "Sua conta foi cadastrada com sucesso!"
+                )
+            }, 2000)
+        }
     }
 
     private fun showPasswordLayoutDelayed() {

@@ -10,7 +10,7 @@
     <string name="invalid_username">E-mail inválido</string>
     <string name="invalid_password">A senha deve conter no mínimo 5 caracteres, com pelo menos uma letra maiúscula e uma letra minúscula.</string>
     <string name="login_failed">"Ocorreu um erro ao efetuar o login"</string>
-    <string name="enter_or_create">Que bom te ver por aqui novamente!</string>
+    <string name="enter_or_create">Preencha os dados</string>
     <string name="or">ou</string>
     <string name="title_activity_main">MainActivity</string>
     <!-- Strings used for fragments for navigation -->
@@ -68,6 +68,7 @@
 
     <!-- OnBoarding -->
     <string name="title_activity_onboarding">OnboardingActivity</string>
+    <string name="deny_permissions">Permissões negadas, algumas funcionalidades podem ficar indisponíveis.</string>
 
     <string name="onboarding_slide1_title">Create an account</string>
     <string name="onboarding_slide1_subtitle">Connect with people around the world</string>
