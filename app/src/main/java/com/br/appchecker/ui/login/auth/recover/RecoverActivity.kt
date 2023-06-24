@@ -1,15 +1,22 @@
 package com.br.appchecker.ui.login.auth.recover
 
+import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.Gravity
 import android.view.View
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.br.appchecker.R
 import com.br.appchecker.data.local.AppDatabase
 import com.br.appchecker.databinding.ActivityRecoverBinding
+import com.br.appchecker.ui.login.auth.LoginActivity
 import com.br.appchecker.ui.login.viewmodels.LoginViewModel
 import com.br.appchecker.ui.login.viewmodels.factory.LoginViewModelFactory
 import com.br.appchecker.util.afterTextChanged
+import com.br.appchecker.util.showBottomSheet
 
 class RecoverActivity : AppCompatActivity() {
 
@@ -28,42 +35,97 @@ class RecoverActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        val userDao = AppDatabase.getInstance(this).userDao()
-        val viewModelFactory = LoginViewModelFactory(userDao)
-        loginViewModel = ViewModelProvider(this, viewModelFactory)[LoginViewModel::class.java]
+        val userDao=AppDatabase.getInstance(this).userDao()
+        val viewModelFactory=LoginViewModelFactory(userDao)
+        loginViewModel=ViewModelProvider(this, viewModelFactory)[LoginViewModel::class.java]
     }
 
-
     private fun setupListeners() {
-        binding.apply {
-            email.afterTextChanged {
-                loginViewModel.loginDataChanged(it, email.text.toString())
+        with(binding) {
+            email.afterTextChanged { text ->
+                loginViewModel.loginDataChanged(text, email.text.toString())
+            }
+
+            tvResend.setOnClickListener {
+                showBottomSheet(message=R.string.error_not_implemented_yet)
             }
 
             continueButton.setOnClickListener {
-                val isemailValid = loginViewModel.isEmailValid(email.text.toString())
-                if (isemailValid) {
-                    loading.visibility = View.VISIBLE
-                    continueButton.isEnabled = false
-//                    startLoginActivityDelayed()
-                    println(binding.email.text)
-                } else {
-                    loading.visibility = View.VISIBLE
-                    continueButton.isEnabled = false
-//                    showPasswordLayoutDelayed()
+                val isEmailValid=loginViewModel.isEmailValid(email.text.toString())
+
+                loading.visibility=View.VISIBLE
+                continueButton.isEnabled=false
+
+                val code=listOf(
+                    code.number1,
+                    code.number2,
+                    code.number3,
+                    code.number4
+                )
+
+                code.forEachIndexed { index, editText ->
+                    editText.addTextChangedListener(
+                        code.getOrNull(index + 1)?.let { createTextWatcher(it) })
+                }
+
+                if (isEmailValid) {
+                    showResetCodeLayoutDelayed()
+                } else if (loginViewModel.isCodeValid(code)) {
+                    startActivityDelayed()
+                }
+            }
+        }
+    }
+
+    private fun createTextWatcher(nextEditText: EditText): TextWatcher {
+        return object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s?.length == 1) {
+                    nextEditText.requestFocus()
                 }
             }
         }
     }
 
     private fun setupObservers() {
-        loginViewModel.loginFormState.observe(this, Observer { loginState ->
-            loginState ?: return@Observer
-            binding.apply {
-                val isEmailValid = loginViewModel.isEmailValid(email.text.toString())
-                continueButton.isEnabled = isEmailValid
-                emailLayout.error = loginState.usernameError?.let { getString(it) }
+        loginViewModel.loginFormState.observe(this) { loginState ->
+            loginState ?: return@observe
+            with(binding) {
+                val isEmailValid=loginViewModel.isEmailValid(email.text.toString())
+                val code = listOf(code.number1, code.number2, code.number3, code.number4)
+                val isCodeValid=loginViewModel.isCodeValid(code)
+                continueButton.isEnabled=isEmailValid || isCodeValid
+                emailLayout.error=loginState.usernameError?.let { getString(it) }
             }
-        })
+        }
+    }
+
+    private fun startActivityDelayed() {
+        val intent=Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun showResetCodeLayoutDelayed() {
+        with(binding) {
+            loading.visibility=View.VISIBLE
+            emailLayout.postDelayed({
+                loading.visibility=View.GONE
+                emailLayout.visibility=View.GONE
+                tvTitle.text=getString(R.string.enter_the_code)
+                tvDesc.textSize=18F
+                val emailText=email.text.toString()
+                val codeDescription=
+                    "Digite o código de 4 dígitos que enviamos para o e-mail: $emailText"
+                tvDesc.text=codeDescription
+                tvText.text=getString(R.string.dont_receive_code)
+                tvText.gravity=Gravity.CENTER
+                tvResend.visibility=View.VISIBLE
+                code.root.visibility=View.VISIBLE
+            }, 2000)
+        }
     }
 }

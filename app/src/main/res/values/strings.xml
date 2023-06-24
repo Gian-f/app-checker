@@ -116,4 +116,7 @@
     <string name="create_password">Crie uma senha</string>
     <string name="create_name">Qual é o seu nome?</string>
     <string name="invalid_name">Seu nome não pode ser vazio!</string>
+    <string name="dont_receive_code">Não recebeu o código?</string>
+    <string name="enter_the_code">Insira o Código</string>
+    <string name="code_email_description">Digite o código de 4 dígitos que enviamos para o e-mail:</string>
 </resources>

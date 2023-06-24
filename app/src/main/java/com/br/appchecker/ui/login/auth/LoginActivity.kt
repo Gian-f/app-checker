@@ -36,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
 
-    private val REQUEST_CODE_PERMISSIONS = 1
+    private val REQUEST_CODE_PERMISSIONS = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

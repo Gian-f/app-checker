@@ -2,6 +2,7 @@ package com.br.appchecker.ui.login.viewmodels
 
 import android.util.Log
 import android.util.Patterns
+import android.widget.EditText
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -97,6 +98,15 @@ class LoginViewModel(
         return username.isNotBlank() && (emailRegex.matches(username))
     }
 
+    fun isNumberValid(phone: String): Boolean {
+        val numberRegex = Patterns.PHONE.toRegex()
+        return phone.isNotBlank() && (numberRegex.matches(phone))
+    }
+
+    fun isCodeValid(code: List<EditText>): Boolean {
+        return code.isNotEmpty()
+    }
+
     fun isPasswordValid(password: String): Boolean {
         val minLength = 5
 
@@ -120,10 +130,7 @@ class LoginViewModel(
     }
 
     fun isNameValid(name: String): Boolean {
-        Log.d("RegisterFormActivity", "Name: $name")
-        val isValid = name.isNotEmpty()
-        Log.d("RegisterFormActivity", "Is Name Valid: $isValid")
-        return isValid
+        return name.isNotEmpty()
     }
 
 }

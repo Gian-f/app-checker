@@ -14,6 +14,7 @@ import com.br.appchecker.ui.login.viewmodels.LoginViewModel
 import com.br.appchecker.ui.login.viewmodels.factory.LoginViewModelFactory
 import com.br.appchecker.util.afterTextChanged
 import com.br.appchecker.util.showNotification
+import com.br.appchecker.util.showToast
 
 class RegisterFormActivity : AppCompatActivity() {
 
@@ -107,9 +108,10 @@ class RegisterFormActivity : AppCompatActivity() {
                 val intent=Intent(applicationContext, LoginActivity::class.java)
                 startActivity(intent)
                 showNotification(
-                    "Sua conta foi criada com sucesso!",
+                    "Obrigado por fazer parte, ${binding.name.text}!",
                     "Sua conta foi cadastrada com sucesso!"
                 )
+                showToast("Seja bem vindo, ${binding.name.text}!")
             }, 2000)
         }
     }
