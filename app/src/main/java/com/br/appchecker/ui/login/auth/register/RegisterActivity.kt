@@ -14,8 +14,8 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setContentView(binding.root)
         super.onCreate(savedInstanceState)
+        setContentView(binding.root)
         setupListeners()
     }
 

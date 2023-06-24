@@ -3,7 +3,6 @@ package com.br.appchecker.ui.login.auth.register
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -33,82 +32,79 @@ class RegisterFormActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        val userDao = AppDatabase.getInstance(this).userDao()
-        val viewModelFactory = LoginViewModelFactory(userDao)
-        loginViewModel = ViewModelProvider(this, viewModelFactory)[LoginViewModel::class.java]
+        val userDao=AppDatabase.getInstance(this).userDao()
+        val viewModelFactory=LoginViewModelFactory(userDao)
+        loginViewModel=ViewModelProvider(this, viewModelFactory)[LoginViewModel::class.java]
     }
 
     private fun setupListeners() {
-        binding.apply {
-
+        with(binding) {
             email.afterTextChanged { email ->
-                loginViewModel.createUserDataChanged(
-                    email,
-                    password.text.toString(),
-                    binding.name.text.toString()
-                )
+                updateLoginForm(email, password.text.toString(), name.text.toString())
             }
 
-            password.apply {
-                afterTextChanged { password ->
-                    loginViewModel.createUserDataChanged(
-                        email.text.toString(),
-                        password,
-                        binding.name.text.toString()
-                    )
-                }
-
-                setOnEditorActionListener { _, actionId, _ ->
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        loginViewModel.login(email.text.toString(), text.toString())
-                        true
-                    } else {
-                        false
-                    }
-                }
+            password.afterTextChanged { password ->
+                updateLoginForm(email.text.toString(), password, name.text.toString())
             }
+
+            name.afterTextChanged { name ->
+                updateLoginForm(email.text.toString(), password.text.toString(), name)
+            }
+
             continueButton.setOnClickListener {
-                val isEmailValid = loginViewModel.isEmailValid(email.text.toString())
-                val isPasswordValid = loginViewModel.isPasswordValid(password.text.toString())
-                val isNameValid = loginViewModel.isNameValid(name.text.toString())
+                val isEmailValid=loginViewModel.isEmailValid(email.text.toString())
+                val isPasswordValid=loginViewModel.isPasswordValid(password.text.toString())
+                val isNameValid=loginViewModel.isNameValid(name.text.toString())
 
-                loading.visibility = View.VISIBLE
-                continueButton.isEnabled = false
+                loading.visibility=View.VISIBLE
+                continueButton.isEnabled=false
 
-                when {
-                    isEmailValid -> showPasswordLayoutDelayed()
-                    isPasswordValid -> showNameLayoutDelayed()
-                    isNameValid -> startLoginActivityDelayed()
+                if (isEmailValid) {
+                    showPasswordLayoutDelayed()
+                }
+                if (isPasswordValid) {
+                    showNameLayoutDelayed()
+                }
+                if (isNameValid) {
+                    startLoginActivityDelayed()
                 }
             }
         }
+    }
+
+    private fun updateLoginForm(email: String, password: String, name: String) {
+        loginViewModel.createUserDataChanged(email, password, name)
     }
 
     private fun setupObservers() {
         loginViewModel.loginFormState.observe(this, Observer { loginState ->
             loginState ?: return@Observer
             binding.apply {
-                val isUsernameValid = loginViewModel.isEmailValid(email.text.toString())
-                val isPasswordValid = if (isUsernameValid) {
+                val isUsernameValid=loginViewModel.isEmailValid(email.text.toString())
+                val isPasswordValid=if (isUsernameValid) {
                     loginViewModel.isPasswordValid(password.text.toString())
                 } else false
-                val isNameValid = loginViewModel.isNameValid(name.text.toString())
-                continueButton.isEnabled = isUsernameValid or isPasswordValid or isNameValid
-                emailLayout.error = loginState.usernameError?.let { getString(it) }
-                passwordLayout.error = loginState.passwordError?.let { getString(it) }
-                nameLayout.error = loginState.nameError?.let { getString(it) }
+                val isNameValid=loginViewModel.isNameValid(name.text.toString())
+                continueButton.isEnabled=isUsernameValid or isPasswordValid or isNameValid
+                emailLayout.error=loginState.usernameError?.let { getString(it) }
+                passwordLayout.error=loginState.passwordError?.let { getString(it) }
+                nameLayout.error=loginState.nameError?.let { getString(it) }
             }
         })
     }
 
     private fun startLoginActivityDelayed() {
         binding.apply {
-            loading.visibility = View.VISIBLE
+            loading.visibility=View.VISIBLE
             continueButton.postDelayed({
-//                loginViewModel.insertUser()
-                loading.visibility = View.GONE
+                loginViewModel.insertUser(
+                    binding.name.text.toString().trim(),
+                    binding.email.text.toString().trim(),
+                    binding.password.text.toString().trim()
+                )
+                loading.visibility=View.GONE
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                val intent = Intent(applicationContext, LoginActivity::class.java)
+                val intent=Intent(applicationContext, LoginActivity::class.java)
                 startActivity(intent)
                 showNotification(
                     "Sua conta foi criada com sucesso!",
@@ -120,27 +116,26 @@ class RegisterFormActivity : AppCompatActivity() {
 
     private fun showPasswordLayoutDelayed() {
         binding.apply {
-            loading.visibility = View.VISIBLE
+            loading.visibility=View.VISIBLE
             passwordLayout.postDelayed({
-                loading.visibility = View.GONE
-                passwordLayout.visibility = View.VISIBLE
-                emailLayout.visibility = View.INVISIBLE
-                letsGetStarted.text = getString(R.string.now)
-                question.text = getString(R.string.create_password)
+                loading.visibility=View.GONE
+                passwordLayout.visibility=View.VISIBLE
+                emailLayout.visibility=View.INVISIBLE
+                letsGetStarted.text=getString(R.string.now)
+                question.text=getString(R.string.create_password)
             }, 2000)
         }
     }
 
     private fun showNameLayoutDelayed() {
         binding.apply {
-            loading.visibility = View.VISIBLE
-            passwordLayout.postDelayed({
-                loading.visibility = View.GONE
-                passwordLayout.visibility = View.INVISIBLE
-                emailLayout.visibility = View.INVISIBLE
-                nameLayout.visibility = View.VISIBLE
-                letsGetStarted.text = getString(R.string.finalize)
-                question.text = getString(R.string.create_name)
+            loading.visibility=View.VISIBLE
+            nameLayout.postDelayed({
+                loading.visibility=View.GONE
+                passwordLayout.visibility=View.INVISIBLE
+                nameLayout.visibility=View.VISIBLE
+                letsGetStarted.text=getString(R.string.finalize)
+                question.text=getString(R.string.create_name)
             }, 2000)
         }
     }
