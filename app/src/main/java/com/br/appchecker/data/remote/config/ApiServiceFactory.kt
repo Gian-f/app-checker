@@ -51,7 +51,7 @@ object ApiServiceFactory {
         return retrofit.create(LoginService::class.java)
     }
 
-    fun createService(): AnswerService {
+    fun createAnswerService(): AnswerService {
         val okHttpClient = OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor()
                 .apply { level = HttpLoggingInterceptor.Level.BODY })

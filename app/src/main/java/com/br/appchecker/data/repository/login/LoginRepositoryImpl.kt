@@ -85,6 +85,14 @@ class LoginRepositoryImpl(
     ): StateInfo<UserResponse> {
         return try {
             val response = service.createUser(UserRequest(email, password, name)).awaitResponse()
+
+            if (response.code() == 404) {
+                return StateInfo.Error(
+                    message = "O usuário já existe com este email.",
+                    title = "Usuário existente"
+                )
+            }
+
             if (response.isSuccessful) {
                 val newUser = response.body()
                 if (newUser != null) {
@@ -100,8 +108,7 @@ class LoginRepositoryImpl(
             } else {
                 Log.e(null, "Erro ao criar um usuário")
                 StateInfo.Error(
-                    message =
-                    "Ocorreu um erro ao criar um usuário. Código de resposta: ${response.code()}",
+                    message = "Ocorreu um erro ao criar um usuário. Código de resposta: ${response.code()}",
                     code = response.code(),
                     txt = "\n\nDeseja tentar novamente?",
                     title = "Ocorreu um erro"

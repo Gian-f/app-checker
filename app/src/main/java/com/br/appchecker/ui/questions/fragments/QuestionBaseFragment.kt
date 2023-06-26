@@ -10,7 +10,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDirections
 import androidx.viewbinding.ViewBinding
 import com.br.appchecker.data.local.AppDatabase
+import com.br.appchecker.data.repository.answer.AnswerRepositoryImpl
 import com.br.appchecker.data.repository.question.QuestionRepositoryImpl
+import com.br.appchecker.domain.usecase.question.GetAnswersUseCase
 import com.br.appchecker.domain.usecase.question.GetQuestionsUseCase
 import com.br.appchecker.domain.usecase.question.InsertQuestionUseCase
 import com.br.appchecker.ui.questions.interfaces.ProgressBarListener
@@ -43,13 +45,16 @@ abstract class QuestionBaseFragment<T : ViewBinding> : Fragment() {
         val questionDao = AppDatabase.getInstance(requireContext()).questionDao()
         val userDao = AppDatabase.getInstance(requireContext()).userDao()
         val questionRepository = QuestionRepositoryImpl(questionDao, userDao)
+        val answerRepository = AnswerRepositoryImpl()
         val getAllUseCase = GetQuestionsUseCase(questionRepository)
         val insertUseCase = InsertQuestionUseCase(questionRepository)
+        val getAnswersUseCase = GetAnswersUseCase(answerRepository)
         viewModel = ViewModelProvider(
             this,
             QuestionViewModelFactory(
                 getAllUseCase,
                 insertUseCase,
+                getAnswersUseCase
             )
         )[QuestionViewModel::class.java]
     }

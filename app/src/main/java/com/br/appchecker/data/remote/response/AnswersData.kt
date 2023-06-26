@@ -3,10 +3,7 @@ package com.br.appchecker.data.remote.response
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.br.appchecker.domain.model.Question
 import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "answers")

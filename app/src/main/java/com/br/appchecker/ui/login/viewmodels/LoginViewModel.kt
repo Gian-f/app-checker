@@ -18,6 +18,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 
 class LoginViewModel(
     private val loginRepository: LoginRepositoryImpl,
@@ -28,7 +29,6 @@ class LoginViewModel(
 
     private val _loginResult = MutableLiveData<StateLogin<LoginResponse>>()
     val loginResult: LiveData<StateLogin<LoginResponse>> = _loginResult
-
 
     private val _userResult = MutableLiveData<StateInfo<UserResponse>>()
     val userResult: LiveData<StateInfo<UserResponse>> = _userResult
@@ -58,10 +58,55 @@ class LoginViewModel(
     fun insertUser(email: String, password: String, name: String) {
         viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
             Log.e("ERRO ao criar usuário", "$throwable")
+            val errorState = handleError(throwable)
+            _userResult.value = errorState
         }) {
             val state = loginRepository.createUser(email, password, name)
             withContext(Dispatchers.Main) {
                 _userResult.value = state
+            }
+        }
+    }
+
+    private fun handleError(throwable: Throwable): StateInfo<UserResponse> {
+        return when (throwable) {
+            is HttpException -> {
+                val code = throwable.code()
+                val message = throwable.message()
+                when (code) {
+                    404 -> {
+                        if (message == "O usuário já existe") {
+                            StateInfo.Error(
+                                message = "O usuário já existe",
+                                txt = "Por favor, tente novamente",
+                                title = "Erro ao criar usuário"
+                            )
+                        } else {
+                            StateInfo.Error(
+                                message = "Erro ao criar usuário. Código de resposta: $code",
+                                code = code,
+                                txt = "Por favor, tente novamente",
+                                title = "Erro ao criar usuário"
+                            )
+                        }
+                    }
+
+                    else -> {
+                        StateInfo.Error(
+                            message = "Erro ao criar usuário. Código de resposta: $code",
+                            code = code,
+                            txt = "Por favor, tente novamente",
+                            title = "Erro ao criar usuário"
+                        )
+                    }
+                }
+            }
+
+            else -> {
+                StateInfo.Error(
+                    message = "Erro ao criar usuário",
+                    exception = throwable
+                )
             }
         }
     }
@@ -71,6 +116,7 @@ class LoginViewModel(
             loginRepository.deleteAllUsers()
         }
     }
+
     fun loginDataChanged(username: String, password: String) {
         _loginForm.value = if (!isEmailValid(username)) {
             LoginFormState(usernameError = R.string.invalid_username)
@@ -93,9 +139,10 @@ class LoginViewModel(
         }
     }
 
-    fun isEmailValid(username: String): Boolean {
+    fun isEmailValid(email: String): Boolean {
         val emailRegex = Patterns.EMAIL_ADDRESS.toRegex()
-        return username.isNotBlank() && (emailRegex.matches(username))
+        Log.d("isEmailValid", "isEmailValid ${emailRegex.toString().isNotBlank()}")
+        return email.isNotBlank() && (emailRegex.matches(email))
     }
 
     fun isNumberValid(phone: String): Boolean {

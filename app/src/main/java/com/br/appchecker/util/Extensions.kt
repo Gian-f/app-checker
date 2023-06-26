@@ -80,3 +80,29 @@ fun Activity.showBottomSheet(
     bottomSheetDialog.setContentView(bottomSheetBinding.root)
     bottomSheetDialog.show()
 }
+
+fun Activity.showErrorSheet(
+    titleDialog: Int? = null,
+    titleButton: Int? = null,
+    message: String,
+    onClick: () -> Unit = {}) {
+    val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialog)
+    val bottomSheetBinding: BottomSheetBinding =
+        BottomSheetBinding.inflate(layoutInflater, null, false)
+
+    with(bottomSheetBinding) {
+        textTitle.text = getString(titleDialog ?: R.string.text_title_bottom_sheet)
+        textMessage.text = message
+        btnClick.text = getString(titleButton ?: R.string.text_button_bottom_sheet)
+        btnClick.setOnClickListener {
+            onClick()
+            bottomSheetDialog.dismiss()
+        }
+        closeButton.setOnClickListener {
+            onClick()
+            bottomSheetDialog.dismiss()
+        }
+    }
+    bottomSheetDialog.setContentView(bottomSheetBinding.root)
+    bottomSheetDialog.show()
+}

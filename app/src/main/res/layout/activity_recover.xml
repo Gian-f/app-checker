@@ -79,7 +79,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="22dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/inter_light"
         android:text="Vamos enviar um código de verificação para o seu e-mail."

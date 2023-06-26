@@ -46,17 +46,33 @@ class RecoverActivity : AppCompatActivity() {
                 loginViewModel.loginDataChanged(text, email.text.toString())
             }
 
+            code.number1.afterTextChanged { text ->
+                loginViewModel.loginDataChanged(text, code.number1.text.toString())
+            }
+
+            code.number2.afterTextChanged { text ->
+                loginViewModel.loginDataChanged(text, code.number2.text.toString())
+            }
+
+            code.number3.afterTextChanged { text ->
+                loginViewModel.loginDataChanged(text, code.number3.text.toString())
+            }
+
+            code.number4.afterTextChanged { text ->
+                loginViewModel.loginDataChanged(text, code.number4.text.toString())
+            }
+
             tvResend.setOnClickListener {
-                showBottomSheet(message=R.string.error_not_implemented_yet)
+                showBottomSheet(message = R.string.error_not_implemented_yet)
             }
 
             continueButton.setOnClickListener {
-                val isEmailValid=loginViewModel.isEmailValid(email.text.toString())
+                val isEmailValid = loginViewModel.isEmailValid(email.text.toString())
 
-                loading.visibility=View.VISIBLE
-                continueButton.isEnabled=false
+                loading.visibility = View.VISIBLE
+                continueButton.isEnabled = false
 
-                val code=listOf(
+                val code = listOf(
                     code.number1,
                     code.number2,
                     code.number3,
@@ -64,8 +80,10 @@ class RecoverActivity : AppCompatActivity() {
                 )
 
                 code.forEachIndexed { index, editText ->
-                    editText.addTextChangedListener(
-                        code.getOrNull(index + 1)?.let { createTextWatcher(it) })
+                    if (index < code.size - 1) {
+                        val nextEditText = code[index + 1]
+                        editText.addTextChangedListener(createTextWatcher(nextEditText))
+                    }
                 }
 
                 if (isEmailValid) {
@@ -77,14 +95,14 @@ class RecoverActivity : AppCompatActivity() {
         }
     }
 
-    private fun createTextWatcher(nextEditText: EditText): TextWatcher {
+    private fun createTextWatcher(nextEditText: EditText?): TextWatcher {
         return object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
-                if (s?.length == 1) {
+                if (s?.length == 1 && nextEditText != null) {
                     nextEditText.requestFocus()
                 }
             }
@@ -98,7 +116,7 @@ class RecoverActivity : AppCompatActivity() {
                 val isEmailValid=loginViewModel.isEmailValid(email.text.toString())
                 val code = listOf(code.number1, code.number2, code.number3, code.number4)
                 val isCodeValid=loginViewModel.isCodeValid(code)
-                continueButton.isEnabled=isEmailValid || isCodeValid
+                continueButton.isEnabled= isEmailValid || isCodeValid
                 emailLayout.error=loginState.usernameError?.let { getString(it) }
             }
         }

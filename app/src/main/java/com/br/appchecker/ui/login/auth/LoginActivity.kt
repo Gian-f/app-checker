@@ -27,6 +27,7 @@ import com.br.appchecker.ui.login.viewmodels.factory.LoginViewModelFactory
 import com.br.appchecker.ui.questions.MainActivity
 import com.br.appchecker.util.afterTextChanged
 import com.br.appchecker.util.showBottomSheet
+import com.br.appchecker.util.showErrorSheet
 
 
 class LoginActivity : AppCompatActivity() {
@@ -127,7 +128,8 @@ class LoginActivity : AppCompatActivity() {
                 is StateLogin.Error -> {
                     val handler = Handler(Looper.getMainLooper())
                     handler.postDelayed({
-                        showLoginFailed()
+                        binding.loading.visibility = View.GONE
+                        showErrorSheet(message = state.message)
                     }, 3000)
                 }
             }
@@ -194,10 +196,5 @@ class LoginActivity : AppCompatActivity() {
         ).show()
         val intent = Intent(applicationContext, MainActivity::class.java)
         startActivity(intent)
-    }
-
-    private fun showLoginFailed() {
-        binding.loading.visibility = View.GONE
-        showBottomSheet(message = R.string.error_login)
     }
 }

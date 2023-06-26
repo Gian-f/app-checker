@@ -1,13 +1,11 @@
 package com.br.appchecker.data.state
 
-import com.br.appchecker.domain.model.User
-
 sealed class StateInfo<out T> {
 
     data class Success<out T>(
-        val data: User? = null,
-        val info: String,
-        val status: Boolean
+        val data: Any? = null,
+        val info: String? = null,
+        val status: Boolean? = null
     ) : StateInfo<T>()
 
     data class Error(
@@ -15,6 +13,6 @@ sealed class StateInfo<out T> {
         val code: Int = 0,
         val txt: String = "\n\nDeseja tentar novamente?",
         val title: String = "Ocorreu um problema.",
-        val exception: Exception? = null
+        val exception: Throwable? = null
     ) : StateInfo<Nothing>()
 }
