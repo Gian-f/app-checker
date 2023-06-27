@@ -161,5 +161,4 @@ class RegisterFormActivity : AppCompatActivity() {
             }, 2000)
         }
     }
-
 }
