@@ -6,8 +6,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
@@ -25,10 +23,11 @@ import com.br.appchecker.presentation.login.auth.register.RegisterActivity
 import com.br.appchecker.presentation.login.viewmodels.LoginViewModel
 import com.br.appchecker.presentation.login.viewmodels.factory.LoginViewModelFactory
 import com.br.appchecker.presentation.questions.MainActivity
-import com.br.appchecker.presentation.questions.viewmodels.QuestionViewModel
+import com.br.appchecker.util.LoadingUtils
 import com.br.appchecker.util.afterTextChanged
 import com.br.appchecker.util.showBottomSheet
 import com.br.appchecker.util.showErrorSheet
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 
 class LoginActivity : AppCompatActivity() {
@@ -39,6 +38,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var loginViewModel: LoginViewModel
 
     private val REQUEST_CODE_PERMISSIONS = 0
+
+    private var bottomSheetDialog: BottomSheetDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,13 +121,14 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.loginResult.observe(this) { state ->
             when (state) {
                 is StateLogin.Success -> {
+                    hideLoading()
                     navigateToMain()
                 }
 
                 is StateLogin.Error -> {
-
                     binding.loading.visibility = View.GONE
                     showErrorSheet(message = state.message)
+                    hideLoading()
                 }
             }
             setResult(Activity.RESULT_OK)
@@ -136,7 +138,6 @@ class LoginActivity : AppCompatActivity() {
     private fun setupListeners() {
 
         binding.apply {
-
             email.afterTextChanged { text ->
                 loginViewModel.loginDataChanged(text, binding.password.text.toString())
             }
@@ -171,13 +172,13 @@ class LoginActivity : AppCompatActivity() {
             }
 
             login.setOnClickListener {
-                loading.visibility = View.VISIBLE
+                showLoading()
                 loginViewModel.deleteAllUsers()
                 loginViewModel.login(email.text.toString(), password.text.toString())
             }
 
             guest?.setOnClickListener {
-                loading.visibility = View.VISIBLE
+                showLoading()
                 loginViewModel.loginAsGuest()
             }
         }
@@ -192,5 +193,14 @@ class LoginActivity : AppCompatActivity() {
         ).show()
         val intent = Intent(applicationContext, MainActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun showLoading() {
+        bottomSheetDialog = LoadingUtils.showLoadingSheet(this)
+    }
+
+    private fun hideLoading() {
+        bottomSheetDialog?.let { LoadingUtils.dismissLoadingSheet(it) }
+        bottomSheetDialog = null
     }
 }

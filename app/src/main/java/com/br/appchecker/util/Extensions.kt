@@ -112,27 +112,3 @@ fun Activity.showErrorSheet(
     bottomSheetDialog.show()
 
 }
-
-fun Activity.showLoadingSheet(
-    titleDialog: Int? = null,
-    message: Int? = null, ) {
-    val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialog)
-    val loadingBottomSheetBinding: LoadingBottomSheetBinding =
-        LoadingBottomSheetBinding.inflate(layoutInflater, null, false)
-
-    with(loadingBottomSheetBinding) {
-        textTitle.text = getString(titleDialog ?: R.string.text_title_bottom_sheet)
-        textMessage.text = getString(message ?: R.string.message_loading_bottom_sheet)
-    }
-    bottomSheetDialog.setContentView(loadingBottomSheetBinding.root)
-    bottomSheetDialog.show()
-}
-
-fun Activity.dismissLoadingSheet() {
-    val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialog)
-    val loadingBottomSheetBinding: LoadingBottomSheetBinding =
-        LoadingBottomSheetBinding.inflate(layoutInflater, null, false)
-
-    bottomSheetDialog.setContentView(loadingBottomSheetBinding.root)
-    bottomSheetDialog.dismiss()
-}

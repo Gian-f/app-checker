@@ -134,7 +134,7 @@ class RegisterFormActivity : AppCompatActivity() {
                 val name = binding.name.text.toString().trim()
 
                 loginViewModel.insertUser(email, password, name)
-            }, 1500)
+            }, 2000)
         }
     }
 

@@ -14,6 +14,6 @@ sealed class StateLogin<out T> {
         val code: Int = 0,
         val txt: String = "\n\nDeseja tentar novamente?",
         val title: String = "Ocorreu um problema.",
-        val exception: Exception? = null
+        val exception: Throwable? = null
     ) : StateLogin<Nothing>()
 }
