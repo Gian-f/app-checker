@@ -38,7 +38,6 @@ class QuestionViewModel(
             Log.e("Erro Quest", "$throwable")
         }) {
             try {
-                // verifica se o usuário é convidado
                 val result = getQuestionsUseCase.execute()
                 withContext(Dispatchers.Main) {
                     _questions.value = result

@@ -9,7 +9,8 @@
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">E-mail inválido</string>
-    <string name="invalid_password">A senha deve conter no mínimo 5 caracteres, com pelo menos uma letra maiúscula e uma letra minúscula.</string>
+    <string name="invalid_password_login">Senha inválida</string>
+    <string name="invalid_password_register">A senha deve conter no mínimo 5 caracteres, com letras maiúsculas e minúsculas.</string>
     <string name="login_failed">"Ocorreu um erro ao efetuar o login"</string>
     <string name="enter_or_create">Preencha os dados</string>
     <string name="or">ou</string>
@@ -58,6 +59,7 @@
     </string>
     <string name="text_button_bottom_sheet"> Ok </string>
     <string name="text_title_bottom_sheet">Atenção!</string>
+    <string name="text_title_loading_bottom_sheet">Carregando...</string>
     <string name="error_generic">Ocorreu um erro, por favor tente novamente.</string>
     <string name="error_login">Ocorreu um erro, por favor verifique seus dados e tente novamente.</string>
     <string name="error_empty_form">Houve um erro 🥺 preencha todos os campos obrigatórios antes de prosseguir.</string>
@@ -71,24 +73,22 @@
     <string name="title_activity_onboarding">OnboardingActivity</string>
     <string name="deny_permissions">Permissões negadas podem resultar em funcionalidades indisponíveis.😔</string>
 
-    <string name="onboarding_slide1_title">Create an account</string>
-    <string name="onboarding_slide1_subtitle">Connect with people around the world</string>
-    <string name="onboarding_slide1_desc">User will be able to give you live, chat and meet
-        with people nearby.</string>
+    <string name="onboarding_slide1_title">Crie uma conta</string>
+    <string name="onboarding_slide1_subtitle"> Descubra o poder da pesquisa!</string>
+    <string name="onboarding_slide1_desc">Com nosso aplicativo de pesquisa, você terá acesso a uma vasta gama de informações e poderá explorar os tópicos que mais lhe interessam.</string>
 
-    <string name="onboarding_slide2_title">Login to your account</string>
-    <string name="onboarding_slide2_subtitle">Let\'s build connection with new people</string>
-    <string name="onboarding_slide2_desc">Connect helps you locate the people around you who
-        are closest from your home.</string>
+    <string name="onboarding_slide2_title">Faça login na sua conta</string>
+    <string name="onboarding_slide2_subtitle"> Aprenda, descubra e expanda seus horizontes com apenas alguns toques.</string>
+    <string name="onboarding_slide2_desc">Tem uma pergunta? Nosso aplicativo de pesquisa tem as respostas!</string>
 
-    <string name="onboarding_slide3_title">Login to your account</string>
-    <string name="onboarding_slide3_subtitle">Feel the happiness</string>
-    <string name="onboarding_slide3_desc">User will be able to give you live, chat and meet
-        with people nearby.</string>
+    <string name="onboarding_slide3_title">Faça login na sua conta</string>
+    <string name="onboarding_slide3_subtitle">A pesquisa nunca foi tão eficiente!</string>
+    <string name="onboarding_slide3_desc">Aqui, contamos com um time globalmente especializado para te ajudar em todas as etapas!</string>
+
     <string name="continuar">Continuar</string>
     <string name="title_activity_register">RegisterActivity</string>
     <string name="title_activity_recover">RecoverActivity</string>
-    <string name="action_register">Registre-se</string>
+    <string name="action_register">Cadastre-se</string>
     <string name="register_title">Falta pouco para terminar o seu cadastro!</string>
     <string name="register_description">Como deseja se conectar?!</string>
     <string name="continue_email">Continuar com o E-mail</string>
@@ -120,4 +120,5 @@
     <string name="enter_the_code">Insira o Código</string>
     <string name="code_email_description">Digite o código de 4 dígitos que enviamos para o e-mail:</string>
     <string name="image_view">register image view</string>
+    <string name="message_loading_bottom_sheet">Por favor, aguarde...</string>
 </resources>

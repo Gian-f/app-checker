@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.br.appchecker.R
 import com.br.appchecker.databinding.FragmentFirstBinding
 import com.br.appchecker.domain.model.Question
@@ -16,8 +18,8 @@ import com.br.appchecker.util.showBottomSheet
 
 class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
 
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) ->
-    FragmentFirstBinding = FragmentFirstBinding::inflate
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentFirstBinding =
+        FragmentFirstBinding::inflate
 
     private val position by lazy {
         FirstFragmentArgs.fromBundle(requireArguments()).position
@@ -27,8 +29,22 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
         FirstFragmentArgs.fromBundle(requireArguments()).list
     }
 
+    private val adapter: SingleChoiceAdapter by lazy {
+        SingleChoiceAdapter(requireContext(), object : SingleChoiceAdapter.OnItemClickListener {
+            override fun onItemClick(question: Question, position: Int) {
+                question.selectedAnswerPosition = position
+                Toast.makeText(
+                    requireContext(),
+                    "Você clicou em $position - ${question.selectedAnswerPosition}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
+    }
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = bindingInflater.invoke(inflater, container, false)
@@ -57,36 +73,27 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
     }
 
     private fun setupRecyclerView() {
-        val adapter = SingleChoiceAdapter(requireContext(),
-            object : SingleChoiceAdapter.OnItemClickListener {
-                override fun onItemClick(question: Question, position: Int) {
-                    question.selectedAnswerPosition = position
-                    Toast.makeText(
-                        requireContext(),
-                        "Você clicou em $position - ${question.selectedAnswerPosition}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            })
-
+        binding.rv.adapter = adapter
+        binding.rv.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                LinearLayoutManager.VERTICAL,
+            )
+        )
         viewModel.questions.observe(viewLifecycleOwner) { questions ->
             GlobalData.globalQuestions.value = questions
             updateProgressBar(position, questions.size)
             adapter.submitList(findQuestionListOne(questions))
-            adapter.notifyDataSetChanged()
         }
-
-        if ((list.isNullOrEmpty()) || GlobalData.globalQuestions.value.isNullOrEmpty()) {
+        if (list.isNullOrEmpty() || GlobalData.globalQuestions.value.isNullOrEmpty()) {
             viewModel.getAllQuestions()
         } else {
             val listAux = ArrayList<Question>()
-            listAux.addAll((list ?: arrayOf()))
+            listAux.addAll(list!!)
             GlobalData.globalQuestions.value = listAux
             updateProgressBar(position, listAux.size)
             adapter.submitList(findQuestionListOne(listAux))
-            adapter.notifyDataSetChanged()
         }
-        binding.rv.adapter = adapter
     }
 
     private fun setupButtonsVisibility() {
@@ -98,8 +105,8 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
         }
     }
 
-    private fun findQuestionListOne(questions: List<Question>): MutableList<Question> {
-        return mutableListOf(questions[position])
+    private fun findQuestionListOne(questions: List<Question>): List<Question> {
+        return listOf(questions[position])
     }
 
     private fun navigateToNextQuestion() {
@@ -112,21 +119,21 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
         "${position + 1} de ${list?.size ?: GlobalData.globalQuestions.value?.size ?: 1}"
 
     override fun getActionForNextFragment(): NavDirections {
-        return if (position + 1 < (list?.size ?:GlobalData.globalQuestions.value?.size ?: 0)) {
+        return if (position + 1 < (list?.size ?: GlobalData.globalQuestions.value?.size ?: 0)) {
             FirstFragmentDirections.actionFirstFragmentSelf(
                 position = position + 1,
-                list = list ?:GlobalData.globalQuestions.value?.toTypedArray() ?: arrayOf()
+                list = list ?: GlobalData.globalQuestions.value?.toTypedArray()
             )
-        } else FirstFragmentDirections.actionFirstFragmentToResultFragment()
+        } else {
+            FirstFragmentDirections.actionFirstFragmentToResultFragment()
+        }
     }
 
     override fun getActionForPreviousFragment(): Nothing? = null
 
     override fun isAnswerSelected(): Boolean {
-        val adapter = binding.rv.adapter as? SingleChoiceAdapter
-        val questions = adapter?.currentList
-        val unansweredQuestion = questions?.getOrNull(0)
+        val questions = adapter.currentList
+        val unansweredQuestion = questions.getOrNull(0)
         return unansweredQuestion?.selectedAnswerPosition != null
     }
 }
-

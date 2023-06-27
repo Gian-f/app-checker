@@ -25,6 +25,7 @@ import com.br.appchecker.presentation.login.auth.register.RegisterActivity
 import com.br.appchecker.presentation.login.viewmodels.LoginViewModel
 import com.br.appchecker.presentation.login.viewmodels.factory.LoginViewModelFactory
 import com.br.appchecker.presentation.questions.MainActivity
+import com.br.appchecker.presentation.questions.viewmodels.QuestionViewModel
 import com.br.appchecker.util.afterTextChanged
 import com.br.appchecker.util.showBottomSheet
 import com.br.appchecker.util.showErrorSheet
@@ -119,18 +120,13 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.loginResult.observe(this) { state ->
             when (state) {
                 is StateLogin.Success -> {
-                    val handler = Handler(Looper.getMainLooper())
-                    handler.postDelayed({
-                        navigateToMain()
-                    }, 1000)
+                    navigateToMain()
                 }
 
                 is StateLogin.Error -> {
-                    val handler = Handler(Looper.getMainLooper())
-                    handler.postDelayed({
-                        binding.loading.visibility = View.GONE
-                        showErrorSheet(message = state.message)
-                    }, 1000)
+
+                    binding.loading.visibility = View.GONE
+                    showErrorSheet(message = state.message)
                 }
             }
             setResult(Activity.RESULT_OK)

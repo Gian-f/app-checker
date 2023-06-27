@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.br.appchecker.R
 import com.br.appchecker.databinding.BottomSheetBinding
+import com.br.appchecker.databinding.LoadingBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
@@ -15,12 +16,13 @@ fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
         override fun afterTextChanged(editable: Editable?) {
             afterTextChanged.invoke(editable.toString())
         }
+
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
     })
 }
 
-fun Activity.showNotification(title:String, description: String) {
+fun Activity.showNotification(title: String, description: String) {
     val notificationHelper = LocalNotificationManager(this)
     notificationHelper.showNotification(title, description, intent)
 }
@@ -33,7 +35,8 @@ fun Fragment.showBottomSheet(
     titleDialog: Int? = null,
     titleButton: Int? = null,
     message: Int,
-    onClick: () -> Unit = {}) {
+    onClick: () -> Unit = {}
+) {
     val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
     val bottomSheetBinding: BottomSheetBinding =
         BottomSheetBinding.inflate(layoutInflater, null, false)
@@ -59,7 +62,8 @@ fun Activity.showBottomSheet(
     titleDialog: Int? = null,
     titleButton: Int? = null,
     message: Int,
-    onClick: () -> Unit = {}) {
+    onClick: () -> Unit = {}
+) {
     val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialog)
     val bottomSheetBinding: BottomSheetBinding =
         BottomSheetBinding.inflate(layoutInflater, null, false)
@@ -85,7 +89,8 @@ fun Activity.showErrorSheet(
     titleDialog: Int? = null,
     titleButton: Int? = null,
     message: String,
-    onClick: () -> Unit = {}) {
+    onClick: () -> Unit = {}
+) {
     val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialog)
     val bottomSheetBinding: BottomSheetBinding =
         BottomSheetBinding.inflate(layoutInflater, null, false)
@@ -105,4 +110,29 @@ fun Activity.showErrorSheet(
     }
     bottomSheetDialog.setContentView(bottomSheetBinding.root)
     bottomSheetDialog.show()
+
+}
+
+fun Activity.showLoadingSheet(
+    titleDialog: Int? = null,
+    message: Int? = null, ) {
+    val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialog)
+    val loadingBottomSheetBinding: LoadingBottomSheetBinding =
+        LoadingBottomSheetBinding.inflate(layoutInflater, null, false)
+
+    with(loadingBottomSheetBinding) {
+        textTitle.text = getString(titleDialog ?: R.string.text_title_bottom_sheet)
+        textMessage.text = getString(message ?: R.string.message_loading_bottom_sheet)
+    }
+    bottomSheetDialog.setContentView(loadingBottomSheetBinding.root)
+    bottomSheetDialog.show()
+}
+
+fun Activity.dismissLoadingSheet() {
+    val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialog)
+    val loadingBottomSheetBinding: LoadingBottomSheetBinding =
+        LoadingBottomSheetBinding.inflate(layoutInflater, null, false)
+
+    bottomSheetDialog.setContentView(loadingBottomSheetBinding.root)
+    bottomSheetDialog.dismiss()
 }

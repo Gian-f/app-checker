@@ -122,7 +122,7 @@ class LoginViewModel(
         _loginForm.value = if (!isEmailValid(username)) {
             LoginFormState(usernameError = R.string.invalid_username)
         } else if (!isPasswordValid(password)) {
-            LoginFormState(passwordError = R.string.invalid_password)
+            LoginFormState(passwordError = R.string.invalid_password_login)
         } else {
             LoginFormState(isDataValid = true)
         }
@@ -132,7 +132,7 @@ class LoginViewModel(
         if (!isEmailValid(email)) {
             _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
         } else if (!isPasswordValid(password)) {
-            _loginForm.value = LoginFormState(passwordError = R.string.invalid_password)
+            _loginForm.value = LoginFormState(passwordError = R.string.invalid_password_register)
         } else if (!isNameValid(name)) {
             _loginForm.value = LoginFormState(nameError = R.string.invalid_name)
         } else {
