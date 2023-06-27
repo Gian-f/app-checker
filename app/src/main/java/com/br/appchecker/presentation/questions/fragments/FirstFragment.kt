@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.br.appchecker.R
 import com.br.appchecker.databinding.FragmentFirstBinding
 import com.br.appchecker.domain.model.Question
+import com.br.appchecker.presentation.questions.GlobalData
 import com.br.appchecker.presentation.questions.adapters.SingleChoiceAdapter
 import com.br.appchecker.util.showBottomSheet
 
@@ -69,18 +70,18 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
             })
 
         viewModel.questions.observe(viewLifecycleOwner) { questions ->
-            viewModel.globalQuestions.value = questions
+            GlobalData.globalQuestions.value = questions
             updateProgressBar(position, questions.size)
             adapter.submitList(findQuestionListOne(questions))
             adapter.notifyDataSetChanged()
         }
 
-        if ((list.isNullOrEmpty()) || viewModel.globalQuestions.value.isNullOrEmpty()) {
+        if ((list.isNullOrEmpty()) || GlobalData.globalQuestions.value.isNullOrEmpty()) {
             viewModel.getAllQuestions()
         } else {
             val listAux = ArrayList<Question>()
             listAux.addAll((list ?: arrayOf()))
-            viewModel.globalQuestions.value = listAux
+            GlobalData.globalQuestions.value = listAux
             updateProgressBar(position, listAux.size)
             adapter.submitList(findQuestionListOne(listAux))
             adapter.notifyDataSetChanged()
@@ -108,13 +109,13 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
     override fun getProgressBarIndex(): Int = position + 1
 
     override fun getProgressBarMessage(): String =
-        "${position + 1} de ${list?.size ?: viewModel.globalQuestions.value?.size ?: 1}"
+        "${position + 1} de ${list?.size ?: GlobalData.globalQuestions.value?.size ?: 1}"
 
     override fun getActionForNextFragment(): NavDirections {
-        return if (position + 1 < (list?.size ?:viewModel.globalQuestions.value?.size ?: 0)) {
+        return if (position + 1 < (list?.size ?:GlobalData.globalQuestions.value?.size ?: 0)) {
             FirstFragmentDirections.actionFirstFragmentSelf(
                 position = position + 1,
-                list = list ?: viewModel.globalQuestions.value?.toTypedArray() ?: arrayOf()
+                list = list ?:GlobalData.globalQuestions.value?.toTypedArray() ?: arrayOf()
             )
         } else FirstFragmentDirections.actionFirstFragmentToResultFragment()
     }

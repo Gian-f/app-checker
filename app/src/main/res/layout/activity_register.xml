@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".presentation.login.auth.register.RegisterActivity">
 
+    <ImageView
+        android:id="@+id/ivRegister"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:src="@drawable/login"
+        app:layout_constraintBottom_toTopOf="@+id/register_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/image_view" />
+
     <TextView
         android:id="@+id/register_title"
         android:layout_width="match_parent"

@@ -122,7 +122,7 @@ class LoginActivity : AppCompatActivity() {
                     val handler = Handler(Looper.getMainLooper())
                     handler.postDelayed({
                         navigateToMain()
-                    }, 3000)
+                    }, 1000)
                 }
 
                 is StateLogin.Error -> {
@@ -130,7 +130,7 @@ class LoginActivity : AppCompatActivity() {
                     handler.postDelayed({
                         binding.loading.visibility = View.GONE
                         showErrorSheet(message = state.message)
-                    }, 3000)
+                    }, 1000)
                 }
             }
             setResult(Activity.RESULT_OK)

@@ -24,8 +24,6 @@ class QuestionViewModel(
     private val _questions = MutableLiveData<List<Question>>()
     val questions: LiveData<List<Question>> get() = _questions
 
-    val globalQuestions = MutableLiveData<List<Question>>(listOf())
-
     private val _question = MutableLiveData<Question>()
     val question: LiveData<Question> get() = _question
 

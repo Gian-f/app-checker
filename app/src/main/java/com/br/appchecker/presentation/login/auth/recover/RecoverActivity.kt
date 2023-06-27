@@ -145,7 +145,7 @@ class RecoverActivity : AppCompatActivity() {
                 tvText.gravity = Gravity.CENTER
                 tvResend.visibility = View.VISIBLE
                 code.root.visibility = View.VISIBLE
-            }, 2000)
+            }, 1000)
         }
     }
 }

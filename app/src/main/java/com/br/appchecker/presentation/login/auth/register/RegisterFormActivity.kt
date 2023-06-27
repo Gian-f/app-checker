@@ -115,9 +115,11 @@ class RegisterFormActivity : AppCompatActivity() {
                     showErrorSheet(message = state.message)
                     val handler = Handler(Looper.getMainLooper())
                     handler.postDelayed({
+                        binding.loading.visibility = View.VISIBLE
                         val intent = Intent(this, RegisterFormActivity::class.java)
                         startActivity(intent)
-                    }, 2500)
+                        finish()
+                    }, 2000)
                 }
             }
         }
@@ -132,7 +134,7 @@ class RegisterFormActivity : AppCompatActivity() {
                 val name = binding.name.text.toString().trim()
 
                 loginViewModel.insertUser(email, password, name)
-            }, 2000)
+            }, 1500)
         }
     }
 
@@ -145,7 +147,7 @@ class RegisterFormActivity : AppCompatActivity() {
                 emailLayout.visibility = View.INVISIBLE
                 letsGetStarted.text = getString(R.string.now)
                 question.text = getString(R.string.create_password)
-            }, 2000)
+            }, 1000)
         }
     }
 
@@ -158,7 +160,7 @@ class RegisterFormActivity : AppCompatActivity() {
                 nameLayout.visibility = View.VISIBLE
                 letsGetStarted.text = getString(R.string.finalize)
                 question.text = getString(R.string.create_name)
-            }, 2000)
+            }, 1000)
         }
     }
 }
