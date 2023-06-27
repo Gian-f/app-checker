@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.br.appchecker.ui.questions.fragments.FirstFragment"
+        android:name="com.br.appchecker.presentation.questions.fragments.FirstFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
 
@@ -42,7 +42,7 @@
 
     <fragment
         android:id="@+id/resultFragment"
-        android:name="com.br.appchecker.ui.questions.fragments.ResultFragment"
+        android:name="com.br.appchecker.presentation.questions.fragments.ResultFragment"
         android:label="ResultFragment"
         tools:layout="@layout/fragment_result"/>
 </navigation>

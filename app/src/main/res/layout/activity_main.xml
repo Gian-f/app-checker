@@ -38,7 +38,6 @@
             android:max="6"
             android:minHeight="4dp"
             android:progress="1"
-            app:indicatorColor="@color/color_primary_medium"
             app:layout_constraintTop_toBottomOf="@+id/questionTextView"
             app:trackColor="@color/gray"
             app:trackCornerRadius="8dp" />

@@ -11,11 +11,11 @@
                 />
         </targets>
         <transition
-            class="com.br.appchecker.ui.onboarding.animations.PopTransition"
+            class="com.br.appchecker.presentation.onboarding.animations.PopTransition"
             app:startScale="0.95"
             app:endScale="1.0"/>
         <transition
-            class="com.br.appchecker.ui.onboarding.animations.FadeTransition"
+            class="com.br.appchecker.presentation.onboarding.animations.FadeTransition"
             app:startAlpha="0.3"
             app:endAlpha="1.0"/>
     </transitionSet>
