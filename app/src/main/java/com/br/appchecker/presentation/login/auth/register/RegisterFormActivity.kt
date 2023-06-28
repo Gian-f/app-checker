@@ -1,10 +1,13 @@
 package com.br.appchecker.presentation.login.auth.register
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -27,7 +30,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class RegisterFormActivity : AppCompatActivity() {
 
-    private val binding: ActivityRegisterFormBinding by lazy { ActivityRegisterFormBinding.inflate(layoutInflater) }
+    private val binding: ActivityRegisterFormBinding by lazy {
+        ActivityRegisterFormBinding.inflate(
+            layoutInflater
+        )
+    }
 
     private lateinit var loginViewModel: LoginViewModel
 
@@ -39,6 +46,7 @@ class RegisterFormActivity : AppCompatActivity() {
         setupViewModel()
         setupListeners()
         setupObservers()
+        setupEmailFocus()
     }
 
     private fun setupViewModel() {
@@ -80,6 +88,10 @@ class RegisterFormActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupEmailFocus() {
+        binding.email.requestFocus()
+    }
+
     private fun updateLoginForm(email: String, password: String, name: String) {
         loginViewModel.createUserDataChanged(email, password, name)
     }
@@ -106,7 +118,8 @@ class RegisterFormActivity : AppCompatActivity() {
                     hideLoading()
                     showNotification(
                         "Obrigado por fazer parte, ${binding.name.text}!",
-                        "Sua conta foi cadastrada com sucesso!")
+                        "Sua conta foi cadastrada com sucesso!"
+                    )
                     showToast("Seja bem vindo, ${binding.name.text}!")
                     val intent = Intent(this, LoginActivity::class.java)
                     startActivity(intent)
@@ -127,8 +140,12 @@ class RegisterFormActivity : AppCompatActivity() {
     }
 
     private fun startLoginActivityDelayed() {
+        closeKeyboard(this@RegisterFormActivity)
         binding.apply {
-            showLoading()
+            val handler = Handler(Looper.getMainLooper())
+            handler.postDelayed({
+                showLoading()
+            }, 500)
             continueButton.postDelayed({
                 val email = binding.email.text.toString().trim()
                 val password = binding.password.text.toString().trim()
@@ -146,11 +163,13 @@ class RegisterFormActivity : AppCompatActivity() {
                 loading.visibility = View.GONE
                 passwordLayout.visibility = View.VISIBLE
                 emailLayout.visibility = View.INVISIBLE
+                password.requestFocus()
                 letsGetStarted.text = getString(R.string.now)
                 question.text = getString(R.string.create_password)
-            }, 1000)
+            }, 800)
         }
     }
+
     private fun showNameLayoutDelayed() {
         binding.apply {
             loading.visibility = View.VISIBLE
@@ -158,18 +177,30 @@ class RegisterFormActivity : AppCompatActivity() {
                 loading.visibility = View.GONE
                 passwordLayout.visibility = View.INVISIBLE
                 nameLayout.visibility = View.VISIBLE
+                name.requestFocus()
                 letsGetStarted.text = getString(R.string.finalize)
                 question.text = getString(R.string.create_name)
-            }, 1000)
+            }, 800)
         }
     }
+
+    private fun closeKeyboard(activity: Activity) {
+        val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val currentFocusView = activity.currentFocus
+        if (currentFocusView != null) {
+            imm.hideSoftInputFromWindow(currentFocusView.windowToken, 0)
+        }
+    }
+
     private fun showLoading() {
         bottomSheetDialog = LoadingUtils.showLoadingSheet(this)
     }
+
     private fun hideLoading() {
         bottomSheetDialog?.let { LoadingUtils.dismissLoadingSheet(it) }
         bottomSheetDialog = null
     }
+
     override fun onDestroy() {
         super.onDestroy()
         hideLoading()

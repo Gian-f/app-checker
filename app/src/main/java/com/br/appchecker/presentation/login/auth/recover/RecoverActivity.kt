@@ -65,7 +65,7 @@ class RecoverActivity : AppCompatActivity() {
             }
 
             tvResend.setOnClickListener {
-                showBottomSheet(applicationContext,message = R.string.error_not_implemented_yet)
+                showBottomSheet(this@RecoverActivity, message = R.string.error_not_implemented_yet)
             }
 
             continueButton.setOnClickListener {

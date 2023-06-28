@@ -97,7 +97,7 @@ class LoginActivity : AppCompatActivity() {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permissões concedidas, continue com a lógica de login ou exiba a tela principal
             } else {
-                showBottomSheet(this,message = R.string.deny_permissions)
+                showBottomSheet(this, message = R.string.deny_permissions)
             }
         }
     }

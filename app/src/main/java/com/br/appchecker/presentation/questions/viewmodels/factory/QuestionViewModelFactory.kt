@@ -2,22 +2,20 @@ package com.br.appchecker.presentation.questions.viewmodels.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.br.appchecker.domain.usecase.question.GetAnswersUseCase
-import com.br.appchecker.domain.usecase.question.GetQuestionsUseCase
-import com.br.appchecker.domain.usecase.question.InsertQuestionUseCase
+import com.br.appchecker.data.local.dao.QuestionDao
+import com.br.appchecker.data.local.dao.UserDao
+import com.br.appchecker.data.repository.question.QuestionRepositoryImpl
 import com.br.appchecker.presentation.questions.viewmodels.QuestionViewModel
 
 class QuestionViewModelFactory(
-    private val getQuestionsUseCase: GetQuestionsUseCase,
-    private val insertQuestionUseCase: InsertQuestionUseCase,
-    private val getAnswersUseCase: GetAnswersUseCase
+    private val questionDao: QuestionDao,
+    private val userDao: UserDao
 ) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(QuestionViewModel::class.java)) {
             return QuestionViewModel(
-                getQuestionsUseCase,
-                insertQuestionUseCase,
-                getAnswersUseCase
+                    repository = QuestionRepositoryImpl(questionDao, userDao)
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
