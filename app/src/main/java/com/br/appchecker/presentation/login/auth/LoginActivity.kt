@@ -24,9 +24,9 @@ import com.br.appchecker.presentation.login.viewmodels.LoginViewModel
 import com.br.appchecker.presentation.login.viewmodels.factory.LoginViewModelFactory
 import com.br.appchecker.presentation.questions.MainActivity
 import com.br.appchecker.util.LoadingUtils
+import com.br.appchecker.util.LoadingUtils.showBottomSheet
+import com.br.appchecker.util.LoadingUtils.showErrorSheet
 import com.br.appchecker.util.afterTextChanged
-import com.br.appchecker.util.showBottomSheet
-import com.br.appchecker.util.showErrorSheet
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 
@@ -97,7 +97,7 @@ class LoginActivity : AppCompatActivity() {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permissões concedidas, continue com a lógica de login ou exiba a tela principal
             } else {
-                showBottomSheet(message = R.string.deny_permissions)
+                showBottomSheet(this,message = R.string.deny_permissions)
             }
         }
     }
@@ -127,7 +127,7 @@ class LoginActivity : AppCompatActivity() {
 
                 is StateLogin.Error -> {
                     binding.loading.visibility = View.GONE
-                    showErrorSheet(message = state.message)
+                    showErrorSheet(this, message = state.message)
                     hideLoading()
                 }
             }

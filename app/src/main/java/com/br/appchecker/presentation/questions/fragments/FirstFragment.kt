@@ -14,7 +14,7 @@ import com.br.appchecker.databinding.FragmentFirstBinding
 import com.br.appchecker.domain.model.Question
 import com.br.appchecker.presentation.questions.GlobalData
 import com.br.appchecker.presentation.questions.adapters.SingleChoiceAdapter
-import com.br.appchecker.util.showBottomSheet
+import com.br.appchecker.util.LoadingUtils.showBottomSheet
 
 class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
 
@@ -64,7 +64,7 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
             if (isAnswerSelected()) {
                 navigateToNextQuestion()
             } else {
-                showBottomSheet(message = R.string.error_empty_form)
+                showBottomSheet(requireContext(),message = R.string.error_empty_form)
             }
         }
         binding.backButton.setOnClickListener {

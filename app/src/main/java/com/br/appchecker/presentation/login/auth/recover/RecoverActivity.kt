@@ -15,10 +15,10 @@ import com.br.appchecker.databinding.ActivityRecoverBinding
 import com.br.appchecker.presentation.login.auth.LoginActivity
 import com.br.appchecker.presentation.login.viewmodels.LoginViewModel
 import com.br.appchecker.presentation.login.viewmodels.factory.LoginViewModelFactory
+import com.br.appchecker.util.LoadingUtils.showBottomSheet
 import com.br.appchecker.util.ValidationUtils.isCodeValid
 import com.br.appchecker.util.ValidationUtils.isEmailValid
 import com.br.appchecker.util.afterTextChanged
-import com.br.appchecker.util.showBottomSheet
 
 class RecoverActivity : AppCompatActivity() {
 
@@ -65,7 +65,7 @@ class RecoverActivity : AppCompatActivity() {
             }
 
             tvResend.setOnClickListener {
-                showBottomSheet(message = R.string.error_not_implemented_yet)
+                showBottomSheet(applicationContext,message = R.string.error_not_implemented_yet)
             }
 
             continueButton.setOnClickListener {

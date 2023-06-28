@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.br.appchecker.R
 import com.br.appchecker.databinding.ActivityRegisterBinding
-import com.br.appchecker.util.showBottomSheet
+import com.br.appchecker.util.LoadingUtils.showBottomSheet
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -23,7 +23,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.apply {
 
             google.setOnClickListener {
-                showBottomSheet(message = R.string.error_not_implemented_yet)
+                showBottomSheet(applicationContext,message = R.string.error_not_implemented_yet)
             }
 
             mail.setOnClickListener {

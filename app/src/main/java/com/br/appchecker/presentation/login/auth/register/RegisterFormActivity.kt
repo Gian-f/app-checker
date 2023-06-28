@@ -1,6 +1,5 @@
 package com.br.appchecker.presentation.login.auth.register
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -17,20 +16,19 @@ import com.br.appchecker.presentation.login.auth.LoginActivity
 import com.br.appchecker.presentation.login.viewmodels.LoginViewModel
 import com.br.appchecker.presentation.login.viewmodels.factory.LoginViewModelFactory
 import com.br.appchecker.util.LoadingUtils
+import com.br.appchecker.util.LoadingUtils.dismissErrorSheet
+import com.br.appchecker.util.LoadingUtils.showErrorSheet
 import com.br.appchecker.util.ValidationUtils.isEmailValid
 import com.br.appchecker.util.ValidationUtils.isNameValid
 import com.br.appchecker.util.ValidationUtils.isPasswordValid
 import com.br.appchecker.util.afterTextChanged
-import com.br.appchecker.util.showErrorSheet
 import com.br.appchecker.util.showNotification
 import com.br.appchecker.util.showToast
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class RegisterFormActivity : AppCompatActivity() {
 
-    private val binding: ActivityRegisterFormBinding by lazy {
-        ActivityRegisterFormBinding.inflate(layoutInflater)
-    }
+    private val binding: ActivityRegisterFormBinding by lazy { ActivityRegisterFormBinding.inflate(layoutInflater) }
 
     private lateinit var loginViewModel: LoginViewModel
 
@@ -116,12 +114,11 @@ class RegisterFormActivity : AppCompatActivity() {
                 }
 
                 is StateInfo.Error -> {
-                    showErrorSheet(message = state.message)
+                    showErrorSheet(this, message = state.message)
                     val handler = Handler(Looper.getMainLooper())
                     handler.postDelayed({
                         val intent = Intent(this, RegisterFormActivity::class.java)
                         startActivity(intent)
-                        finish()
                     }, 2000)
                 }
             }
@@ -143,6 +140,7 @@ class RegisterFormActivity : AppCompatActivity() {
 
     private fun showPasswordLayoutDelayed() {
         binding.apply {
+            loading.visibility = View.VISIBLE
             passwordLayout.postDelayed({
                 loading.visibility = View.GONE
                 passwordLayout.visibility = View.VISIBLE
@@ -155,6 +153,7 @@ class RegisterFormActivity : AppCompatActivity() {
 
     private fun showNameLayoutDelayed() {
         binding.apply {
+            loading.visibility = View.VISIBLE
             nameLayout.postDelayed({
                 loading.visibility = View.GONE
                 passwordLayout.visibility = View.INVISIBLE
@@ -164,15 +163,14 @@ class RegisterFormActivity : AppCompatActivity() {
             }, 1000)
         }
     }
+
     private fun showLoading() {
         bottomSheetDialog = LoadingUtils.showLoadingSheet(this)
     }
-
     private fun hideLoading() {
         bottomSheetDialog?.let { LoadingUtils.dismissLoadingSheet(it) }
         bottomSheetDialog = null
     }
-
     override fun onDestroy() {
         super.onDestroy()
         hideLoading()
