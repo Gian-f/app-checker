@@ -82,6 +82,7 @@ class LoginViewModel(
                                 txt = "Por favor, tente novamente",
                                 title = "Erro ao criar usuário"
                             )
+
                         } else {
                             StateInfo.Error(
                                 message = "Erro ao criar usuário. Código de resposta: $code",

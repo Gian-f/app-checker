@@ -16,7 +16,6 @@ import com.br.appchecker.presentation.login.auth.LoginActivity
 import com.br.appchecker.presentation.login.viewmodels.LoginViewModel
 import com.br.appchecker.presentation.login.viewmodels.factory.LoginViewModelFactory
 import com.br.appchecker.util.LoadingUtils
-import com.br.appchecker.util.LoadingUtils.dismissErrorSheet
 import com.br.appchecker.util.LoadingUtils.showErrorSheet
 import com.br.appchecker.util.ValidationUtils.isEmailValid
 import com.br.appchecker.util.ValidationUtils.isNameValid
@@ -117,9 +116,11 @@ class RegisterFormActivity : AppCompatActivity() {
                     showErrorSheet(this, message = state.message)
                     val handler = Handler(Looper.getMainLooper())
                     handler.postDelayed({
+                        hideLoading()
                         val intent = Intent(this, RegisterFormActivity::class.java)
                         startActivity(intent)
-                    }, 2000)
+                        finish()
+                    }, 3000)
                 }
             }
         }
@@ -150,7 +151,6 @@ class RegisterFormActivity : AppCompatActivity() {
             }, 1000)
         }
     }
-
     private fun showNameLayoutDelayed() {
         binding.apply {
             loading.visibility = View.VISIBLE
@@ -163,7 +163,6 @@ class RegisterFormActivity : AppCompatActivity() {
             }, 1000)
         }
     }
-
     private fun showLoading() {
         bottomSheetDialog = LoadingUtils.showLoadingSheet(this)
     }

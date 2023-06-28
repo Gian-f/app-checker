@@ -7,7 +7,6 @@ import android.widget.EditText
 object ValidationUtils {
     fun isEmailValid(email: String): Boolean {
         val emailRegex = Patterns.EMAIL_ADDRESS.toRegex()
-        Log.d("isEmailValid", "isEmailValid ${emailRegex.toString().isNotBlank()}")
         return email.isNotBlank() && (emailRegex.matches(email))
     }
 

@@ -2,6 +2,8 @@ package com.br.appchecker.util
 
 import android.app.Activity
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import com.br.appchecker.R
 import com.br.appchecker.databinding.BottomSheetBinding
@@ -96,9 +98,13 @@ object LoadingUtils {
             }
             bottomSheetDialog.setContentView(bottomSheetBinding.root)
             bottomSheetDialog.show()
+
+            val handler = Handler(Looper.getMainLooper())
+            handler.postDelayed({
+                if (bottomSheetDialog.isShowing) {
+                    bottomSheetDialog.dismiss()
+                }
+            }, 2000)
         }
-    }
-    fun dismissErrorSheet(bottomSheetDialog: BottomSheetDialog) {
-        bottomSheetDialog.dismiss()
     }
 }

@@ -53,13 +53,7 @@
         <activity
             android:name=".presentation.login.auth.LoginActivity"
             android:exported="false"
-            android:label="@string/title_activity_login">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+            android:label="@string/title_activity_login" />
         <activity
             android:name=".presentation.login.auth.register.RegisterActivity"
             android:exported="false"
