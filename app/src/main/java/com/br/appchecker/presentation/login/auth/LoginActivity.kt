@@ -178,7 +178,6 @@ class LoginActivity : AppCompatActivity() {
             }
 
             guest?.setOnClickListener {
-                showLoading()
                 loginViewModel.loginAsGuest()
             }
         }

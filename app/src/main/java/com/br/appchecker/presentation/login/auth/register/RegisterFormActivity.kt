@@ -1,5 +1,6 @@
 package com.br.appchecker.presentation.login.auth.register
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -15,6 +16,7 @@ import com.br.appchecker.databinding.ActivityRegisterFormBinding
 import com.br.appchecker.presentation.login.auth.LoginActivity
 import com.br.appchecker.presentation.login.viewmodels.LoginViewModel
 import com.br.appchecker.presentation.login.viewmodels.factory.LoginViewModelFactory
+import com.br.appchecker.util.LoadingUtils
 import com.br.appchecker.util.ValidationUtils.isEmailValid
 import com.br.appchecker.util.ValidationUtils.isNameValid
 import com.br.appchecker.util.ValidationUtils.isPasswordValid
@@ -22,6 +24,7 @@ import com.br.appchecker.util.afterTextChanged
 import com.br.appchecker.util.showErrorSheet
 import com.br.appchecker.util.showNotification
 import com.br.appchecker.util.showToast
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class RegisterFormActivity : AppCompatActivity() {
 
@@ -30,6 +33,8 @@ class RegisterFormActivity : AppCompatActivity() {
     }
 
     private lateinit var loginViewModel: LoginViewModel
+
+    private var bottomSheetDialog: BottomSheetDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,8 +68,6 @@ class RegisterFormActivity : AppCompatActivity() {
                 val isEmailValid = isEmailValid(email.text.toString())
                 val isPasswordValid = isPasswordValid(password.text.toString())
                 val isNameValid = isNameValid(name.text.toString())
-
-                loading.visibility = View.VISIBLE
                 continueButton.isEnabled = false
 
                 if (isEmailValid) {
@@ -103,6 +106,7 @@ class RegisterFormActivity : AppCompatActivity() {
         loginViewModel.userResult.observe(this) { state ->
             when (state) {
                 is StateInfo.Success -> {
+                    hideLoading()
                     showNotification(
                         "Obrigado por fazer parte, ${binding.name.text}!",
                         "Sua conta foi cadastrada com sucesso!")
@@ -115,7 +119,6 @@ class RegisterFormActivity : AppCompatActivity() {
                     showErrorSheet(message = state.message)
                     val handler = Handler(Looper.getMainLooper())
                     handler.postDelayed({
-                        binding.loading.visibility = View.VISIBLE
                         val intent = Intent(this, RegisterFormActivity::class.java)
                         startActivity(intent)
                         finish()
@@ -127,7 +130,7 @@ class RegisterFormActivity : AppCompatActivity() {
 
     private fun startLoginActivityDelayed() {
         binding.apply {
-            loading.visibility = View.VISIBLE
+            showLoading()
             continueButton.postDelayed({
                 val email = binding.email.text.toString().trim()
                 val password = binding.password.text.toString().trim()
@@ -140,7 +143,6 @@ class RegisterFormActivity : AppCompatActivity() {
 
     private fun showPasswordLayoutDelayed() {
         binding.apply {
-            loading.visibility = View.VISIBLE
             passwordLayout.postDelayed({
                 loading.visibility = View.GONE
                 passwordLayout.visibility = View.VISIBLE
@@ -153,7 +155,6 @@ class RegisterFormActivity : AppCompatActivity() {
 
     private fun showNameLayoutDelayed() {
         binding.apply {
-            loading.visibility = View.VISIBLE
             nameLayout.postDelayed({
                 loading.visibility = View.GONE
                 passwordLayout.visibility = View.INVISIBLE
@@ -162,5 +163,19 @@ class RegisterFormActivity : AppCompatActivity() {
                 question.text = getString(R.string.create_name)
             }, 1000)
         }
+    }
+    private fun showLoading() {
+        bottomSheetDialog = LoadingUtils.showLoadingSheet(this)
+    }
+
+    private fun hideLoading() {
+        bottomSheetDialog?.let { LoadingUtils.dismissLoadingSheet(it) }
+        bottomSheetDialog = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        hideLoading()
+        bottomSheetDialog?.dismiss()
     }
 }

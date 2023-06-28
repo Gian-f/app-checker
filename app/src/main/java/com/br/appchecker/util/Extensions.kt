@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import com.br.appchecker.R
 import com.br.appchecker.databinding.BottomSheetBinding
 import com.br.appchecker.databinding.LoadingBottomSheetBinding
@@ -110,5 +111,4 @@ fun Activity.showErrorSheet(
     }
     bottomSheetDialog.setContentView(bottomSheetBinding.root)
     bottomSheetDialog.show()
-
 }
