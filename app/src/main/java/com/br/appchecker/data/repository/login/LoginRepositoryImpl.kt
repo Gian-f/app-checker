@@ -81,8 +81,7 @@ class LoginRepositoryImpl(
                 userDao.insert(guestUser)
                 StateLogin.Success(
                     User(guestUser.id, guestUser.email, guestUser.name, guestUser.password),
-                    "Usuário autenticado com sucesso"
-                )
+                    "Usuário autenticado com sucesso")
             } else {
                 StateLogin.Error(
                     message = "O usuário não é um convidado.",

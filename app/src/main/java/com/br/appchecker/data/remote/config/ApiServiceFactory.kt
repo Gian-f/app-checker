@@ -5,9 +5,11 @@ import com.br.appchecker.data.remote.service.LoginService
 import com.br.appchecker.data.remote.service.QuestionService
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
 
 object ApiServiceFactory {
 
@@ -68,6 +70,20 @@ object ApiServiceFactory {
             .build()
 
         return retrofit.create(AnswerService::class.java)
+    }
+
+    fun isServerOnline(serverUrl: String): Boolean {
+        val client = OkHttpClient()
+        val request = Request.Builder()
+            .url(serverUrl)
+            .build()
+
+        return try {
+            val response = client.newCall(request).execute()
+            response.isSuccessful
+        } catch (e: IOException) {
+            false
+        }
     }
 
 }
