@@ -18,6 +18,7 @@ import com.br.appchecker.databinding.ActivityRegisterFormBinding
 import com.br.appchecker.presentation.login.auth.LoginActivity
 import com.br.appchecker.presentation.login.viewmodels.LoginViewModel
 import com.br.appchecker.presentation.login.viewmodels.factory.LoginViewModelFactory
+import com.br.appchecker.util.FirebaseUtils
 import com.br.appchecker.util.LoadingUtils
 import com.br.appchecker.util.LoadingUtils.showErrorSheet
 import com.br.appchecker.util.ValidationUtils.isEmailValid
@@ -27,6 +28,7 @@ import com.br.appchecker.util.afterTextChanged
 import com.br.appchecker.util.showNotification
 import com.br.appchecker.util.showToast
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.auth.FirebaseAuthException
 
 class RegisterFormActivity : AppCompatActivity() {
 
@@ -120,16 +122,25 @@ class RegisterFormActivity : AppCompatActivity() {
                         "Obrigado por fazer parte, ${binding.name.text}!",
                         "Sua conta foi cadastrada com sucesso!"
                     )
-                    showToast("Seja bem vindo, ${binding.name.text}!")
+                    showToast("Seja bem-vindo, ${binding.name.text}!")
                     val intent = Intent(this, LoginActivity::class.java)
                     startActivity(intent)
+                    setResult(Activity.RESULT_OK)
                 }
 
                 is StateInfo.Error -> {
-                    showErrorSheet(this, message = state.message)
+                    hideLoading()
+
+                    val errorMessage = when (state.exception) {
+                        is FirebaseAuthException -> {
+                            FirebaseUtils.getErrorMessage(state.exception)
+                        }
+                        else -> state.message
+                    }
+
+                    showErrorSheet(this, message = errorMessage)
                     val handler = Handler(Looper.getMainLooper())
                     handler.postDelayed({
-                        hideLoading()
                         val intent = Intent(this, RegisterFormActivity::class.java)
                         startActivity(intent)
                         finish()
@@ -137,6 +148,7 @@ class RegisterFormActivity : AppCompatActivity() {
                 }
             }
         }
+
     }
 
     private fun startLoginActivityDelayed() {

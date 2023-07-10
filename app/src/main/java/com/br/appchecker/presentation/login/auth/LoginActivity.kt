@@ -23,11 +23,13 @@ import com.br.appchecker.presentation.login.auth.register.RegisterActivity
 import com.br.appchecker.presentation.login.viewmodels.LoginViewModel
 import com.br.appchecker.presentation.login.viewmodels.factory.LoginViewModelFactory
 import com.br.appchecker.presentation.questions.MainActivity
+import com.br.appchecker.util.FirebaseUtils
 import com.br.appchecker.util.LoadingUtils
 import com.br.appchecker.util.LoadingUtils.showBottomSheet
 import com.br.appchecker.util.LoadingUtils.showErrorSheet
 import com.br.appchecker.util.afterTextChanged
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.auth.FirebaseAuthException
 
 
 class LoginActivity : AppCompatActivity() {
@@ -126,14 +128,23 @@ class LoginActivity : AppCompatActivity() {
                 }
 
                 is StateLogin.Error -> {
-                    binding.loading.visibility = View.GONE
-                    showErrorSheet(this, message = state.message)
                     hideLoading()
+
+                    val errorMessage = when (state.exception) {
+                        is FirebaseAuthException -> {
+                            FirebaseUtils.getErrorMessage(state.exception)
+                        }
+                        else -> state.message
+                    }
+
+                    binding.loading.visibility = View.GONE
+                    showErrorSheet(this, message = errorMessage)
                 }
             }
             setResult(Activity.RESULT_OK)
         }
     }
+
 
     private fun setupListeners() {
 
