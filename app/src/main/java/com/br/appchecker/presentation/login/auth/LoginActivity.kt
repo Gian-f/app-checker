@@ -149,7 +149,7 @@ class LoginActivity : AppCompatActivity() {
 
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        loginViewModel.login(binding.email.text.toString(), text.toString())
+                        loginViewModel.loginFirebase(binding.email.text.toString(), text.toString())
                     }
                     false
                 }
@@ -174,7 +174,7 @@ class LoginActivity : AppCompatActivity() {
             login.setOnClickListener {
                 showLoading()
                 loginViewModel.deleteAllUsers()
-                loginViewModel.login(email.text.toString(), password.text.toString())
+                loginViewModel.loginFirebase(email.text.toString(), password.text.toString())
             }
 
             guest?.setOnClickListener {

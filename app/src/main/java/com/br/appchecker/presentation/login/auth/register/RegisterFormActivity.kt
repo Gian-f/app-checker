@@ -151,7 +151,7 @@ class RegisterFormActivity : AppCompatActivity() {
                 val password = binding.password.text.toString().trim()
                 val name = binding.name.text.toString().trim()
 
-                loginViewModel.insertUser(email, password, name)
+                loginViewModel.insertUserFirebase(email, password, name)
             }, 2000)
         }
     }

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "669737048682",
+    "project_id": "app-checker-391119",
+    "storage_bucket": "app-checker-391119.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:669737048682:android:94f05ae3d1826a81900813",
+        "android_client_info": {
+          "package_name": "com.br.appchecker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "669737048682-tf4fu5iht86cdfl55i51veeepfsrtrf1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6Lrl1cmeL7jDEnT_eLBqnlmsOnFqZrTI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "669737048682-tf4fu5iht86cdfl55i51veeepfsrtrf1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

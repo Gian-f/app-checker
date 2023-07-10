@@ -11,64 +11,98 @@ import com.br.appchecker.data.state.StateInfo
 import com.br.appchecker.data.state.StateLogin
 import com.br.appchecker.domain.model.User
 import com.br.appchecker.util.ErrorUtils.parseErrorMessage
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.tasks.await
 import retrofit2.awaitResponse
 
 class LoginRepositoryImpl(
     private val userDao: UserDao
 ) : LoginRepository {
 
-    private var service = ApiServiceFactory.createLoginService()
+    private var service=ApiServiceFactory.createLoginService()
 
     override suspend fun login(email: String, password: String): StateLogin<LoginResponse> {
         return try {
-            val response = service.login(LoginRequest(email, password)).awaitResponse()
+            val response=service.login(LoginRequest(email, password)).awaitResponse()
 
-            val errorBody = response.errorBody()?.string()
-            val errorMessage = errorBody?.let { parseErrorMessage(it) }
+            val errorBody=response.errorBody()?.string()
+            val errorMessage=errorBody?.let { parseErrorMessage(it) }
             if (response.isSuccessful) {
-                val user = response.body()
+                val user=response.body()
                 if (user != null) {
                     userDao.insert(user.user)
                     StateLogin.Success(user.user, user.info)
                 } else {
                     Log.e(null, "Erro ao efetuar o login")
                     StateLogin.Error(
-                        message = errorMessage
+                        message=errorMessage
                             ?: "Ocorreu um erro ao efetuar login. Resposta inválida.",
-                        txt = "Por favor, tente novamente",
-                        title = "Ocorreu um erro"
+                        txt="Por favor, tente novamente",
+                        title="Ocorreu um erro"
                     )
                 }
             } else {
                 if (errorBody != null) {
                     // Erro ao criar usuário, retorne a mensagem de erro do servidor
                     StateLogin.Error(
-                        message = errorMessage ?: "Ocorreu um erro ao efetuar o login",
-                        title = "Ocorreu um erro"
+                        message=errorMessage ?: "Ocorreu um erro ao efetuar o login",
+                        title="Ocorreu um erro"
                     )
                 } else {
                     Log.e(null, "Erro ao criar um usuário")
                     StateLogin.Error(
-                        message = "Ocorreu um erro ao criar um usuário ${response.code()}",
-                        code = response.code(),
-                        txt = "\n\nDeseja tentar novamente?",
-                        title = "Ocorreu um erro"
+                        message="Ocorreu um erro ao criar um usuário ${response.code()}",
+                        code=response.code(),
+                        txt="\n\nDeseja tentar novamente?",
+                        title="Ocorreu um erro"
                     )
                 }
                 Log.e(null, "Erro ao efetuar o login")
                 StateLogin.Error(
-                    message =
+                    message=
                     errorMessage ?: "Usuário ou senha incorreta!",
-                    code = response.code(),
-                    txt = "\n\nDeseja tentar novamente?",
-                    title = "Ocorreu um erro"
+                    code=response.code(),
+                    txt="\n\nDeseja tentar novamente?",
+                    title="Ocorreu um erro"
                 )
             }
         } catch (e: Exception) {
             Log.e("Erro ao efetuar o login", "$e")
             StateLogin.Error(
-                message = "${e.message}",
-                exception = e
+                message="${e.message}",
+                exception=e
+            )
+        }
+    }
+
+    override suspend fun loginFirebase(email: String, password: String): StateLogin<LoginResponse> {
+        return try {
+            val auth=FirebaseAuth.getInstance()
+            val authResult=auth.signInWithEmailAndPassword(email, password).await()
+
+            if (authResult.user != null) {
+                // Autenticação bem-sucedida
+                // Exemplo: userDao.insert(user.user)
+
+                // Retorne o usuário autenticado
+                val firebaseUser=authResult.user!!
+                val user=User(
+                    id= firebaseUser.uid.toInt(), email= firebaseUser.email ?: "",
+                    name= firebaseUser.displayName ?: "", password= null
+                )
+                StateLogin.Success(user, "Informações adicionais do usuário, se necessário")
+            } else {
+                // Autenticação falhou
+                StateLogin.Error(
+                    message="Usuário ou senha incorreta!",
+                    title="Ocorreu um erro"
+                )
+            }
+        } catch (e: Exception) {
+            Log.e("Erro ao efetuar o login", "$e")
+            StateLogin.Error(
+                message="${e.message}",
+                exception=e
             )
         }
     }
@@ -76,23 +110,24 @@ class LoginRepositoryImpl(
     override suspend fun loginAsGuest(): StateLogin<LoginResponse> {
         return try {
             userDao.deleteAll()
-            val guestUser = User(email = "convidado@email.com", name = "convidado", password = "")
+            val guestUser=User(email="convidado@email.com", name="convidado", password="")
             if (userDao.getAll().isEmpty()) {
                 userDao.insert(guestUser)
                 StateLogin.Success(
                     User(guestUser.id, guestUser.email, guestUser.name, guestUser.password),
-                    "Usuário autenticado com sucesso")
+                    "Usuário autenticado com sucesso"
+                )
             } else {
                 StateLogin.Error(
-                    message = "O usuário não é um convidado.",
-                    txt = "Por favor, faça o login regularmente."
+                    message="O usuário não é um convidado.",
+                    txt="Por favor, faça o login regularmente."
                 )
             }
         } catch (e: Exception) {
             Log.e("Erro ao efetuar o login", "$e")
             StateLogin.Error(
-                message = "Ocorreu um erro ao efetuar login como usuário convidado.",
-                exception = e
+                message="Ocorreu um erro ao efetuar login como usuário convidado.",
+                exception=e
             )
         }
     }
@@ -103,40 +138,77 @@ class LoginRepositoryImpl(
         name: String
     ): StateInfo<UserResponse> {
         return try {
-            val response = service.createUser(UserRequest(email, password, name)).awaitResponse()
+            val response=service.createUser(UserRequest(email, password, name)).awaitResponse()
 
-            val responseBody = response.body()
-            val errorBody = response.errorBody()?.string()
+            val responseBody=response.body()
+            val errorBody=response.errorBody()?.string()
 
             if (response.isSuccessful) {
                 if (responseBody != null) {
                     // Sucesso ao criar usuário, retorne os dados do usuário
-                    StateInfo.Success(status = responseBody.status, info = responseBody.info)
+                    StateInfo.Success(status=responseBody.status, info=responseBody.info)
                 } else {
                     Log.e(null, "Erro ao criar um usuário")
                     StateInfo.Error(
-                        message = "Ocorreu um erro ao criar um usuário. Resposta inválida.",
-                        txt = "Por favor, tente novamente",
-                        title = "Ocorreu um erro"
+                        message="Ocorreu um erro ao criar um usuário. Resposta inválida.",
+                        txt="Por favor, tente novamente",
+                        title="Ocorreu um erro"
                     )
                 }
             } else {
                 if (errorBody != null) {
-                    val errorMessage = parseErrorMessage(errorBody)
+                    val errorMessage=parseErrorMessage(errorBody)
                     // Erro ao criar usuário, retorne a mensagem de erro do servidor
                     StateInfo.Error(
-                        message = errorMessage,
-                        title = "Ocorreu um erro"
+                        message=errorMessage,
+                        title="Ocorreu um erro"
                     )
                 } else {
                     Log.e(null, "Erro ao criar um usuário")
                     StateInfo.Error(
-                        message = "errorMessage ${response.code()}",
-                        code = response.code(),
-                        txt = "\n\nDeseja tentar novamente?",
-                        title = "Ocorreu um erro"
+                        message="errorMessage ${response.code()}",
+                        code=response.code(),
+                        txt="\n\nDeseja tentar novamente?",
+                        title="Ocorreu um erro"
                     )
                 }
+            }
+        } catch (e: Exception) {
+            Log.e("Erro ao criar um usuário", "$e")
+            StateInfo.Error(
+                message="Ocorreu um erro ao criar um usuário.",
+                exception=e
+            )
+        }
+    }
+
+    override suspend fun createUserFirebase(
+        email: String,
+        password: String,
+        name: String
+    ): StateInfo<UserResponse> {
+        return try {
+            val auth = FirebaseAuth.getInstance()
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .await() // Aguarda a conclusão da criação do usuário
+
+            val user = auth.currentUser
+            if (user != null) {
+                val userId = user.uid
+                val newUser = UserResponse(userId, true) // Crie um objeto UserResponse com os dados relevantes
+
+                // Salve o novo usuário no banco de dados ou execute outras ações necessárias
+                // Exemplo: userDao.insert(newUser)
+
+                // Sucesso ao criar usuário, retorne os dados do usuário
+                StateInfo.Success(status = true, info = newUser.info)
+            } else {
+                // Ocorreu um erro na criação do usuário
+                StateInfo.Error(
+                    message = "Erro ao criar usuário",
+                    title = "Ocorreu um erro"
+                )
             }
         } catch (e: Exception) {
             Log.e("Erro ao criar um usuário", "$e")
@@ -146,6 +218,7 @@ class LoginRepositoryImpl(
             )
         }
     }
+
 
     override suspend fun deleteAllUsers() {
         userDao.deleteAll()

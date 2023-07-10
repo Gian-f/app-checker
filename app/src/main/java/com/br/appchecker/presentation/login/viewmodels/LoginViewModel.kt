@@ -45,6 +45,17 @@ class LoginViewModel(
         }
     }
 
+    fun loginFirebase(username: String, password: String) {
+        viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
+            Log.e("ERRO login ", "$throwable")
+        }) {
+            val state = loginRepository.loginFirebase(username, password)
+            withContext(Dispatchers.Main) {
+                _loginResult.value = state
+            }
+        }
+    }
+
     fun loginAsGuest() {
         viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
             Log.e("ERRO login as guest ", "$throwable")
@@ -63,6 +74,19 @@ class LoginViewModel(
             _userResult.value = errorState
         }) {
             val state = loginRepository.createUser(email, password, name)
+            withContext(Dispatchers.Main) {
+                _userResult.value = state
+            }
+        }
+    }
+
+    fun insertUserFirebase(email: String, password: String, name: String) {
+        viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
+            Log.e("ERRO ao criar usuário", "$throwable")
+            val errorState = handleError(throwable)
+            _userResult.value = errorState
+        }) {
+            val state = loginRepository.createUserFirebase(email, password, name)
             withContext(Dispatchers.Main) {
                 _userResult.value = state
             }
