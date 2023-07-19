@@ -73,20 +73,23 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
     }
 
     private fun setupRecyclerView() {
-        binding.rv.adapter = adapter
-        binding.rv.addItemDecoration(
-            DividerItemDecoration(
-                requireContext(),
-                LinearLayoutManager.VERTICAL,
+        with(binding) {
+            rv.adapter = adapter
+            rv.addItemDecoration(
+                DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
             )
-        )
+        }
+        setupObservers()
+    }
+
+    private fun setupObservers() {
         viewModel.questions.observe(viewLifecycleOwner) { questions ->
             GlobalData.globalQuestions.value = questions
             updateProgressBar(position, questions.size)
             adapter.submitList(findQuestionListOne(questions))
         }
         if (list.isNullOrEmpty() || GlobalData.globalQuestions.value.isNullOrEmpty()) {
-            viewModel.getAllQuestions()
+            viewModel.getAllQuestionsFromFirebase()
         } else {
             val listAux = ArrayList<Question>()
             listAux.addAll(list!!)

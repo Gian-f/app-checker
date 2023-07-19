@@ -5,7 +5,15 @@ import com.br.appchecker.data.local.dao.QuestionDao
 import com.br.appchecker.data.local.dao.UserDao
 import com.br.appchecker.data.remote.config.ApiServiceFactory
 import com.br.appchecker.data.remote.request.QuestionRequest
+import com.br.appchecker.data.remote.response.AnswersData
 import com.br.appchecker.domain.model.Question
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class QuestionRepositoryImpl(
     private val questionDao: QuestionDao,
@@ -26,6 +34,44 @@ class QuestionRepositoryImpl(
                 title = response.question.title,
                 answers = response.answers,
             )
+        }
+    }
+
+    override suspend fun getAllQuestionsFromFirebase(): List<Question> {
+        val questionsRef = FirebaseDatabase.getInstance().getReference("questions")
+
+        return suspendCoroutine { continuation ->
+            questionsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val questions = mutableListOf<Question>()
+
+                    for (questionSnapshot in dataSnapshot.children) {
+                        val id = questionSnapshot.child("id").getValue(Int::class.java)
+                        val title = questionSnapshot.child("title").getValue(String::class.java)
+                        val description = questionSnapshot.child("description").getValue(String::class.java)
+                        val answersDataList = mutableListOf<AnswersData>()
+
+                        for (answersSnapshot in questionSnapshot.child("answers").children) {
+                            val answerId = answersSnapshot.child("id").getValue(Int::class.java)
+                            val answerDescription = answersSnapshot.child("description").getValue(String::class.java)
+                            val answerQuestionId = answersSnapshot.child("questionId").getValue(Int::class.java)
+                            val answerPositionOrder = answersSnapshot.child("positionOrder").getValue(Int::class.java)
+
+                            val answerData = AnswersData(answerId ?: 0, answerDescription ?: "", answerQuestionId ?: 0, answerPositionOrder ?: 0)
+                            answersDataList.add(answerData)
+                        }
+
+                        val question = Question(id ?: 0, title ?: "", description ?: "", answersDataList)
+                        questions.add(question)
+                    }
+
+                    continuation.resume(questions)
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    continuation.resumeWithException(databaseError.toException())
+                }
+            })
         }
     }
 

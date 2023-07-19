@@ -44,6 +44,21 @@ class QuestionViewModel(
         }
     }
 
+    fun getAllQuestionsFromFirebase() {
+        viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
+            Log.e("Erro Quest", "$throwable")
+        }) {
+            try {
+                val result = repository.getAllQuestionsFromFirebase()
+                withContext(Dispatchers.Main) {
+                    _questions.value = result
+                }
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
 //    fun getAllAnswers() {
 //        viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
 //            Log.e("Erro Answers", "$throwable")

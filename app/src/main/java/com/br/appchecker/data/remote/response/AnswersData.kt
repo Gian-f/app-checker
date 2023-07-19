@@ -18,9 +18,9 @@ data class AnswersData(
     @ColumnInfo(name = "positionOrder")
     val positionOrder: Int
 ): Parcelable {
+
+    constructor() : this(0, "", 0, 0)
     override fun toString(): String {
         return description
     }
 }
-
-

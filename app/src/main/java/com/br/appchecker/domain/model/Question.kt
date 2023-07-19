@@ -24,5 +24,6 @@ data class Question(
     val optionIdResultId: Int? = null,
     @ColumnInfo(name = "selected_answer_position")
     var selectedAnswerPosition: Int? = RecyclerView.NO_POSITION
-): Parcelable
-
+) : Parcelable {
+    constructor() : this(0, "", "", emptyList(), null, RecyclerView.NO_POSITION)
+}
