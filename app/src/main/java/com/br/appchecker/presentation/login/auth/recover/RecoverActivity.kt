@@ -38,7 +38,7 @@ class RecoverActivity : AppCompatActivity() {
 
     private fun setupViewModel() {
         val userDao = AppDatabase.getInstance(this).userDao()
-        val viewModelFactory = LoginViewModelFactory(userDao)
+        val viewModelFactory = LoginViewModelFactory(userDao,this)
         loginViewModel = ViewModelProvider(this, viewModelFactory)[LoginViewModel::class.java]
     }
 

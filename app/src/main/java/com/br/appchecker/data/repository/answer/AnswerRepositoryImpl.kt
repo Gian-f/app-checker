@@ -1,14 +1,20 @@
 package com.br.appchecker.data.repository.answer
 
+import android.content.Context
 import android.util.Log
 import com.br.appchecker.data.remote.config.ApiServiceFactory
 import com.br.appchecker.data.remote.request.AnswerRequest
+import com.br.appchecker.data.remote.service.AnswerService
 import com.br.appchecker.data.state.StateInfo
 import retrofit2.awaitResponse
 
-class AnswerRepositoryImpl : AnswerRepository {
+class AnswerRepositoryImpl(
+    val context: Context
+) : AnswerRepository {
 
-    private var service = ApiServiceFactory.createAnswerService()
+    private val service: AnswerService by lazy {
+        ApiServiceFactory.createAnswerService(context)
+    }
 
     override suspend fun insertAnswer(
         questionOption: Int,
@@ -42,9 +48,9 @@ class AnswerRepositoryImpl : AnswerRepository {
                 )
             }
         } catch (e: Exception) {
-            Log.e("Erro ao efetuar o login", "$e")
+            Log.e("Erro ao inserir resposta", "$e")
             StateInfo.Error(
-                message = "Ocorreu um erro ao efetuar login.",
+                message = "Ocorreu um erro ao inserir resposta",
                 exception = e
             )
         }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="open_ai_api_key">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</string>
+    <string name="base_url">http://192.168.203.56:8081</string>
+    <string name="open_ai_base_url">https://api.openai.com/</string>
+</resources>

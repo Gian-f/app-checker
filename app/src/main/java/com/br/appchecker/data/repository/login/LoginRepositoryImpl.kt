@@ -1,5 +1,6 @@
 package com.br.appchecker.data.repository.login
 
+import android.content.Context
 import android.util.Log
 import com.br.appchecker.data.local.dao.UserDao
 import com.br.appchecker.data.remote.config.ApiServiceFactory
@@ -7,6 +8,7 @@ import com.br.appchecker.data.remote.request.LoginRequest
 import com.br.appchecker.data.remote.request.UserRequest
 import com.br.appchecker.data.remote.response.LoginResponse
 import com.br.appchecker.data.remote.response.UserResponse
+import com.br.appchecker.data.remote.service.LoginService
 import com.br.appchecker.data.state.StateInfo
 import com.br.appchecker.data.state.StateLogin
 import com.br.appchecker.domain.model.User
@@ -16,10 +18,13 @@ import kotlinx.coroutines.tasks.await
 import retrofit2.awaitResponse
 
 class LoginRepositoryImpl(
-    private val userDao: UserDao
+    private val userDao: UserDao,
+    private val context: Context
 ) : LoginRepository {
 
-    private var service = ApiServiceFactory.createLoginService()
+    private val service: LoginService by lazy {
+        ApiServiceFactory.createLoginService(context)
+    }
 
     override suspend fun login(email: String, password: String): StateLogin<LoginResponse> {
         return try {

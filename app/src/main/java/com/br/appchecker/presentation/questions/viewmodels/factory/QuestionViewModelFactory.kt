@@ -1,5 +1,6 @@
 package com.br.appchecker.presentation.questions.viewmodels.factory
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.br.appchecker.data.local.dao.QuestionDao
@@ -9,13 +10,14 @@ import com.br.appchecker.presentation.questions.viewmodels.QuestionViewModel
 
 class QuestionViewModelFactory(
     private val questionDao: QuestionDao,
-    private val userDao: UserDao
+    private val userDao: UserDao,
+    private val context: Context
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(QuestionViewModel::class.java)) {
             return QuestionViewModel(
-                    repository = QuestionRepositoryImpl(questionDao, userDao)
+                    repository = QuestionRepositoryImpl(questionDao, userDao, context)
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

@@ -42,7 +42,7 @@ abstract class QuestionBaseFragment<T : ViewBinding> : Fragment() {
         viewModel = ViewModelProvider(
             this,
             QuestionViewModelFactory(
-                questionDao, userDao
+                questionDao, userDao, requireContext()
             )
         )[QuestionViewModel::class.java]
     }

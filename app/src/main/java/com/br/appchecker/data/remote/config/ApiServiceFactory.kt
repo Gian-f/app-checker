@@ -1,89 +1,76 @@
 package com.br.appchecker.data.remote.config
 
+import android.content.Context
+import com.br.appchecker.R
 import com.br.appchecker.data.remote.service.AnswerService
+import com.br.appchecker.data.remote.service.ResultService
 import com.br.appchecker.data.remote.service.LoginService
 import com.br.appchecker.data.remote.service.QuestionService
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
-import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
-
 object ApiServiceFactory {
+    private lateinit var BASE_URL: String
+    private lateinit var OPEN_AI_KEY: String
 
-    private const val BASE_URL = "http://192.168.203.56:8081"
-
-    fun createQuestionService(): QuestionService {
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor()
-            .apply { level = HttpLoggingInterceptor.Level.BODY })
+    private val httpClient by lazy {
+        OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
             .build()
+    }
 
-        val gson = GsonBuilder()
+    private val gson by lazy {
+        GsonBuilder()
             .setLenient()
             .create()
+    }
 
-        val retrofit = Retrofit.Builder()
+    private val retrofit by lazy {
+        Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .client(okHttpClient)
+            .client(httpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
+    }
 
+    fun createQuestionService(context: Context): QuestionService {
+        BASE_URL = context.getString(R.string.base_url)
         return retrofit.create(QuestionService::class.java)
     }
 
-    fun createLoginService(): LoginService {
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor()
-                .apply { level = HttpLoggingInterceptor.Level.BODY })
-            .build()
-
-        val gson = GsonBuilder()
-            .setLenient()
-            .create()
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-
+    fun createLoginService(context: Context): LoginService {
+        BASE_URL = context.getString(R.string.base_url)
         return retrofit.create(LoginService::class.java)
     }
 
-    fun createAnswerService(): AnswerService {
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor()
-                .apply { level = HttpLoggingInterceptor.Level.BODY })
-            .build()
-
-        val gson = GsonBuilder()
-            .setLenient()
-            .create()
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-
+    fun createAnswerService(context: Context): AnswerService {
+        BASE_URL = context.getString(R.string.base_url)
         return retrofit.create(AnswerService::class.java)
     }
 
-    fun isServerOnline(serverUrl: String): Boolean {
-        val client = OkHttpClient()
-        val request = Request.Builder()
-            .url(serverUrl)
+    fun createResultService(context: Context): ResultService {
+        BASE_URL = context.getString(R.string.open_ai_base_url)
+        OPEN_AI_KEY = context.getString(R.string.open_ai_api_key)
+
+        val httpClientWithAuth = OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                val originalRequest = chain.request()
+                val newRequest = originalRequest.newBuilder()
+                    .header("Authorization", "Bearer $OPEN_AI_KEY")
+                    .build()
+                chain.proceed(newRequest)
+            }
             .build()
 
-        return try {
-            val response = client.newCall(request).execute()
-            response.isSuccessful
-        } catch (e: IOException) {
-            false
-        }
-    }
+        val retrofitWithAuth = retrofit.newBuilder()
+            .baseUrl(BASE_URL)
+            .client(httpClientWithAuth)
+            .build()
 
+        return retrofitWithAuth.create(ResultService::class.java)
+    }
 }

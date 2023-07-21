@@ -10,24 +10,28 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.br.appchecker.R
-import com.br.appchecker.databinding.FragmentFirstBinding
+import com.br.appchecker.databinding.FragmentQuestionBinding
 import com.br.appchecker.domain.model.Question
 import com.br.appchecker.presentation.questions.GlobalData
 import com.br.appchecker.presentation.questions.adapters.SingleChoiceAdapter
+import com.br.appchecker.util.LoadingUtils
 import com.br.appchecker.util.LoadingUtils.showBottomSheet
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
+class QuestionFragment : QuestionBaseFragment<FragmentQuestionBinding>() {
 
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentFirstBinding =
-        FragmentFirstBinding::inflate
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentQuestionBinding =
+        FragmentQuestionBinding::inflate
 
     private val position by lazy {
-        FirstFragmentArgs.fromBundle(requireArguments()).position
+        QuestionFragmentArgs.fromBundle(requireArguments()).position
     }
 
     private val list by lazy {
-        FirstFragmentArgs.fromBundle(requireArguments()).list
+        QuestionFragmentArgs.fromBundle(requireArguments()).list
     }
+
+    private var bottomSheetDialog: BottomSheetDialog? = null
 
     private val adapter: SingleChoiceAdapter by lazy {
         SingleChoiceAdapter(requireContext(), object : SingleChoiceAdapter.OnItemClickListener {
@@ -88,6 +92,16 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
             updateProgressBar(position, questions.size)
             adapter.submitList(findQuestionListOne(questions))
         }
+
+        viewModel.loading.observe(viewLifecycleOwner) { loading ->
+            if (loading) {
+                binding.continueButton.visibility = View.GONE
+                showLoading()
+            } else {
+                hideLoading()
+            }
+        }
+
         if (list.isNullOrEmpty() || GlobalData.globalQuestions.value.isNullOrEmpty()) {
             viewModel.getAllQuestionsFromFirebase()
         } else {
@@ -97,6 +111,16 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
             updateProgressBar(position, listAux.size)
             adapter.submitList(findQuestionListOne(listAux))
         }
+    }
+    private fun showLoading() {
+        binding.continueButton.visibility = View.GONE
+        bottomSheetDialog = LoadingUtils.showLoadingSheet(requireContext())
+    }
+
+    private fun hideLoading() {
+        binding.continueButton.visibility = View.VISIBLE
+        bottomSheetDialog?.let { LoadingUtils.dismissLoadingSheet(it) }
+        bottomSheetDialog = null
     }
 
     private fun setupButtonsVisibility() {
@@ -123,12 +147,12 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
 
     override fun getActionForNextFragment(): NavDirections {
         return if (position + 1 < (list?.size ?: GlobalData.globalQuestions.value?.size ?: 0)) {
-            FirstFragmentDirections.actionFirstFragmentSelf(
+            QuestionFragmentDirections.actionFirstFragmentSelf(
                 position = position + 1,
                 list = list ?: GlobalData.globalQuestions.value?.toTypedArray()
             )
         } else {
-            FirstFragmentDirections.actionFirstFragmentToResultFragment()
+            QuestionFragmentDirections.actionFirstFragmentToResultFragment()
         }
     }
 
@@ -138,5 +162,11 @@ class FirstFragment : QuestionBaseFragment<FragmentFirstBinding>() {
         val questions = adapter.currentList
         val unansweredQuestion = questions.getOrNull(0)
         return unansweredQuestion?.selectedAnswerPosition != null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        hideLoading()
+        bottomSheetDialog?.dismiss()
     }
 }

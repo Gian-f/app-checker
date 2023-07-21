@@ -29,6 +29,10 @@ class QuestionViewModel(
     private val _answers = MutableLiveData<AnswersData>()
     private val answers: LiveData<AnswersData> get() = _answers
 
+    private val _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean> get() = _loading
+
+
     fun getAllQuestions() {
         viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
             Log.e("Erro Quest", "$throwable")
@@ -46,8 +50,10 @@ class QuestionViewModel(
 
     fun getAllQuestionsFromFirebase() {
         viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
+            _loading.postValue(false)
             Log.e("Erro Quest", "$throwable")
         }) {
+            _loading.postValue(true)
             try {
                 val result = repository.getAllQuestionsFromFirebase()
                 withContext(Dispatchers.Main) {
@@ -55,6 +61,8 @@ class QuestionViewModel(
                 }
             } catch (e: Exception) {
                 throw e
+            } finally {
+                _loading.postValue(false)
             }
         }
     }

@@ -1,11 +1,13 @@
 package com.br.appchecker.data.repository.question
 
+import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import com.br.appchecker.data.local.dao.QuestionDao
 import com.br.appchecker.data.local.dao.UserDao
 import com.br.appchecker.data.remote.config.ApiServiceFactory
 import com.br.appchecker.data.remote.request.QuestionRequest
 import com.br.appchecker.data.remote.response.AnswersData
+import com.br.appchecker.data.remote.service.QuestionService
 import com.br.appchecker.domain.model.Question
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -17,10 +19,13 @@ import kotlin.coroutines.suspendCoroutine
 
 class QuestionRepositoryImpl(
     private val questionDao: QuestionDao,
-    private val userDao: UserDao
+    private val userDao: UserDao,
+    private val context: Context
     ) : QuestionRepository {
 
-    private var service = ApiServiceFactory.createQuestionService()
+    private val service: QuestionService by lazy {
+        ApiServiceFactory.createQuestionService(context)
+    }
 
     override suspend fun getAllQuestions(): List<Question> {
         val user = userDao.find()
