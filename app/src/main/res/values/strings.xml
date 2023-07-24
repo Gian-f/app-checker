@@ -62,7 +62,7 @@
     <string name="text_title_loading_bottom_sheet">Carregando...</string>
     <string name="error_generic">Ocorreu um erro, por favor tente novamente.</string>
     <string name="error_login">Ocorreu um erro, por favor verifique seus dados e tente novamente.</string>
-    <string name="error_empty_form">Houve um erro 🥺 preencha todos os campos obrigatórios antes de prosseguir.</string>
+    <string name="error_empty_form">Por favor, preencha todos os campos obrigatórios antes de prosseguir.</string>
     <string name="error_not_implemented_yet">Recurso ainda não implementado.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

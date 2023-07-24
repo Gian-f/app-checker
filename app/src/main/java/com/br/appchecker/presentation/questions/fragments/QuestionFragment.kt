@@ -68,7 +68,7 @@ class QuestionFragment : QuestionBaseFragment<FragmentQuestionBinding>() {
             if (isAnswerSelected()) {
                 navigateToNextQuestion()
             } else {
-                showBottomSheet(requireContext(),message = R.string.error_empty_form)
+                showBottomSheet(requireContext(), message = R.string.error_empty_form)
             }
         }
         binding.backButton.setOnClickListener {
@@ -95,7 +95,6 @@ class QuestionFragment : QuestionBaseFragment<FragmentQuestionBinding>() {
 
         viewModel.loading.observe(viewLifecycleOwner) { loading ->
             if (loading) {
-                binding.continueButton.visibility = View.GONE
                 showLoading()
             } else {
                 hideLoading()
@@ -105,13 +104,13 @@ class QuestionFragment : QuestionBaseFragment<FragmentQuestionBinding>() {
         if (list.isNullOrEmpty() || GlobalData.globalQuestions.value.isNullOrEmpty()) {
             viewModel.getAllQuestionsFromFirebase()
         } else {
-            val listAux = ArrayList<Question>()
-            listAux.addAll(list!!)
+            val listAux = list!!.toMutableList()
             GlobalData.globalQuestions.value = listAux
             updateProgressBar(position, listAux.size)
             adapter.submitList(findQuestionListOne(listAux))
         }
     }
+
     private fun showLoading() {
         binding.continueButton.visibility = View.GONE
         bottomSheetDialog = LoadingUtils.showLoadingSheet(requireContext())
@@ -127,7 +126,6 @@ class QuestionFragment : QuestionBaseFragment<FragmentQuestionBinding>() {
         if (position > 0) {
             with(binding) {
                 backButton.visibility = View.VISIBLE
-                continueButton.layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
             }
         }
     }
@@ -159,9 +157,8 @@ class QuestionFragment : QuestionBaseFragment<FragmentQuestionBinding>() {
     override fun getActionForPreviousFragment(): Nothing? = null
 
     override fun isAnswerSelected(): Boolean {
-        val questions = adapter.currentList
-        val unansweredQuestion = questions.getOrNull(0)
-        return unansweredQuestion?.selectedAnswerPosition != null
+        val question = adapter.currentList.getOrNull(0)
+        return question?.selectedAnswerPosition != -1
     }
 
     override fun onDestroy() {

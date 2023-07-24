@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
         setContentView(binding.root)
         setupNavController()
         onUpdateProgressBar(1, 6)
+        setSupportActionBar(binding.materialToolbar)
     }
 
     private fun setupNavController() {
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity(), ProgressBarListener {
     override fun onUpdateProgressBar(progress: Int, max: Int) {
         with(binding) {
             progressIndicator.progress = progress
-            questionTextView.text = "$progress de $max"
+            materialToolbar.title = "$progress de $max"
             progressIndicator.max = max
         }
     }

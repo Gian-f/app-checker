@@ -8,11 +8,7 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface ResultService {
-    @POST("chat/send")
+    @POST("engines/text-davinci-003/completions")
     @Headers("Content-Type:Application/json")
     fun sendMessage(@Body request: ChatRequest): Call<ChatResponse>
-
-    @POST("chat/receive")
-    @Headers("Content-Type:Application/json")
-    fun receiveMessage(@Body request: ChatRequest): Call<ChatResponse>
 }

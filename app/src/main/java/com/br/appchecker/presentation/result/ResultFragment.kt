@@ -6,13 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.br.appchecker.databinding.FragmentResultBinding
+import com.br.appchecker.domain.model.Question
+import com.br.appchecker.presentation.questions.GlobalData
 import com.br.appchecker.presentation.result.viewmodels.ResultViewModel
 import com.br.appchecker.presentation.result.viewmodels.factory.ResultViewModelFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ResultFragment: Fragment() {
 
     private val binding by lazy { FragmentResultBinding.inflate(layoutInflater) }
+
     private lateinit var resultViewModel: ResultViewModel
 
     override fun onCreateView(
@@ -26,9 +33,7 @@ class ResultFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViewModel()
-//        setupObservers()
-        // Iniciar a conversa com uma mensagem de saudação
-//        resultViewModel.sendMessage("Olá preciso que você me retorne se eu preciso declarar um imposto de renda ou não baseado neste JSON?")
+        setupObservers()
     }
 
     private fun setupViewModel() {
@@ -36,13 +41,22 @@ class ResultFragment: Fragment() {
         resultViewModel = ViewModelProvider(this, viewModelFactory)[ResultViewModel::class.java]
     }
 
-//    private fun setupObservers() {
-//        // Observar as mudanças na lista de mensagens no ViewModel
-//        resultViewModel.chatMessages.observe(viewLifecycleOwner) { messages ->
-//            val message = messages.lastOrNull()
-//            message?.let { text ->
-//                binding.tvResult.text = text
-//            }
-//        }
-//    }
+    private fun setupObservers() {
+
+        GlobalData.globalQuestions.observe(viewLifecycleOwner) { questions ->
+            lifecycleScope.launch(Dispatchers.IO) {
+                sendMessageWithQuestions(questions)
+            }
+        }
+    }
+
+    private suspend fun sendMessageWithQuestions(questions: List<Question>) {
+        // Aqui você pode formatar a mensagem da forma que desejar, ou usar a lista de perguntas diretamente, como preferir.
+        val message = "De acordo com este JSON, defina se preciso declarar imposto de renda ou não"
+
+        val response = resultViewModel.sendMessage(message, questions)
+        withContext(Dispatchers.Main) {
+            binding.tvResult.text = response
+        }
+    }
 }

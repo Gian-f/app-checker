@@ -6,42 +6,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.br.appchecker.data.repository.ai.ResultRepositoryImpl
 import com.br.appchecker.data.state.StateInfo
+import com.br.appchecker.domain.model.Question
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ResultViewModel(
     private val repository: ResultRepositoryImpl
-    ) : ViewModel() {
+) : ViewModel() {
 
-    private val _chatMessages = MutableLiveData<List<String>>()
-
-    val chatMessages: LiveData<List<String>> get() = _chatMessages
-
-
-    fun sendMessage(message: String) {
-        viewModelScope.launch {
-            val response = repository.sendMessage(message)
-            handleChatResponse(response)
-        }
-    }
-
-    fun receiveMessage(message: String) {
-        viewModelScope.launch {
-            val response = repository.receiveMessage(message)
-            handleChatResponse(response)
-        }
-    }
-
-    private fun handleChatResponse(response: StateInfo<String>) {
-        when (response) {
-            is StateInfo.Success -> {
-                val currentMessages = _chatMessages.value ?: emptyList()
-                val newMessages = currentMessages.toMutableList()
-                newMessages.add(response.data.toString())
-                _chatMessages.value = newMessages
+    suspend fun sendMessage(message: String, questions: List<Question>): String {
+        return try {
+            when (val response = repository.sendMessage(message, questions)) {
+                is StateInfo.Success -> response.data.toString()
+                is StateInfo.Error -> "Error: ${response.message}"
             }
-            is StateInfo.Error -> {
-                // Trate o erro, se necessário
-            }
+        } catch (e: Exception) {
+            "Error: ${e.message}"
         }
     }
 }
