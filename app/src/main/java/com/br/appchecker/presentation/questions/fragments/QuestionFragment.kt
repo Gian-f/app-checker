@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -37,11 +36,7 @@ class QuestionFragment : QuestionBaseFragment<FragmentQuestionBinding>() {
         SingleChoiceAdapter(requireContext(), object : SingleChoiceAdapter.OnItemClickListener {
             override fun onItemClick(question: Question, position: Int) {
                 question.selectedAnswerPosition = position
-                Toast.makeText(
-                    requireContext(),
-                    "Você clicou em $position - ${question.selectedAnswerPosition}",
-                    Toast.LENGTH_LONG
-                ).show()
+
             }
         })
     }

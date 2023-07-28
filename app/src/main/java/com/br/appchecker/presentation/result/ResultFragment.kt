@@ -6,17 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.br.appchecker.databinding.FragmentResultBinding
-import com.br.appchecker.domain.model.Question
 import com.br.appchecker.presentation.questions.GlobalData
 import com.br.appchecker.presentation.result.viewmodels.ResultViewModel
 import com.br.appchecker.presentation.result.viewmodels.factory.ResultViewModelFactory
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class ResultFragment: Fragment() {
+class ResultFragment : Fragment() {
 
     private val binding by lazy { FragmentResultBinding.inflate(layoutInflater) }
 
@@ -42,20 +37,12 @@ class ResultFragment: Fragment() {
     }
 
     private fun setupObservers() {
-
         GlobalData.globalQuestions.observe(viewLifecycleOwner) { questions ->
-            lifecycleScope.launch(Dispatchers.IO) {
-                sendMessageWithQuestions(questions)
-            }
+            // Aqui você consegue colocar a mensagem que achar melhor
+            val message = "De acordo com este JSON, defina se preciso declarar imposto de renda ou não"
+            resultViewModel.sendMessage(message, questions)
         }
-    }
-
-    private suspend fun sendMessageWithQuestions(questions: List<Question>) {
-        // Aqui você pode formatar a mensagem da forma que desejar, ou usar a lista de perguntas diretamente, como preferir.
-        val message = "De acordo com este JSON, defina se preciso declarar imposto de renda ou não"
-
-        val response = resultViewModel.sendMessage(message, questions)
-        withContext(Dispatchers.Main) {
+        resultViewModel.chatMessages.observe(viewLifecycleOwner) { response ->
             binding.tvResult.text = response
         }
     }

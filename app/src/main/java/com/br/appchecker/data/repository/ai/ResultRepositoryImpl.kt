@@ -24,7 +24,7 @@ class ResultRepositoryImpl(
             val response = service.sendMessage(gpt3Request).execute()
             if (response.isSuccessful) {
                 val gpt3Response = response.body()
-                val answer = gpt3Response?.choices?.get(0)?.text ?: "No response from GPT-3"
+                val answer = gpt3Response?.choices?.get(0)?.text ?: "Sem resposta do GPT-3"
                 StateInfo.Success(answer)
             } else {
                 Log.e("Chat Error", "Exception in sendMessage: ${response.code()} ${response.message()}")
@@ -60,7 +60,7 @@ class ResultRepositoryImpl(
         // Percorra a lista de perguntas e adicione cada pergunta e resposta ao prompt no formato desejado.
         questions.forEachIndexed { _, question ->
             val questionKey = question.title + 1
-            val answer = question.answers[question.selectedAnswerPosition!!]
+            val answer = question.answers[question.selectedAnswerPosition?: 0]
             promptBuilder.append("\"$questionKey\": \"$answer\",\n")
         }
 

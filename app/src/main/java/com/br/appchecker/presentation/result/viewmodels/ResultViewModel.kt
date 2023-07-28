@@ -12,16 +12,23 @@ import kotlinx.coroutines.launch
 
 class ResultViewModel(
     private val repository: ResultRepositoryImpl
-) : ViewModel() {
+    ) : ViewModel() {
 
-    suspend fun sendMessage(message: String, questions: List<Question>): String {
-        return try {
-            when (val response = repository.sendMessage(message, questions)) {
-                is StateInfo.Success -> response.data.toString()
-                is StateInfo.Error -> "Error: ${response.message}"
+    private val _chatMessages = MutableLiveData<String>()
+    val chatMessages: LiveData<String> get() = _chatMessages
+
+    fun sendMessage(message: String, questions: List<Question>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = repository.sendMessage(message, questions)
+                if (response is StateInfo.Success) {
+                    val currentMessages = _chatMessages.value ?: ""
+                    val newMessages = "$currentMessages\n${response.data}"
+                    _chatMessages.postValue(newMessages)
+                }
+            } catch (e: Exception) {
+                // Trate o erro, se necessário
             }
-        } catch (e: Exception) {
-            "Error: ${e.message}"
         }
     }
 }
