@@ -13,7 +13,7 @@ class FirebaseUtils {
         fun isAuthenticated(): Boolean = getAuth().currentUser != null
 
         fun getErrorMessage(error: Exception): String {
-            return when (val errorCode = (error as? FirebaseAuthException)?.errorCode) {
+            return when ((error as? FirebaseAuthException)?.errorCode) {
                 "ERROR_INVALID_CUSTOM_TOKEN" -> "Token personalizado inválido."
                 "ERROR_CUSTOM_TOKEN_MISMATCH" -> "Token personalizado não corresponde à ID do aplicativo."
                 "ERROR_INVALID_CREDENTIAL" -> "Credencial inválida fornecida."

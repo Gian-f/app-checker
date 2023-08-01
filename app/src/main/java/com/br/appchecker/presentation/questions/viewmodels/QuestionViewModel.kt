@@ -66,30 +66,4 @@ class QuestionViewModel(
             }
         }
     }
-
-//    fun getAllAnswers() {
-//        viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
-//            Log.e("Erro Answers", "$throwable")
-//        }) {
-//            try {
-//                val result = TODO()
-//                withContext(Dispatchers.Main) {
-//                    _answers.value = result
-//                }
-//            } catch (e: Exception) {
-//                throw e
-//            }
-//        }
-//    }
-
-    fun insertQuestion(question: Question) {
-        viewModelScope.launch {
-            try {
-                val result = repository.insertQuestion()
-                _question.value = result
-            } catch (e: Exception) {
-                throw e
-            }
-        }
-    }
 }
