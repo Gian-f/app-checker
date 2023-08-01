@@ -17,7 +17,7 @@ First, you i'll need to clone the project and open in Android Studio
 
 After that, you i'll need to create a file called: `secrets.properties` in the directory `res/raw`.
 
-`OPEN_AI_API_KEY`= pass your openai key here
+`OPEN_AI_API_KEY` = pass your openai key here
 
 
 
