@@ -1,36 +1,46 @@
 package com.br.appchecker.presentation.questions.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.br.appchecker.R
+import com.br.appchecker.data.local.AppDatabase
 import com.br.appchecker.databinding.FragmentQuestionBinding
 import com.br.appchecker.domain.model.Question
 import com.br.appchecker.presentation.questions.GlobalData
 import com.br.appchecker.presentation.questions.adapters.SingleChoiceAdapter
+import com.br.appchecker.presentation.questions.interfaces.ProgressBarListener
+import com.br.appchecker.presentation.questions.viewmodels.QuestionViewModel
+import com.br.appchecker.presentation.questions.viewmodels.factory.QuestionViewModelFactory
 import com.br.appchecker.util.LoadingUtils
 import com.br.appchecker.util.LoadingUtils.showBottomSheet
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class QuestionFragment : QuestionBaseFragment<FragmentQuestionBinding>() {
+class QuestionFragment : Fragment() {
 
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentQuestionBinding =
-        FragmentQuestionBinding::inflate
-
+    private val binding by lazy {
+        FragmentQuestionBinding.inflate(layoutInflater)
+    }
     private val position by lazy {
         QuestionFragmentArgs.fromBundle(requireArguments()).position
     }
-
     private val list by lazy {
         QuestionFragmentArgs.fromBundle(requireArguments()).list
     }
 
+    private lateinit var viewModel:QuestionViewModel
+
     private var bottomSheetDialog: BottomSheetDialog? = null
+
+    private var progressBarListener: ProgressBarListener? = null
 
     private val adapter: SingleChoiceAdapter by lazy {
         SingleChoiceAdapter(requireContext(), object : SingleChoiceAdapter.OnItemClickListener {
@@ -44,9 +54,8 @@ class QuestionFragment : QuestionBaseFragment<FragmentQuestionBinding>() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-        binding = bindingInflater.invoke(inflater, container, false)
         return binding.root
     }
 
@@ -56,6 +65,7 @@ class QuestionFragment : QuestionBaseFragment<FragmentQuestionBinding>() {
         setupRecyclerView()
         setupListeners()
         setupButtonsVisibility()
+        isFormValid()
     }
 
     private fun setupListeners() {
@@ -79,6 +89,21 @@ class QuestionFragment : QuestionBaseFragment<FragmentQuestionBinding>() {
             )
         }
         setupObservers()
+    }
+
+    private fun setupViewModel() {
+        val questionDao = AppDatabase.getInstance(requireContext()).questionDao()
+        val userDao = AppDatabase.getInstance(requireContext()).userDao()
+        viewModel = ViewModelProvider(
+            this,
+            QuestionViewModelFactory(
+                questionDao, userDao, requireContext()
+            )
+        )[QuestionViewModel::class.java]
+    }
+
+    private fun updateProgressBar(position: Int, sizeList: Int) {
+        progressBarListener?.onUpdateProgressBar(position + 1, sizeList)
     }
 
     private fun setupObservers() {
@@ -133,12 +158,7 @@ class QuestionFragment : QuestionBaseFragment<FragmentQuestionBinding>() {
         findNavController().navigate(getActionForNextFragment())
     }
 
-    override fun getProgressBarIndex(): Int = position + 1
-
-    override fun getProgressBarMessage(): String =
-        "${position + 1} de ${list?.size ?: GlobalData.globalQuestions.value?.size ?: 1}"
-
-    override fun getActionForNextFragment(): NavDirections {
+    private fun getActionForNextFragment(): NavDirections {
         return if (position + 1 < (list?.size ?: GlobalData.globalQuestions.value?.size ?: 0)) {
             QuestionFragmentDirections.actionFirstFragmentSelf(
                 position = position + 1,
@@ -149,11 +169,29 @@ class QuestionFragment : QuestionBaseFragment<FragmentQuestionBinding>() {
         }
     }
 
-    override fun getActionForPreviousFragment(): Nothing? = null
-
-    override fun isAnswerSelected(): Boolean {
+    private fun isAnswerSelected(): Boolean {
         val question = adapter.currentList.getOrNull(0)
         return question?.selectedAnswerPosition != -1
+    }
+
+    private fun isFormValid(): Boolean {
+        val currentQuestion = adapter.currentList.any { question ->
+            question.description.contains("Viagem")
+        }
+        if (currentQuestion) {
+            binding.continueButton.text = getString(R.string.finalizar)
+        }
+        return currentQuestion
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        progressBarListener = context as? ProgressBarListener
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        progressBarListener = null
     }
 
     override fun onDestroy() {

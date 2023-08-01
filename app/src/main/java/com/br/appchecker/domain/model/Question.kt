@@ -5,7 +5,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.Relation
 import com.br.appchecker.data.remote.response.AnswersData
 import kotlinx.parcelize.Parcelize
 

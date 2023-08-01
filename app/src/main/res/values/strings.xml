@@ -86,6 +86,7 @@
     <string name="onboarding_slide3_desc">Aqui, contamos com um time globalmente especializado para te ajudar em todas as etapas!</string>
 
     <string name="continuar">Continuar</string>
+    <string name="finalizar">Finalizar</string>
     <string name="title_activity_register">RegisterActivity</string>
     <string name="title_activity_recover">RecoverActivity</string>
     <string name="action_register">Cadastre-se</string>
@@ -121,4 +122,5 @@
     <string name="code_email_description">Digite o código de 4 dígitos que enviamos para o e-mail:</string>
     <string name="image_view">register image view</string>
     <string name="message_loading_bottom_sheet">Por favor, aguarde...</string>
+    <string name="imageviewdescription">imageviewDescription</string>
 </resources>

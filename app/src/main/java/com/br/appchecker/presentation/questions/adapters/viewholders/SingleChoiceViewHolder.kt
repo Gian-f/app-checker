@@ -10,7 +10,7 @@ import com.br.appchecker.presentation.questions.adapters.SingleChoiceAdapter
 import com.google.android.material.radiobutton.MaterialRadioButton
 
 class SingleChoiceViewHolder(
-    private val binding: ItemSingleChoiceQuestionBinding
+    val binding: ItemSingleChoiceQuestionBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(
