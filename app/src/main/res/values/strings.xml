@@ -123,4 +123,9 @@
     <string name="image_view">register image view</string>
     <string name="message_loading_bottom_sheet">Por favor, aguarde...</string>
     <string name="imageviewdescription">imageviewDescription</string>
+    <string name="concluded_questions">Seu questionário foi concluído!</string>
+    <string name="result_title">É necessário declarar?</string>
+    <string name="what_todo">O que fazer?</string>
+    <string name="whoToFind">Com quem falar?</string>
+    <string name="assertiveness">Assertividade</string>
 </resources>

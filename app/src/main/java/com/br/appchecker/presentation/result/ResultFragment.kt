@@ -1,6 +1,8 @@
 package com.br.appchecker.presentation.result
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,11 +41,27 @@ class ResultFragment : Fragment() {
     private fun setupObservers() {
         GlobalData.globalQuestions.observe(viewLifecycleOwner) { questions ->
             // Aqui você consegue colocar a mensagem que achar melhor
-            val message = "De acordo com este JSON, defina se preciso declarar imposto de renda ou não"
+            val message = "De acordo com as informações fornecidas, por favor, informe se é necessário declarar o imposto de renda sem entrar em muitos detalhes, sendo breve, por favor."
             resultViewModel.sendMessage(message, questions)
         }
         resultViewModel.chatMessages.observe(viewLifecycleOwner) { response ->
-            binding.tvResult.text = response
+            showTextLetterByLetter(response)
         }
+    }
+    private fun showTextLetterByLetter(text: String) {
+        val textView = binding.tvResult
+        var currentCharIndex = 0
+
+        val handler = Handler(Looper.getMainLooper())
+        handler.postDelayed(object : Runnable {
+            override fun run() {
+                if (currentCharIndex < text.length) {
+                    val currentText = text.substring(0, currentCharIndex + 1)
+                    textView.text = currentText
+                    currentCharIndex++
+                    handler.postDelayed(this, 50)
+                }
+            }
+        }, 50)
     }
 }

@@ -6,6 +6,7 @@ import com.br.appchecker.data.remote.config.ApiServiceFactory
 import com.br.appchecker.data.remote.request.ChatRequest
 import com.br.appchecker.data.remote.service.ResultService
 import com.br.appchecker.data.state.StateInfo
+import com.br.appchecker.domain.model.Message
 import com.br.appchecker.domain.model.Question
 
 class ResultRepositoryImpl(
@@ -19,12 +20,17 @@ class ResultRepositoryImpl(
     override suspend fun sendMessage(message: String, questions: List<Question>): StateInfo<String> {
         val prompt = createPromptFromMessage(message, questions)
 
-        val gpt3Request = ChatRequest(prompt)
+        val messageList = mutableListOf<Message>()
+        messageList.add(Message(role = "system", content = "Mensagem do sistema"))
+        messageList.add(Message(role = "user", content = prompt))
+
+        val request = ChatRequest(messages = messageList)
+
         return try {
-            val response = service.sendMessage(gpt3Request).execute()
+            val response = service.sendMessage(request).execute()
             if (response.isSuccessful) {
-                val gpt3Response = response.body()
-                val answer = gpt3Response?.choices?.get(0)?.text ?: "Sem resposta do GPT-3"
+                val responseBody = response.body()
+                val answer = responseBody?.choices?.get(0)?.messageData?.content ?: "Sem resposta do GPT-3"
                 StateInfo.Success(answer)
             } else {
                 Log.e("Chat Error", "Exception in sendMessage: ${response.code()} ${response.message()}")
