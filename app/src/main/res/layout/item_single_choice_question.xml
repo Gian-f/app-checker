@@ -27,37 +27,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="Title" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/description"
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chip"
+        style="@style/CustomChipStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:elevation="2dp"
+        tools:text="teste"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/inter_light"
-        android:textSize="13sp"
+        app:chipIcon="@drawable/ic_money"
+        app:chipIconTint="@color/color_primary_high"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title"
-        tools:text="Description" />
-
-    <ImageView
-        android:id="@+id/iv_description"
-        android:layout_width="wrap_content"
-        android:layout_height="23dp"
-        android:layout_marginTop="13dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintStart_toEndOf="@+id/description"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        android:contentDescription="@string/imageviewdescription"
-        app:tint="@color/color_primary_high" />
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <RadioGroup
         android:id="@+id/answers_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/description">
+        app:layout_constraintTop_toBottomOf="@id/chip">
 
     </RadioGroup>
 

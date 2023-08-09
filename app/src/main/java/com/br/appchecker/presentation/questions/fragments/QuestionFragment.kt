@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDirections
@@ -84,9 +85,12 @@ class QuestionFragment : Fragment() {
     private fun setupRecyclerView() {
         with(binding) {
             rv.adapter = adapter
-            rv.addItemDecoration(
-                DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
-            )
+            val customDivider = ContextCompat.getDrawable(requireContext(), R.drawable.divider_custom)
+            val itemDecoration = DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
+            customDivider?.let { customLayout ->
+                itemDecoration.setDrawable(customLayout)
+            }
+            rv.addItemDecoration(itemDecoration)
         }
         setupObservers()
     }

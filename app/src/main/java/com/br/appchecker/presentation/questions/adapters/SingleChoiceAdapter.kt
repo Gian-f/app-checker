@@ -3,7 +3,7 @@ package com.br.appchecker.presentation.questions.adapters
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import com.br.appchecker.R
 import com.br.appchecker.databinding.ItemSingleChoiceQuestionBinding
@@ -14,7 +14,7 @@ import com.br.appchecker.util.enums.EnumDescription
 class SingleChoiceAdapter(
     val context: Context,
     private val listener: OnItemClickListener,
-) : ListAdapter<Question, SingleChoiceViewHolder>(QuestionDiffCallback()) {
+) : ListAdapter<Question, SingleChoiceViewHolder>(QuestionDiffCallback) {
 
     private val descriptionToImageMap = mapOf(
         EnumDescription.RENDA.value to R.drawable.ic_money,
@@ -39,21 +39,13 @@ class SingleChoiceAdapter(
     private fun setupImageDescription(binding: ItemSingleChoiceQuestionBinding, question: Question) {
         val imageResource = descriptionToImageMap[question.description]
         if (imageResource != null) {
-            binding.ivDescription.setImageResource(imageResource)
+            binding.chip.chipIcon = ContextCompat.getDrawable(context, imageResource)
         } else {
-            binding.ivDescription.setImageDrawable(null)
+            binding.chip.chipIcon = null
         }
     }
 
     interface OnItemClickListener {
         fun onItemClick(question: Question, position: Int)
-    }
-
-    private class QuestionDiffCallback : DiffUtil.ItemCallback<Question>() {
-        override fun areItemsTheSame(oldItem: Question, newItem: Question) =
-            oldItem.id == newItem.id
-
-        override fun areContentsTheSame(oldItem: Question, newItem: Question) =
-            oldItem == newItem
     }
 }

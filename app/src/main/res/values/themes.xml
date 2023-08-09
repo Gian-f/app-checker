@@ -37,6 +37,12 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+    
+    <style name="CustomChipStyle" parent="Widget.Material3.Chip.Assist.Elevated"> 
+        <item name="chipBackgroundColor">#F0F0F0</item>
+        <item name="chipCornerRadius">10dp</item>
+
+    </style>
 
     <style name="Theme.AppChecker.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 

@@ -18,7 +18,7 @@ class SingleChoiceViewHolder(
         listener: SingleChoiceAdapter.OnItemClickListener) {
         with(binding) {
             title.text = question.title
-            description.text = question.description
+            chip.text = question.description
             answersGroup.removeAllViews()
 
             for (i in question.answers.indices) {
