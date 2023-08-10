@@ -34,7 +34,7 @@ class SingleChoiceViewHolder(
                         setMargins(0, 16, 0, 16)
                     }
                     text = answer.toString()
-                    setTextAppearance(android.R.style.TextAppearance_Holo_Small)
+                    setTextAppearance(android.R.style.TextAppearance_Material_Body1)
                     isChecked = (i == question.selectedAnswerPosition)
                     setOnClickListener {
                         question.selectedAnswerPosition = i
