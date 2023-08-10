@@ -6,7 +6,7 @@ import android.content.pm.PackageManager
 import android.telephony.SmsManager
 import androidx.core.content.ContextCompat
 
-class SMSNotificationManager {
+object SMSNotificationManager {
     fun sendSMS(context: Context, phoneNumber: String, message: String) {
         val smsManager: SmsManager =
             context.getSystemService(SmsManager::class.java)
